@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight } from "lucide-react";
 import { useAmbience } from "@/context/AmbienceContext";
 
 export interface TableNode {
@@ -166,7 +165,6 @@ export default function TableFloorplan({
   onSelectTable,
   guestCountFilter = "2 Guests",
   currentDateTime = "Today, 8:00 PM",
-  onConfirmSelection,
 }: TableFloorplanProps) {
   const { isEvening } = useAmbience();
   const [activeZone, setActiveZone] = useState<string>("All Spaces");
@@ -787,8 +785,8 @@ export default function TableFloorplan({
         </AnimatePresence>
       </div>
 
-      {/* Selected Table Architectural Summary & Quick Confirm Action Bar */}
-      <div className="relative z-10 pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-[#F4F3EE]/10">
+      {/* Selected Table Architectural Summary & Quick Status Bar */}
+      <div className="relative z-10 pt-4 pb-2 sm:pb-1 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-[#F4F3EE]/10">
         <div className="flex items-center gap-3 w-full sm:w-auto text-left">
           <div className={`w-11 h-11 rounded-2xl flex flex-col items-center justify-center shrink-0 border transition-colors duration-500 ${
             isEvening
@@ -818,35 +816,28 @@ export default function TableFloorplan({
           </div>
         </div>
 
-        {/* Selected Table Confirmation Action */}
-        <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
-          <div className="text-right hidden md:block">
-            <span className="block text-[10px] font-mono uppercase text-[#A2ADA5] tracking-wider">
+        {/* Selected Table Status Badge (Replaces Duplicate Confirm Button) */}
+        <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end">
+          <div className="text-left sm:text-right">
+            <span className="block text-[10px] font-mono uppercase text-[#A2ADA5] tracking-wider leading-tight">
               {isEvening ? "Candlelit Service" : "Daylight Service"}
             </span>
-            <span className={`text-xs font-mono font-semibold flex items-center gap-1 ${
+            <span className={`text-xs font-mono font-semibold flex items-center gap-1.5 mt-0.5 ${
               isEvening ? "text-[#C8A97E]" : "text-[#6B8E78]"
             }`}>
-              <span className={`w-1.5 h-1.5 rounded-full ${isEvening ? "bg-[#C8A97E]" : "bg-[#6B8E78]"}`} />
+              <span className={`w-1.5 h-1.5 rounded-full ${isEvening ? "bg-[#C8A97E] animate-pulse" : "bg-[#6B8E78] animate-pulse"}`} />
               Locked for {currentDateTime}
             </span>
           </div>
 
-          {onConfirmSelection && (
-            <button
-              type="button"
-              onClick={onConfirmSelection}
-              data-cursor="magnetic"
-              className={`w-full sm:w-auto px-6 py-3 rounded-full text-xs font-semibold uppercase tracking-wider transition-all shadow-md active:scale-95 flex items-center justify-center gap-2 shrink-0 cursor-pointer ${
-                isEvening
-                  ? "bg-[#C8A97E] hover:bg-[#D9BA8F] text-[#0B1610]"
-                  : "bg-[#F4F3EE] hover:bg-white text-[#11261B]"
-              }`}
-            >
-              <span>Confirm Table {activeTable.id}</span>
-              <ArrowRight className={`w-4 h-4 ${isEvening ? "text-[#0B1610]" : "text-[#1B3B2B]"}`} />
-            </button>
-          )}
+          <div className={`px-4 py-2 rounded-full border text-[11px] font-mono font-semibold uppercase tracking-wider flex items-center gap-2 shrink-0 ${
+            isEvening
+              ? "bg-[#12241B] border-[#C8A97E]/40 text-[#C8A97E]"
+              : "bg-[#11261B] border-[#6B8E78]/40 text-[#EAE8E0]"
+          }`}>
+            <span className={`w-1.5 h-1.5 rounded-full ${isEvening ? "bg-[#C8A97E]" : "bg-emerald-400"}`} />
+            <span>SELECTED: TABLE {activeTable.id}</span>
+          </div>
         </div>
       </div>
 

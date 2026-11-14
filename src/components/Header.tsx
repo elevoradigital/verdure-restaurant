@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
-import { Menu, X, Calendar, Phone, ArrowRight, Volume2, VolumeX } from "lucide-react";
+import { Menu, X, Calendar, Phone, ArrowRight, ArrowUpRight, Volume2, VolumeX } from "lucide-react";
 import MagneticButton from "./MagneticButton";
 import AmbienceToggle from "./AmbienceToggle";
 import { useAmbience } from "@/context/AmbienceContext";
@@ -234,7 +234,7 @@ export default function Header({ onOpenReservation }: HeaderProps) {
                 }`}
               >
                 <span>Book a Table</span>
-                <span className="text-xs group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">↗</span>
+                <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 text-current" />
               </MagneticButton>
             </div>
 

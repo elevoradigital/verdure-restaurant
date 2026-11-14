@@ -107,7 +107,7 @@ export default function Footer() {
                 isEvening ? "text-[#C8A97E]" : "text-[#2D5A43]"
               }`}
             >
-              [ 05 // BOTANICAL ARCHITECTURE & ARCHIVE ]
+              [ 01 // BOTANICAL ARCHITECTURE & ARCHIVE ]
             </span>
           </div>
           <span

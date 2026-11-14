@@ -62,7 +62,7 @@ export const heroDishObjects: HeroDishObject[] = [
         metric: "100% Wild Botanical",
         top: "52%",
         left: "56%",
-        cardPlacement: "top-left",
+        cardPlacement: "bottom-right",
       },
       {
         id: "03",
@@ -106,7 +106,7 @@ export const heroDishObjects: HeroDishObject[] = [
         metric: "House Fermentation",
         top: "56%",
         left: "58%",
-        cardPlacement: "top-left",
+        cardPlacement: "bottom-right",
       },
       {
         id: "03",
@@ -150,7 +150,7 @@ export const heroDishObjects: HeroDishObject[] = [
         metric: "Single-Origin Uji",
         top: "55%",
         left: "60%",
-        cardPlacement: "top-left",
+        cardPlacement: "bottom-right",
       },
       {
         id: "03",
@@ -480,12 +480,12 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                             </span>
                             <span className="font-semibold">{dish.price}</span>
                           </div>
-                          <div className={`font-serif text-xs font-semibold truncate ${
+                          <div className={`font-serif text-[12px] sm:text-[13px] leading-tight font-medium ${
                             isSelected
                               ? isEvening ? "text-[#F4F3EE]" : "text-[#141816]"
                               : isEvening ? "text-[#95A79B]" : "text-[#5C645E]"
                           }`}>
-                            {dish.shortName}
+                            {dish.name}
                           </div>
                         </div>
                       </div>
@@ -811,13 +811,17 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
               {/* LAYER 3: OVERLAPPING FLOATING 3D CARDS (translateZ: 55px) */}
               {/* ---------------------------------------------------- */}
               
-              {/* Top-Left Overlapping Frosted Card (-left-8 top-8) */}
+              {/* Top-Left Overlapping Frosted Card (-top-4 -left-3 sm:-left-6 max-w-[230px]) */}
               <motion.div
                 style={{
                   transformStyle: "preserve-3d",
                   transform: prefersReducedMotion ? undefined : "translateZ(55px)",
                 }}
-                className="absolute -left-3 sm:-left-8 top-6 sm:top-8 z-30 pointer-events-auto"
+                className={`absolute -top-4 -left-3 sm:-left-6 z-20 max-w-[230px] pointer-events-auto transition-all duration-300 ${
+                  activeHotspot !== null
+                    ? "opacity-20 scale-95 pointer-events-none"
+                    : "opacity-100 scale-100"
+                }`}
               >
                 <div className={`p-3 sm:p-3.5 rounded-2xl backdrop-blur-md border shadow-2xl transition-colors duration-500 text-left ${
                   isEvening
@@ -918,7 +922,7 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
           </div>
 
           {/* Center Cell: Smooth Kinetic Continuous Marquee Ticker (Cols 4-8) */}
-          <div className="md:col-span-6 overflow-hidden h-full flex items-center relative">
+          <div className="md:col-span-6 overflow-hidden h-full flex items-center relative px-4 sm:px-6">
             <motion.div
               animate={{ x: ["0%", "-50%"] }}
               transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
@@ -952,8 +956,9 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                   {isEvening ? "TONIGHT: 3 TABLES REMAINING" : "LUNCH: 5 TABLES REMAINING"}
                 </span>
               </div>
-              <span className="text-xs font-mono group-hover:translate-x-1 transition-transform">
-                RESERVE ↗
+              <span className="text-xs font-mono inline-flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
+                <span>RESERVE</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
               </span>
             </a>
           </div>

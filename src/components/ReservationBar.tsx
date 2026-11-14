@@ -57,7 +57,7 @@ export default function ReservationBar() {
   return (
     <section
       id="reserve"
-      className={`py-16 sm:py-20 lg:py-28 relative scroll-mt-10 overflow-hidden transition-colors duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] border-b ${
+      className={`pt-28 sm:pt-32 lg:pt-36 pb-16 sm:pb-20 lg:pb-28 relative scroll-mt-24 overflow-hidden transition-colors duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] border-b ${
         isEvening ? "bg-[#0B1610] border-[#F4F3EE]/10" : "bg-[#F4F3EE] border-[#11261B]/10"
       }`}
     >
@@ -65,7 +65,7 @@ export default function ReservationBar() {
       <div className={`absolute -right-4 -top-8 pointer-events-none select-none font-serif text-[18vw] font-bold leading-none tracking-tighter opacity-[0.035] -z-0 ${
         isEvening ? "text-white" : "text-[#11261B]"
       }`}>
-        03
+        04
       </div>
 
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
