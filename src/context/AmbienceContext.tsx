@@ -21,10 +21,12 @@ export interface TransitionOrigin {
 interface AmbienceContextType {
   mode: AmbienceMode;
   isEvening: boolean;
-  toggleAmbience: (event?: React.MouseEvent | MouseEvent) => void;
-  setAmbience: (mode: AmbienceMode, event?: React.MouseEvent | MouseEvent) => void;
+  toggleAmbience: (event?: React.MouseEvent | MouseEvent | React.TouchEvent | TouchEvent) => void;
+  setAmbience: (mode: AmbienceMode, event?: React.MouseEvent | MouseEvent | React.TouchEvent | TouchEvent) => void;
   isTransitioning: boolean;
   lastOrigin: TransitionOrigin | null;
+  targetMode: AmbienceMode | null;
+  isMobileTransition: boolean;
 }
 
 const STORAGE_KEY = "verdure_ambience_mode";
@@ -64,28 +66,56 @@ function getServerSnapshot(): AmbienceMode {
   return "day";
 }
 
-function extractOrigin(event?: React.MouseEvent | MouseEvent): TransitionOrigin {
+function checkIsMobile(): boolean {
+  if (typeof window === "undefined") return false;
+  return (
+    window.innerWidth < 768 ||
+    window.matchMedia("(pointer: coarse)").matches ||
+    window.matchMedia("(hover: none)").matches
+  );
+}
+
+function extractOrigin(
+  event?: React.MouseEvent | MouseEvent | React.TouchEvent | TouchEvent
+): TransitionOrigin {
   if (typeof window === "undefined") {
     return { x: 0, y: 0, endRadius: 1000 };
   }
-  let x: number;
-  let y: number;
+  let x: number | null = null;
+  let y: number | null = null;
 
+  // 1. From clicked/tapped target element
   if (event && "currentTarget" in event && event.currentTarget instanceof HTMLElement) {
     const rect = event.currentTarget.getBoundingClientRect();
-    x = rect.left + rect.width / 2;
-    y = rect.top + rect.height / 2;
-  } else if (
+    if (rect.width > 0 && rect.height > 0) {
+      x = rect.left + rect.width / 2;
+      y = rect.top + rect.height / 2;
+    }
+  }
+
+  // 2. From touch coordinates if available
+  if (x === null && event && "touches" in event && (event as TouchEvent).touches?.length > 0) {
+    const touch = (event as TouchEvent).touches[0];
+    x = touch.clientX;
+    y = touch.clientY;
+  }
+
+  // 3. From mouse coordinates
+  if (
+    x === null &&
     event &&
     "clientX" in event &&
-    typeof event.clientX === "number" &&
-    (event.clientX > 0 || event.clientY > 0)
+    typeof (event as MouseEvent).clientX === "number" &&
+    ((event as MouseEvent).clientX > 0 || (event as MouseEvent).clientY > 0)
   ) {
-    x = event.clientX;
-    y = event.clientY;
-  } else {
-    // Default to the top-right navbar toggle area
-    x = window.innerWidth * 0.78;
+    x = (event as MouseEvent).clientX;
+    y = (event as MouseEvent).clientY;
+  }
+
+  // 4. Default fallback: Top-right navbar toggle area
+  if (x === null || y === null) {
+    const isMobile = window.innerWidth < 768;
+    x = isMobile ? window.innerWidth - 48 : window.innerWidth * 0.78;
     y = 36;
   }
 
@@ -116,7 +146,10 @@ const AmbienceContext = createContext<AmbienceContextType | undefined>(undefined
 export function AmbienceProvider({ children }: { children: React.ReactNode }) {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [lastOrigin, setLastOrigin] = useState<TransitionOrigin | null>(null);
+  const [targetMode, setTargetMode] = useState<AmbienceMode | null>(null);
+  const [isMobileTransition, setIsMobileTransition] = useState(false);
   const transitionTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const switchTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Sync with sessionStorage on client mount
   useEffect(() => {
@@ -132,20 +165,27 @@ export function AmbienceProvider({ children }: { children: React.ReactNode }) {
   const isEvening = mode === "evening";
 
   const setAmbience = useCallback(
-    (newMode: AmbienceMode, event?: React.MouseEvent | MouseEvent) => {
+    (newMode: AmbienceMode, event?: React.MouseEvent | MouseEvent | React.TouchEvent | TouchEvent) => {
       if (newMode === currentMode) return;
 
       const origin = extractOrigin(event);
-      setLastOrigin(origin);
-      setIsTransitioning(true);
+      const isMobile = checkIsMobile();
 
-      if (transitionTimerRef.current) {
-        clearTimeout(transitionTimerRef.current);
-      }
+      if (transitionTimerRef.current) clearTimeout(transitionTimerRef.current);
+      if (switchTimerRef.current) clearTimeout(switchTimerRef.current);
+
+      setLastOrigin(origin);
+      setTargetMode(newMode);
+      setIsMobileTransition(isMobile);
+      setIsTransitioning(true);
 
       try {
         sessionStorage.setItem(STORAGE_KEY, newMode);
       } catch {}
+
+      if (typeof document !== "undefined") {
+        document.documentElement.classList.add("theme-switching");
+      }
 
       const doc = typeof document !== "undefined" ? (document as Document & {
         startViewTransition?: (callback: () => void) => {
@@ -154,17 +194,32 @@ export function AmbienceProvider({ children }: { children: React.ReactNode }) {
         };
       }) : null;
 
-      if (!doc || !doc.startViewTransition) {
-        currentMode = newMode;
-        applyThemeDOM(newMode);
-        emitChange();
+      // ==============================================================
+      // 1. MOBILE ZERO-LAG GPU SCALE3D PORTAL ENGINE (<768px or touch)
+      // Or fallback when startViewTransition is unsupported
+      // ==============================================================
+      if (isMobile || !doc || !doc.startViewTransition) {
+        // At mid-expansion (210ms), seamlessly flip underlying CSS variables
+        switchTimerRef.current = setTimeout(() => {
+          currentMode = newMode;
+          applyThemeDOM(newMode);
+          emitChange();
+        }, 210);
+
+        // At 390ms, end transition and restore normal CSS rules
         transitionTimerRef.current = setTimeout(() => {
           setIsTransitioning(false);
-        }, 650);
+          setTargetMode(null);
+          if (typeof document !== "undefined") {
+            document.documentElement.classList.remove("theme-switching");
+          }
+        }, 390);
         return;
       }
 
-      // Modern Awwwards Origin-Aware Circular Clip-Path Reveal
+      // ==============================================================
+      // 2. DESKTOP AWWWARDS ORIGIN-AWARE CIRCULAR CLIP-PATH WIPE (>=768px)
+      // ==============================================================
       const transition = doc.startViewTransition(() => {
         currentMode = newMode;
         applyThemeDOM(newMode);
@@ -191,13 +246,17 @@ export function AmbienceProvider({ children }: { children: React.ReactNode }) {
 
       transitionTimerRef.current = setTimeout(() => {
         setIsTransitioning(false);
+        setTargetMode(null);
+        if (typeof document !== "undefined") {
+          document.documentElement.classList.remove("theme-switching");
+        }
       }, 650);
     },
     []
   );
 
   const toggleAmbience = useCallback(
-    (event?: React.MouseEvent | MouseEvent) => {
+    (event?: React.MouseEvent | MouseEvent | React.TouchEvent | TouchEvent) => {
       setAmbience(currentMode === "day" ? "evening" : "day", event);
     },
     [setAmbience]
@@ -216,8 +275,19 @@ export function AmbienceProvider({ children }: { children: React.ReactNode }) {
       setAmbience,
       isTransitioning,
       lastOrigin,
+      targetMode,
+      isMobileTransition,
     }),
-    [mode, isEvening, toggleAmbience, setAmbience, isTransitioning, lastOrigin]
+    [
+      mode,
+      isEvening,
+      toggleAmbience,
+      setAmbience,
+      isTransitioning,
+      lastOrigin,
+      targetMode,
+      isMobileTransition,
+    ]
   );
 
   return (

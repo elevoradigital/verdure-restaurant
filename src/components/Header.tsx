@@ -329,7 +329,7 @@ export default function Header({ onOpenReservation }: HeaderProps) {
                 <AudioEqualizerPill
                   isPlaying={isAmbientPlaying}
                   isEvening={isEvening}
-                  onToggle={toggleAmbience}
+                  onToggle={() => setIsAmbientPlaying(!isAmbientPlaying)}
                 />
                 <button
                   onClick={() => setMobileMenuOpen(false)}
