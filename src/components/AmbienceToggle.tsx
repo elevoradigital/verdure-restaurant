@@ -29,7 +29,7 @@ export default function AmbienceToggle({
           onToggleComplete?.();
         }}
         data-cursor="magnetic"
-        className={`inline-flex items-center gap-2.5 px-5 py-3 rounded-full text-xs font-mono font-semibold tracking-wider transition-all duration-300 shadow-md active:scale-95 cursor-pointer ${
+        className={`inline-flex items-center gap-2.5 px-5 py-3 rounded-full text-xs font-mono font-semibold tracking-wider transition-colors duration-300 shadow-md active:scale-95 cursor-pointer ${
           isEvening
             ? "bg-[#C8A97E] hover:bg-[#D9BA8F] text-[#0B1610]"
             : "bg-[#F4F3EE] hover:bg-white text-[#11261B]"
@@ -63,7 +63,7 @@ export default function AmbienceToggle({
         }}
         data-cursor="magnetic"
         aria-label={isEvening ? "Switch to daylight service" : "Switch to evening service"}
-        className={`min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full border transition-all duration-300 active:scale-90 cursor-pointer ${
+        className={`min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full border transition-colors duration-300 active:scale-90 cursor-pointer ${
           isEvening
             ? "bg-[#12241B] text-[#C8A97E] border-[#C8A97E]/30 shadow-[0_0_12px_rgba(200,169,126,0.15)]"
             : "bg-[#EAE8E0] text-[#141816] border-[#11261B]/15"
@@ -145,7 +145,7 @@ export default function AmbienceToggle({
   // Default: Sleek Dual-Pill Switcher for Desktop Navbar
   return (
     <div
-      className={`inline-flex items-center p-1 rounded-full border transition-all duration-300 select-none ${
+      className={`inline-flex items-center p-1 rounded-full border transition-colors duration-300 select-none ${
         isEvening
           ? "bg-[#12241B] border-[#C8A97E]/25 shadow-[0_2px_12px_rgba(200,169,126,0.12)]"
           : "bg-[#EAE8E0]/90 border-[#11261B]/15"

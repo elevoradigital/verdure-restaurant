@@ -2,7 +2,17 @@
 
 import React, { useState, useRef, MouseEvent } from "react";
 import Image from "next/image";
-import { motion, useSpring, useScroll, useTransform, useReducedMotion, AnimatePresence } from "framer-motion";
+import {
+  motion,
+  useSpring,
+  useScroll,
+  useTransform,
+  useReducedMotion,
+  AnimatePresence,
+  useInView,
+  useMotionValue,
+  useMotionTemplate,
+} from "framer-motion";
 import { ArrowRight, Flame, X, ArrowUpRight } from "lucide-react";
 import MagneticButton from "./MagneticButton";
 import { useIsTouchDevice } from "@/hooks/useIsTouchDevice";
@@ -175,19 +185,32 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
   const { isEvening } = useAmbience();
   const sectionRef = useRef<HTMLElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
+  const isHeroInView = useInView(sectionRef, { margin: "100px" });
   const [isHovered, setIsHovered] = useState(false);
   const [selectedDishIdx, setSelectedDishIdx] = useState(0);
   const [activeHotspot, setActiveHotspot] = useState<string | null>("01");
   const isTouchDevice = useIsTouchDevice();
-  const [sheenPosition, setSheenPosition] = useState({ x: 50, y: 50 });
   const prefersReducedMotion = useReducedMotion();
 
   const currentDish = heroDishObjects[selectedDishIdx];
 
-  // Desktop Mouse Tilt: Damped spring physics
-  const springConfig = { stiffness: 180, damping: 22, mass: 0.6 };
+  // Desktop Mouse Tilt: Damped spring physics tuned for 60-120fps (instant settle, zero dragging)
+  const springConfig = {
+    stiffness: 220,
+    damping: 28,
+    mass: 0.5,
+    restDelta: 0.005,
+    restSpeed: 0.005,
+  };
   const mouseRotateX = useSpring(0, springConfig);
   const mouseRotateY = useSpring(0, springConfig);
+
+  // Direct Hardware-accelerated Sheen coordinates (Zero React Re-Renders)
+  const sheenX = useMotionValue(50);
+  const sheenY = useMotionValue(50);
+  const sheenBackground = useMotionTemplate`radial-gradient(circle 350px at ${sheenX}% ${sheenY}%, ${
+    isEvening ? "rgba(200,169,126,0.32)" : "rgba(255,255,255,0.45)"
+  }, transparent ${isEvening ? "65%" : "60%"})`;
 
   // Scroll-Linked Hero Parallax
   const { scrollYProgress } = useScroll({
@@ -218,10 +241,8 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
     mouseRotateX.set(rX);
     mouseRotateY.set(rY);
 
-    setSheenPosition({
-      x: (x / rect.width) * 100,
-      y: (y / rect.height) * 100,
-    });
+    sheenX.set((x / rect.width) * 100);
+    sheenY.set((y / rect.height) * 100);
   };
 
   const handleMouseEnter = () => {
@@ -232,7 +253,8 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
     setIsHovered(false);
     mouseRotateX.set(0);
     mouseRotateY.set(0);
-    setSheenPosition({ x: 50, y: 50 });
+    sheenX.set(50);
+    sheenY.set(50);
   };
 
   const easeCurve = [0.22, 1, 0.36, 1] as const;
@@ -393,7 +415,7 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                 <MagneticButton
                   onClick={onOpenReservation}
                   data-cursor="magnetic"
-                  className={`group px-6 py-3 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 shadow-md ${
+                  className={`group px-6 py-3 rounded-full text-xs font-semibold uppercase tracking-wider transition-colors duration-300 shadow-md ${
                     isEvening
                       ? "bg-[#C8A97E] hover:bg-[#D9BA8F] text-[#0B1610]"
                       : "bg-[#1B3B2B] hover:bg-[#142E21] text-[#F4F3EE]"
@@ -406,7 +428,7 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                 <a
                   href="#plates"
                   data-cursor="magnetic"
-                  className={`group inline-flex items-center gap-2 px-5 py-3 rounded-full border text-xs font-semibold uppercase tracking-wider transition-all duration-200 cursor-pointer ${
+                  className={`group inline-flex items-center gap-2 px-5 py-3 rounded-full border text-xs font-semibold uppercase tracking-wider transition-colors duration-200 cursor-pointer ${
                     isEvening
                       ? "border-[#F4F3EE]/20 hover:border-[#C8A97E] text-[#F4F3EE] hover:text-[#C8A97E] bg-[#12241B]"
                       : "border-[#11261B]/15 hover:border-[#1B3B2B] text-[#141816] hover:text-[#1B3B2B] bg-[#EAE8E0]"
@@ -453,7 +475,7 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                         setSelectedDishIdx(idx);
                         setActiveHotspot(dish.hotspots[0].id);
                       }}
-                      className={`relative p-2 sm:p-2.5 rounded-2xl border text-left transition-all duration-300 cursor-pointer overflow-hidden ${
+                      className={`relative p-2 sm:p-2.5 rounded-2xl border text-left transition-colors duration-300 cursor-pointer overflow-hidden ${
                         isSelected
                           ? isEvening
                             ? "bg-[#12241B] border-[#C8A97E]/80 shadow-[0_6px_20px_rgba(200,169,126,0.18)]"
@@ -544,6 +566,8 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                 scale: prefersReducedMotion ? 1 : bowlScale,
                 y: prefersReducedMotion ? 0 : bowlParallaxY,
                 transformStyle: "preserve-3d",
+                willChange: "transform",
+                backfaceVisibility: "hidden",
               }}
               className="relative w-full max-w-md sm:max-w-lg lg:max-w-none aspect-[4/4.2] sm:aspect-[4/3.8] select-none preserve-3d"
             >
@@ -557,9 +581,9 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                 }}
                 className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10"
               >
-                {/* Slow Rotating Astronomical Ring (360deg over 45s) */}
+                {/* Slow Rotating Astronomical Ring (360deg over 45s) - Paused off-screen */}
                 <motion.div
-                  animate={{ rotate: 360 }}
+                  animate={isHeroInView && !prefersReducedMotion ? { rotate: 360 } : { rotate: 0 }}
                   transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
                   className={`w-[122%] h-[122%] rounded-full border border-dashed transition-colors duration-700 ${
                     isEvening ? "border-[#C8A97E]/20" : "border-[#1B3B2B]/20"
@@ -588,21 +612,19 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
 
               {/* ---------------------------------------------------- */}
               {/* LAYER 1: ASYMMETRIC SCULPTED GALLERY FRAME (translateZ: 0px) */}
-              {/* Continuous vertical levitation (y: [0, -8, 0])      */}
+              {/* Continuous vertical levitation (y: [0, -8, 0]) - Paused off-screen */}
               {/* ---------------------------------------------------- */}
               <motion.div
-                animate={prefersReducedMotion ? undefined : { y: [0, -8, 0] }}
+                animate={isHeroInView && !prefersReducedMotion ? { y: [0, -8, 0] } : { y: 0 }}
                 transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                 style={{
                   transformStyle: "preserve-3d",
                   transform: "translateZ(0px)",
                   boxShadow: isEvening
-                    ? isHovered
-                      ? "0 36px 70px -10px rgba(0, 0, 0, 0.7), 0 0 40px rgba(200, 169, 126, 0.25)"
-                      : "0 24px 50px -12px rgba(0, 0, 0, 0.6), 0 0 20px rgba(200, 169, 126, 0.15)"
-                    : isHovered
-                    ? "0 32px 64px -12px rgba(17, 38, 27, 0.22), 0 18px 36px -18px rgba(17, 38, 27, 0.18)"
-                    : "0 20px 40px -15px rgba(17, 38, 27, 0.14)",
+                    ? "0 24px 48px -12px rgba(0, 0, 0, 0.7)"
+                    : "0 20px 40px -15px rgba(17, 38, 27, 0.2)",
+                  willChange: "transform",
+                  backfaceVisibility: "hidden",
                 }}
                 className={`relative w-full h-full rounded-t-[140px] rounded-b-[28px] overflow-hidden border p-1.5 transition-colors duration-700 ${
                   isEvening ? "bg-[#12241B] border-[#C8A97E]/30" : "bg-[#EAE8E0] border-[#11261B]/20"
@@ -630,13 +652,11 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                     </motion.div>
                   </AnimatePresence>
 
-                  {/* Specular Ambient Sheen */}
+                  {/* Specular Ambient Sheen (Direct GPU Motion Value) */}
                   <motion.div
                     className="absolute inset-0 pointer-events-none transition-opacity duration-500"
                     style={{
-                      background: isEvening
-                        ? `radial-gradient(circle 350px at ${sheenPosition.x}% ${sheenPosition.y}%, rgba(200,169,126,0.32), transparent 65%)`
-                        : `radial-gradient(circle 350px at ${sheenPosition.x}% ${sheenPosition.y}%, rgba(255,255,255,0.45), transparent 60%)`,
+                      background: sheenBackground,
                       opacity: isHovered ? 1 : 0.4,
                     }}
                   />
@@ -675,13 +695,13 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                       className="absolute -translate-x-1/2 -translate-y-1/2 pointer-events-auto"
                     >
                       <div className="relative flex items-center justify-center w-10 h-10">
-                        {/* Dual-ring pulse */}
+                        {/* Dual-ring pulse (paused off-screen) */}
                         {!prefersReducedMotion && (
                           <motion.span
                             animate={
-                              isActive
-                                ? { opacity: 0 }
-                                : { scale: [1, 1.8], opacity: [0.6, 0] }
+                              isHeroInView && !isActive
+                                ? { scale: [1, 1.8], opacity: [0.6, 0] }
+                                : { opacity: 0 }
                             }
                             transition={{ duration: 2.2, repeat: Infinity, ease: "easeOut" }}
                             className={`absolute w-6 h-6 rounded-full border pointer-events-none ${
@@ -763,10 +783,10 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                               />
                             </svg>
 
-                            <div className={`w-[200px] p-3 rounded-2xl backdrop-blur-md border shadow-2xl text-left ${
+                            <div className={`w-[200px] p-3 rounded-2xl border shadow-xl text-left ${
                               isEvening
-                                ? "bg-[#12241B]/95 text-[#F4F3EE] border-[#C8A97E]/30 shadow-[0_12px_32px_rgba(0,0,0,0.7)]"
-                                : "bg-[#F4F3EE]/95 text-[#141816] border-[#11261B]/15 shadow-[0_12px_32px_rgba(17,38,27,0.2)]"
+                                ? "bg-[#12241B]/[0.98] text-[#F4F3EE] border-[#C8A97E]/30 shadow-[0_12px_32px_rgba(0,0,0,0.7)]"
+                                : "bg-[#F4F3EE]/[0.98] text-[#141816] border-[#11261B]/15 shadow-[0_12px_32px_rgba(17,38,27,0.2)]"
                             }`}>
                               <div className="flex items-center justify-between pb-1 border-b border-current/10">
                                 <span className={`text-[9px] font-mono tracking-widest uppercase font-bold ${
@@ -817,16 +837,16 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                   transformStyle: "preserve-3d",
                   transform: prefersReducedMotion ? undefined : "translateZ(55px)",
                 }}
-                className={`absolute -top-4 -left-3 sm:-left-6 z-20 max-w-[230px] pointer-events-auto transition-all duration-300 ${
+                className={`absolute -top-4 -left-3 sm:-left-6 z-20 max-w-[230px] pointer-events-auto transition-[opacity,transform] duration-300 ${
                   activeHotspot !== null
                     ? "opacity-20 scale-95 pointer-events-none"
                     : "opacity-100 scale-100"
                 }`}
               >
-                <div className={`p-3 sm:p-3.5 rounded-2xl backdrop-blur-md border shadow-2xl transition-colors duration-500 text-left ${
+                <div className={`p-3 sm:p-3.5 rounded-2xl border shadow-xl transition-colors duration-500 text-left ${
                   isEvening
-                    ? "bg-[#12241B]/95 text-[#F4F3EE] border-[#C8A97E]/30"
-                    : "bg-[#F4F3EE]/95 text-[#141816] border-[#11261B]/15"
+                    ? "bg-[#12241B]/[0.98] text-[#F4F3EE] border-[#C8A97E]/30 shadow-[0_12px_28px_rgba(0,0,0,0.6)]"
+                    : "bg-[#F4F3EE]/[0.98] text-[#141816] border-[#11261B]/15 shadow-[0_12px_28px_rgba(17,38,27,0.18)]"
                 }`}>
                   <div className={`text-[9px] font-mono tracking-widest uppercase font-bold ${
                     isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"
@@ -877,13 +897,13 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                   type="button"
                   data-cursor="magnetic"
                   onClick={onOpenReservation}
-                  className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-full backdrop-blur-md border shadow-lg text-[11px] font-mono font-medium transition-all cursor-pointer ${
+                  className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-full border shadow-md text-[11px] font-mono font-medium transition-colors cursor-pointer ${
                     isEvening
-                      ? "bg-[#12241B]/95 border-[#C8A97E]/30 text-[#F4F3EE] hover:bg-[#C8A97E] hover:text-[#0B1610]"
-                      : "bg-[#F4F3EE]/95 border-[#11261B]/15 text-[#141816] hover:bg-[#1B3B2B] hover:text-[#F4F3EE]"
+                      ? "bg-[#12241B]/[0.98] border-[#C8A97E]/30 text-[#F4F3EE] hover:bg-[#C8A97E] hover:text-[#0B1610]"
+                      : "bg-[#F4F3EE]/[0.98] border-[#11261B]/15 text-[#141816] hover:bg-[#1B3B2B] hover:text-[#F4F3EE]"
                   }`}
                 >
-                  <span className={`w-1.5 h-1.5 rounded-full animate-ping ${
+                  <span className={`w-1.5 h-1.5 rounded-full ${
                     isEvening ? "bg-[#C8A97E]" : "bg-[#2D5A43]"
                   }`} />
                   <span>{isEvening ? "● Candlelit Tasting • 6 PM – 11 PM" : "● Daylight Tasting • 12 PM – 4 PM"}</span>
@@ -913,7 +933,7 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
               SCROLL TO EXPLORE
             </span>
             <motion.div
-              animate={{ y: [0, 4, 0] }}
+              animate={isHeroInView && !prefersReducedMotion ? { y: [0, 4, 0] } : { y: 0 }}
               transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
               className="text-xs font-mono"
             >
@@ -921,12 +941,12 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
             </motion.div>
           </div>
 
-          {/* Center Cell: Smooth Kinetic Continuous Marquee Ticker (Cols 4-8) */}
+          {/* Center Cell: Smooth Kinetic Continuous Marquee Ticker (Cols 4-8) - Paused off-screen */}
           <div className="md:col-span-6 overflow-hidden h-full flex items-center relative px-4 sm:px-6">
             <motion.div
-              animate={{ x: ["0%", "-50%"] }}
+              animate={isHeroInView && !prefersReducedMotion ? { x: ["0%", "-50%"] } : {}}
               transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-              className="flex items-center gap-8 whitespace-nowrap text-xs font-mono font-medium tracking-wider uppercase opacity-85"
+              className="flex items-center gap-8 whitespace-nowrap text-xs font-mono font-medium tracking-wider uppercase opacity-85 will-change-transform"
             >
               <span>✦ ORGANIC SOURCING</span>
               <span>✦ OPEN-FIRE HEARTH</span>

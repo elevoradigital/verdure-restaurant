@@ -81,7 +81,7 @@ export default function MobileStickyBar({
               type="button"
               onClick={onOpenReservation}
               whileTap={{ scale: 0.95 }}
-              className={`relative inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-semibold tracking-wide shadow-sm overflow-hidden transition-all duration-300 cursor-pointer ${
+              className={`relative inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-semibold tracking-wide shadow-sm overflow-hidden transition-colors duration-300 cursor-pointer ${
                 isEvening
                   ? "bg-[#C8A97E] text-[#0B1610] hover:bg-[#D8BE96]"
                   : "bg-[#F4F3EE] text-[#11261B] hover:bg-white"

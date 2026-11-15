@@ -211,7 +211,7 @@ export default function ReservationModal({
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         placeholder="e.g. Radhika Sharma"
-                        className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-[#11261B]/15 text-base sm:text-sm text-[#141816] focus:outline-none focus:ring-2 focus:ring-[#1B3B2B] focus:border-transparent transition-all placeholder:text-[#5C645E]/50"
+                        className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-[#11261B]/15 text-base sm:text-sm text-[#141816] focus:outline-none focus:ring-2 focus:ring-[#1B3B2B] focus:border-transparent transition-colors duration-150 placeholder:text-[#5C645E]/50"
                       />
                     </div>
                     {errors.name && (
@@ -233,7 +233,7 @@ export default function ReservationModal({
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                         placeholder="98450 12345"
-                        className="w-full px-3.5 py-2.5 rounded-r-xl bg-white border border-[#11261B]/15 text-base sm:text-sm text-[#141816] focus:outline-none focus:ring-2 focus:ring-[#1B3B2B] focus:border-transparent transition-all placeholder:text-[#5C645E]/50"
+                        className="w-full px-3.5 py-2.5 rounded-r-xl bg-white border border-[#11261B]/15 text-base sm:text-sm text-[#141816] focus:outline-none focus:ring-2 focus:ring-[#1B3B2B] focus:border-transparent transition-colors duration-150 placeholder:text-[#5C645E]/50"
                       />
                     </div>
                     {errors.phone && (
@@ -253,7 +253,7 @@ export default function ReservationModal({
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         placeholder="radhika@example.com"
-                        className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-[#11261B]/15 text-base sm:text-sm text-[#141816] focus:outline-none focus:ring-2 focus:ring-[#1B3B2B] focus:border-transparent transition-all placeholder:text-[#5C645E]/50"
+                        className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-[#11261B]/15 text-base sm:text-sm text-[#141816] focus:outline-none focus:ring-2 focus:ring-[#1B3B2B] focus:border-transparent transition-colors duration-150 placeholder:text-[#5C645E]/50"
                       />
                     </div>
                     {errors.email && (
@@ -271,7 +271,7 @@ export default function ReservationModal({
                       value={formData.notes}
                       onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                       placeholder="Allergies, anniversary, quiet table, etc."
-                      className="w-full px-3.5 py-2 rounded-xl bg-white border border-[#11261B]/15 text-base sm:text-sm text-[#141816] focus:outline-none focus:ring-2 focus:ring-[#1B3B2B] focus:border-transparent transition-all placeholder:text-[#5C645E]/50"
+                      className="w-full px-3.5 py-2 rounded-xl bg-white border border-[#11261B]/15 text-base sm:text-sm text-[#141816] focus:outline-none focus:ring-2 focus:ring-[#1B3B2B] focus:border-transparent transition-colors duration-150 placeholder:text-[#5C645E]/50"
                     />
                   </div>
 
@@ -280,7 +280,7 @@ export default function ReservationModal({
                     <button
                       type="submit"
                       data-cursor="magnetic"
-                      className="w-full py-3.5 px-6 rounded-full bg-[#1B3B2B] hover:bg-[#142E21] text-[#F4F3EE] font-medium text-sm flex items-center justify-center gap-2 transition-all shadow-md active:scale-[0.98]"
+                      className="w-full py-3.5 px-6 rounded-full bg-[#1B3B2B] hover:bg-[#142E21] text-[#F4F3EE] font-medium text-sm flex items-center justify-center gap-2 transition-colors duration-200 shadow-md active:scale-[0.98]"
                     >
                       <span>Confirm Reservation</span>
                       <ArrowRight className="w-4 h-4" />
@@ -430,7 +430,7 @@ export default function ReservationModal({
                         const summary = `🍽️ *VERDURE Table Confirmation*\nPass ID: ${passId}\nGuest: ${formData.name}\nTable: ${formData.tableId} (${formData.tableName})\nParty: ${formData.guests}\nTime: ${formData.dateTime}\n\nPresent this digital pass upon arrival at 14 Olive Lane, Bengaluru.`;
                         window.open(`https://wa.me/?text=${encodeURIComponent(summary)}`, "_blank");
                       }}
-                      className="w-full py-3 px-4 rounded-full bg-[#25D366] hover:bg-[#20ba5a] text-black font-semibold text-xs tracking-wider uppercase transition-all shadow-md active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
+                      className="w-full py-3 px-4 rounded-full bg-[#25D366] hover:bg-[#20ba5a] text-black font-semibold text-xs tracking-wider uppercase transition-colors duration-200 shadow-md active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
                     >
                       <span>Send Pass to WhatsApp ↗</span>
                     </button>

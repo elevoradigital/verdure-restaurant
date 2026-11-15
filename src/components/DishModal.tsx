@@ -164,7 +164,7 @@ export default function DishModal({ dish, onClose, onBookDish }: DishModalProps)
                     onBookDish(dish.name);
                   }}
                   data-cursor="magnetic"
-                  className={`w-full py-3.5 px-4 rounded-full text-[#F4F3EE] text-xs font-semibold tracking-wider uppercase transition-all shadow-sm text-center active:scale-[0.98] cursor-pointer ${
+                  className={`w-full py-3.5 px-4 rounded-full text-[#F4F3EE] text-xs font-semibold tracking-wider uppercase transition-colors duration-200 shadow-sm text-center active:scale-[0.98] cursor-pointer ${
                     isEvening
                       ? "bg-[#2D5A43] hover:bg-[#234C37]"
                       : "bg-[#1B3B2B] hover:bg-[#142E21]"

@@ -17,17 +17,10 @@ import {
 } from "lucide-react";
 import { useAmbience } from "@/context/AmbienceContext";
 
-export default function Footer() {
-  const { isEvening, toggleAmbience } = useAmbience();
-  const footerRef = useRef<HTMLElement>(null);
-  const isInView = useInView(footerRef, { once: true, margin: "-60px 0px" });
-  const [email, setEmail] = useState("");
-  const [subscribed, setSubscribed] = useState(false);
-  const [isArrowHovered, setIsArrowHovered] = useState(false);
-  const [currentTime, setCurrentTime] = useState("");
-  const prefersReducedMotion = useReducedMotion();
+// Isolated Memoized Live Clock: Prevents re-rendering the 580-line Footer on every second tick
+const LiveClock = React.memo(function LiveClock() {
+  const [time, setTime] = useState("");
 
-  // Live IST Clock
   useEffect(() => {
     const updateTime = () => {
       try {
@@ -39,16 +32,28 @@ export default function Footer() {
           minute: "2-digit",
           second: "2-digit",
         });
-        setCurrentTime(istString);
+        setTime(istString);
       } catch {
         const now = new Date();
-        setCurrentTime(now.toTimeString().split(" ")[0]);
+        setTime(now.toTimeString().split(" ")[0]);
       }
     };
     updateTime();
     const interval = setInterval(updateTime, 1000);
     return () => clearInterval(interval);
   }, []);
+
+  return <span>BENGALURU • {time || "19:30:00"} IST</span>;
+});
+
+export default function Footer() {
+  const { isEvening, toggleAmbience } = useAmbience();
+  const footerRef = useRef<HTMLElement>(null);
+  const isInView = useInView(footerRef, { once: true, margin: "-60px 0px" });
+  const [email, setEmail] = useState("");
+  const [subscribed, setSubscribed] = useState(false);
+  const [isArrowHovered, setIsArrowHovered] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
@@ -368,7 +373,7 @@ export default function Footer() {
               <li className="flex items-center justify-between group cursor-default">
                 <span>Michelin Green Star 2026</span>
                 <ArrowUpRight
-                  className={`w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all ${
+                  className={`w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300 ${
                     isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"
                   }`}
                 />
@@ -376,7 +381,7 @@ export default function Footer() {
               <li className="flex items-center justify-between group cursor-default">
                 <span>Architectural Digest SOTY</span>
                 <ArrowUpRight
-                  className={`w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all ${
+                  className={`w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300 ${
                     isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"
                   }`}
                 />
@@ -384,7 +389,7 @@ export default function Footer() {
               <li className="flex items-center justify-between group cursor-default">
                 <span>Awwwards Site of the Day</span>
                 <ArrowUpRight
-                  className={`w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all ${
+                  className={`w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300 ${
                     isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"
                   }`}
                 />
@@ -437,7 +442,7 @@ export default function Footer() {
             <div className="flex items-center gap-1.5">
               <Clock className="w-3.5 h-3.5 opacity-60" />
               <span className="font-semibold tracking-wider">
-                BENGALURU • {currentTime || "19:30:00"} IST
+                <LiveClock />
               </span>
               <span className="opacity-40">|</span>
               <span
@@ -458,7 +463,7 @@ export default function Footer() {
               onClick={toggleAmbience}
               data-cursor="pointer"
               aria-label="Toggle Lighting Ambience"
-              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-[11px] font-mono tracking-wider transition-all duration-300 ${
+              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-[11px] font-mono tracking-wider transition-colors duration-300 ${
                 isEvening
                   ? "bg-[#12241B] border-[#C8A97E]/30 text-[#C8A97E] hover:border-[#C8A97E]"
                   : "bg-[#F4F3EE] border-[#11261B]/20 text-[#1B3B2B] hover:border-[#11261B]"
@@ -485,7 +490,7 @@ export default function Footer() {
             data-cursor="magnetic"
             onMouseEnter={() => setIsArrowHovered(true)}
             onMouseLeave={() => setIsArrowHovered(false)}
-            className={`group inline-flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-300 shadow-sm active:scale-95 cursor-pointer ${
+            className={`group inline-flex items-center gap-2 px-4 py-2 rounded-full border transition-colors duration-300 shadow-sm active:scale-95 cursor-pointer ${
               isEvening
                 ? "bg-[#12241B] hover:bg-[#C8A97E] text-[#F4F3EE] hover:text-[#0B1610] border-white/15"
                 : "bg-[#F4F3EE] hover:bg-[#1B3B2B] text-[#141816] hover:text-[#F4F3EE] border-[#11261B]/15"

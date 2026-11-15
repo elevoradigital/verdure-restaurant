@@ -98,11 +98,7 @@ export default function FeatureStrip() {
                 }}
                 onMouseEnter={() => setHoveredIndex(idx)}
                 onMouseLeave={() => setHoveredIndex(null)}
-                style={{
-                  flex: prefersReducedMotion || hoveredIndex === null ? 1 : hoveredIndex === idx ? 1.4 : 0.8,
-                  transition: "flex 500ms cubic-bezier(0.16, 1, 0.3, 1)",
-                }}
-                className={`group relative p-6 sm:p-8 lg:p-10 transition-all duration-500 flex flex-col justify-between cursor-pointer overflow-hidden ${
+                className={`group relative flex-1 p-6 sm:p-8 lg:p-10 transition-colors duration-500 flex flex-col justify-between cursor-pointer overflow-hidden will-change-transform ${
                   isEvening
                     ? isHovered ? "bg-[#12241B]" : "hover:bg-[#12241B]/60"
                     : isHovered ? "bg-[#EAE8E0]" : "hover:bg-[#EAE8E0]/40"

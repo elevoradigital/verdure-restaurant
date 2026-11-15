@@ -22,13 +22,25 @@ export default function CustomCursor() {
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
 
-  // Inner precision dot spring (tight: 700 / 35 / 0.2)
-  const dotSpringConfig = { stiffness: 700, damping: 35, mass: 0.2 };
+  // Inner precision dot spring (tight: 700 / 35 / 0.2, zero dragging)
+  const dotSpringConfig = {
+    stiffness: 700,
+    damping: 35,
+    mass: 0.2,
+    restDelta: 0.005,
+    restSpeed: 0.005,
+  };
   const dotX = useSpring(mouseX, dotSpringConfig);
   const dotY = useSpring(mouseY, dotSpringConfig);
 
   // Outer contextual ring / morphing pill spring (smooth trailing: 280 / 26 / 0.5)
-  const ringSpringConfig = { stiffness: 280, damping: 26, mass: 0.5 };
+  const ringSpringConfig = {
+    stiffness: 280,
+    damping: 26,
+    mass: 0.5,
+    restDelta: 0.005,
+    restSpeed: 0.005,
+  };
   const ringX = useSpring(mouseX, ringSpringConfig);
   const ringY = useSpring(mouseY, ringSpringConfig);
 
@@ -156,7 +168,7 @@ export default function CustomCursor() {
               animate={{ scale: 1, y: 0, opacity: 1 }}
               exit={{ scale: 0.8, y: -4, opacity: 0 }}
               transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-              className={`h-[34px] px-3.5 rounded-full flex items-center gap-1.5 backdrop-blur-md border shadow-xl transition-all duration-500 whitespace-nowrap ${
+              className={`h-[34px] px-3.5 rounded-full flex items-center gap-1.5 backdrop-blur-md border shadow-xl transition-colors duration-300 whitespace-nowrap will-change-transform ${
                 isEvening
                   ? "bg-[#C8A97E]/95 text-[#0B1610] border-black/10 shadow-[0_6px_24px_rgba(200,169,126,0.35)]"
                   : "bg-[#1B3B2B]/95 text-[#F4F3EE] border-[#F4F3EE]/20 shadow-[0_6px_24px_rgba(17,38,27,0.35)]"
@@ -177,7 +189,7 @@ export default function CustomCursor() {
               animate={{ scale: 1, y: 0, opacity: 1 }}
               exit={{ scale: 0.8, y: -4, opacity: 0 }}
               transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-              className={`h-[34px] px-3.5 rounded-full flex items-center gap-1.5 backdrop-blur-md border shadow-xl transition-all duration-500 whitespace-nowrap ${
+              className={`h-[34px] px-3.5 rounded-full flex items-center gap-1.5 backdrop-blur-md border shadow-xl transition-colors duration-300 whitespace-nowrap will-change-transform ${
                 isEvening
                   ? "bg-[#C8A97E] text-[#0B1610] border-[#0B1610]/15 shadow-[0_6px_24px_rgba(200,169,126,0.4)]"
                   : "bg-[#1B3B2B] text-[#F4F3EE] border-[#F4F3EE]/20 shadow-[0_6px_24px_rgba(17,38,27,0.4)]"
@@ -197,7 +209,7 @@ export default function CustomCursor() {
               animate={{ scale: 1, y: 0, opacity: 1 }}
               exit={{ scale: 0.8, y: -4, opacity: 0 }}
               transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-              className={`h-[34px] px-3.5 rounded-full flex items-center gap-1.5 backdrop-blur-md border shadow-xl transition-all duration-500 whitespace-nowrap ${
+              className={`h-[34px] px-3.5 rounded-full flex items-center gap-1.5 backdrop-blur-md border shadow-xl transition-colors duration-300 whitespace-nowrap will-change-transform ${
                 isEvening
                   ? "bg-[#C8A97E] text-[#0B1610] border-black/10 shadow-[0_6px_24px_rgba(200,169,126,0.4)]"
                   : "bg-[#F4F3EE]/95 text-[#11261B] border-[#11261B]/15 shadow-[0_6px_24px_rgba(17,38,27,0.25)]"
@@ -218,7 +230,7 @@ export default function CustomCursor() {
               animate={{ scale: 1, y: 0, opacity: 1 }}
               exit={{ scale: 0.8, y: -4, opacity: 0 }}
               transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-              className={`h-[34px] px-3.5 rounded-full flex items-center gap-1.5 backdrop-blur-md border shadow-xl transition-all duration-500 whitespace-nowrap ${
+              className={`h-[34px] px-3.5 rounded-full flex items-center gap-1.5 backdrop-blur-md border shadow-xl transition-colors duration-300 whitespace-nowrap will-change-transform ${
                 label.includes("BOOKED")
                   ? "bg-[#5C645E]/90 text-[#F4F3EE] border-white/20 shadow-md"
                   : isEvening

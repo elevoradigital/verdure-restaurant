@@ -132,7 +132,7 @@ export default function GalleryModal({
               src={current.src}
               alt={current.title}
               fill
-              className="object-cover object-center transition-all duration-300"
+              className="object-cover object-center transition-opacity duration-300"
               sizes="(max-width: 1200px) 100vw, 1200px"
             />
 
@@ -140,7 +140,7 @@ export default function GalleryModal({
             <button
               onClick={handlePrev}
               data-cursor="magnetic"
-              className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 p-2.5 sm:p-3 rounded-full bg-[#11261B]/70 hover:bg-[#11261B] text-[#F4F3EE] backdrop-blur-md transition-all active:scale-90"
+              className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 p-2.5 sm:p-3 rounded-full bg-[#11261B]/70 hover:bg-[#11261B] text-[#F4F3EE] backdrop-blur-md transition-colors duration-200 active:scale-90"
               aria-label="Previous image"
             >
               <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -148,7 +148,7 @@ export default function GalleryModal({
             <button
               onClick={handleNext}
               data-cursor="magnetic"
-              className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 p-2.5 sm:p-3 rounded-full bg-[#11261B]/70 hover:bg-[#11261B] text-[#F4F3EE] backdrop-blur-md transition-all active:scale-90"
+              className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 p-2.5 sm:p-3 rounded-full bg-[#11261B]/70 hover:bg-[#11261B] text-[#F4F3EE] backdrop-blur-md transition-colors duration-200 active:scale-90"
               aria-label="Next image"
             >
               <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -173,7 +173,7 @@ export default function GalleryModal({
                   key={img.title}
                   data-cursor="magnetic"
                   onClick={() => setCurrentIndex(idx)}
-                  className={`relative w-12 sm:w-14 h-8 sm:h-10 rounded-lg overflow-hidden shrink-0 border-2 transition-all ${
+                  className={`relative w-12 sm:w-14 h-8 sm:h-10 rounded-lg overflow-hidden shrink-0 border-2 transition-[border-color,opacity,transform] duration-200 ${
                     currentIndex === idx
                       ? "border-[#6B8E78] scale-105"
                       : "border-transparent opacity-60 hover:opacity-100"

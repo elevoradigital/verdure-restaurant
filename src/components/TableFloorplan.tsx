@@ -203,7 +203,7 @@ export default function TableFloorplan({
   };
 
   return (
-    <div className={`w-full rounded-3xl sm:rounded-[2rem] p-4 sm:p-7 md:p-9 text-[#F4F3EE] border shadow-2xl relative overflow-hidden select-none transition-all duration-700 ${
+    <div className={`w-full rounded-3xl sm:rounded-[2rem] p-4 sm:p-7 md:p-9 text-[#F4F3EE] border shadow-2xl relative overflow-hidden select-none transition-colors duration-700 ${
       isEvening
         ? "bg-[#0B1610] border-[#C8A97E]/30 [box-shadow:0_24px_60px_rgba(0,0,0,0.8),0_0_35px_rgba(200,169,126,0.12)]"
         : "bg-[#11261B] border-[#F4F3EE]/15 shadow-2xl"

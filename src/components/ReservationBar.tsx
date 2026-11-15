@@ -178,7 +178,7 @@ export default function ReservationBar() {
                       key={opt}
                       type="button"
                       onClick={() => setGuests(opt)}
-                      className={`py-2 px-2.5 rounded-xl text-xs font-mono transition-all cursor-pointer border ${
+                      className={`py-2 px-2.5 rounded-xl text-xs font-mono transition-colors duration-200 cursor-pointer border ${
                         isSelected
                           ? isEvening
                             ? "bg-[#C8A97E] text-[#0B1610] font-bold border-[#C8A97E] shadow-sm"
@@ -208,7 +208,7 @@ export default function ReservationBar() {
                       key={time}
                       type="button"
                       onClick={() => setDateTime(time)}
-                      className={`py-2 px-2.5 rounded-xl text-xs font-mono transition-all cursor-pointer border truncate ${
+                      className={`py-2 px-2.5 rounded-xl text-xs font-mono transition-colors duration-200 cursor-pointer border truncate ${
                         isSelected
                           ? isEvening
                             ? "bg-[#C8A97E] text-[#0B1610] font-bold border-[#C8A97E] shadow-sm"
@@ -230,7 +230,7 @@ export default function ReservationBar() {
               <MagneticButton
                 onClick={() => setIsModalOpen(true)}
                 data-cursor="magnetic"
-                className={`w-full py-4 rounded-2xl text-xs font-semibold uppercase tracking-[0.14em] transition-all duration-300 shadow-xl flex items-center justify-center gap-2 cursor-pointer ${
+                className={`w-full py-4 rounded-2xl text-xs font-semibold uppercase tracking-[0.14em] transition-colors duration-300 shadow-xl flex items-center justify-center gap-2 cursor-pointer ${
                   isEvening
                     ? "bg-[#C8A97E] hover:bg-[#D9BA8F] text-[#0B1610]"
                     : "bg-[#1B3B2B] hover:bg-[#142E21] text-[#F4F3EE]"

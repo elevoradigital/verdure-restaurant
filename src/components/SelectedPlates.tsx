@@ -139,7 +139,13 @@ function MotionPlateCard({
   const pairingData = dishPairings[dish.id] || { day: "Garden Infusion", evening: "Cellar Pour" };
   const activePairing = isEvening ? pairingData.evening : pairingData.day;
 
-  const springConfig = { stiffness: 180, damping: 22, mass: 0.5 };
+  const springConfig = {
+    stiffness: 220,
+    damping: 26,
+    mass: 0.5,
+    restDelta: 0.005,
+    restSpeed: 0.005,
+  };
   const rotateX = useSpring(0, springConfig);
   const rotateY = useSpring(0, springConfig);
 
@@ -190,7 +196,7 @@ function MotionPlateCard({
         rotateY: isTouchDevice ? 0 : rotateY,
         transformStyle: "preserve-3d",
       }}
-      className={`group relative rounded-3xl p-5 cursor-pointer flex flex-col justify-between preserve-3d transition-all duration-700 border ${
+      className={`group relative rounded-3xl p-5 cursor-pointer flex flex-col justify-between preserve-3d transition-colors duration-700 border ${
         isEvening
           ? "bg-[#12241B] border-[#F4F3EE]/10 shadow-[0_12px_32px_rgba(0,0,0,0.5)] [box-shadow:inset_0_1px_0_0_rgba(200,169,126,0.25)]"
           : "bg-[#F4F3EE] border-[#11261B]/10 shadow-sm hover:shadow-md"
@@ -316,12 +322,17 @@ export default function SelectedPlates({
   const filterBarRef = useRef<HTMLDivElement>(null);
 
   // Floating cursor follower coordinates for Mode B (Editorial Index)
-  const springConfig = { stiffness: 350, damping: 28 };
+  const springConfig = {
+    stiffness: 350,
+    damping: 28,
+    restDelta: 0.005,
+    restSpeed: 0.005,
+  };
   const previewX = useSpring(0, springConfig);
   const previewY = useSpring(0, springConfig);
 
   const handleIndexMouseMove = (e: MouseEvent<HTMLDivElement>) => {
-    if (!sectionRef.current) return;
+    if (viewMode !== "index" || !hoveredIndexDish || !sectionRef.current) return;
     const rect = sectionRef.current.getBoundingClientRect();
     previewX.set(e.clientX - rect.left + 24);
     previewY.set(e.clientY - rect.top - 80);
@@ -473,7 +484,7 @@ export default function SelectedPlates({
               <button
                 type="button"
                 onClick={() => setViewMode("grid")}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-full transition-all cursor-pointer ${
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-full transition-colors duration-200 cursor-pointer ${
                   viewMode === "grid"
                     ? isEvening
                       ? "bg-[#C8A97E] text-[#0B1610] font-bold shadow-sm"
@@ -488,7 +499,7 @@ export default function SelectedPlates({
               <button
                 type="button"
                 onClick={() => setViewMode("index")}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-full transition-all cursor-pointer ${
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-full transition-colors duration-200 cursor-pointer ${
                   viewMode === "index"
                     ? isEvening
                       ? "bg-[#C8A97E] text-[#0B1610] font-bold shadow-sm"
@@ -584,14 +595,14 @@ export default function SelectedPlates({
                       }`}>
                         {dish.price}
                       </span>
-                      <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                      <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-[transform,opacity] duration-300" />
                     </div>
                   </div>
                 );
               })}
             </div>
 
-            {/* Cursor-Following Floating 3D Dish Preview Card */}
+            {/* Cursor-Following Floating 3D Dish Preview Card (GPU-Optimized Solid Surface) */}
             <AnimatePresence>
               {hoveredIndexDish && (
                 <motion.div
@@ -603,13 +614,14 @@ export default function SelectedPlates({
                     x: previewX,
                     y: previewY,
                     pointerEvents: "none",
+                    willChange: "transform",
                   }}
-                  className="absolute z-50 w-72 rounded-3xl p-3 backdrop-blur-xl border shadow-2xl overflow-hidden"
+                  className="absolute z-50 w-72 rounded-3xl p-3 border shadow-xl overflow-hidden will-change-transform"
                 >
                   <div className={`p-3 rounded-2xl ${
                     isEvening
-                      ? "bg-[#12241B]/95 border border-[#C8A97E]/30 text-[#F4F3EE] shadow-[0_20px_50px_rgba(0,0,0,0.8)]"
-                      : "bg-[#F4F3EE]/95 border border-[#11261B]/15 text-[#141816] shadow-[0_20px_50px_rgba(17,38,27,0.25)]"
+                      ? "bg-[#12241B]/[0.98] border border-[#C8A97E]/30 text-[#F4F3EE] shadow-[0_16px_36px_rgba(0,0,0,0.8)]"
+                      : "bg-[#F4F3EE]/[0.98] border border-[#11261B]/15 text-[#141816] shadow-[0_16px_36px_rgba(17,38,27,0.2)]"
                   }`}>
                     <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden mb-2.5">
                       <Image
@@ -668,7 +680,7 @@ export default function SelectedPlates({
                 type="button"
                 onClick={() => scrollToCard(idx)}
                 aria-label={`Go to slide ${idx + 1}`}
-                className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                className={`h-1.5 rounded-full transition-[width,background-color] duration-300 cursor-pointer ${
                   activeMobileIndex === idx
                     ? isEvening ? "w-6 bg-[#C8A97E]" : "w-6 bg-[#1B3B2B]"
                     : isEvening ? "w-1.5 bg-white/20" : "w-1.5 bg-black/20"

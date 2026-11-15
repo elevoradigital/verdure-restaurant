@@ -133,7 +133,7 @@ export default function Atmosphere() {
                   <MagneticButton
                     onClick={() => setGalleryOpen(true)}
                     data-cursor="magnetic"
-                    className="group w-full sm:w-auto px-6 py-3 rounded-full bg-[#C8A97E] hover:bg-[#D9BA8F] text-[#0B1610] text-xs font-semibold uppercase tracking-wider transition-all duration-300 shadow-md cursor-pointer flex items-center justify-center gap-2"
+                    className="group w-full sm:w-auto px-6 py-3 rounded-full bg-[#C8A97E] hover:bg-[#D9BA8F] text-[#0B1610] text-xs font-semibold uppercase tracking-wider transition-colors duration-300 shadow-md cursor-pointer flex items-center justify-center gap-2"
                   >
                     <span>Explore Space Gallery (04)</span>
                     <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
@@ -148,7 +148,7 @@ export default function Atmosphere() {
               {/* ======================================================== */}
               <div className="lg:col-span-7 flex justify-center">
                 <div
-                  className="group relative w-full aspect-[4/3] sm:aspect-[16/11] rounded-2xl sm:rounded-3xl overflow-hidden border border-[#F4F3EE]/15 shadow-2xl transition-all duration-500 hover:border-[#C8A97E]/50 select-none"
+                  className="group relative w-full aspect-[4/3] sm:aspect-[16/11] rounded-2xl sm:rounded-3xl overflow-hidden border border-[#F4F3EE]/15 shadow-2xl transition-colors duration-500 hover:border-[#C8A97E]/50 select-none"
                 >
                   {/* Internal Parallax Image with Smooth Crossfade */}
                   <div
@@ -188,7 +188,7 @@ export default function Atmosphere() {
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0B1610]/85 via-transparent to-transparent pointer-events-none" />
 
                     {/* Top-Right Expand Cue */}
-                    <div className="absolute top-4 right-4 z-10 p-2.5 rounded-full bg-[#0B1610]/80 backdrop-blur-md border border-white/10 text-[#F4F3EE] opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all pointer-events-none">
+                    <div className="absolute top-4 right-4 z-10 p-2.5 rounded-full bg-[#0B1610]/80 backdrop-blur-md border border-white/10 text-[#F4F3EE] opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-[transform,opacity] duration-300 pointer-events-none">
                       <Eye className="w-4 h-4" />
                     </div>
                   </div>
@@ -202,7 +202,7 @@ export default function Atmosphere() {
                           key={zone.id}
                           type="button"
                           onClick={() => setActiveZoneIdx(idx)}
-                          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-mono transition-all cursor-pointer whitespace-nowrap ${
+                          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-mono transition-colors duration-200 cursor-pointer whitespace-nowrap ${
                             isActive
                               ? "bg-[#C8A97E] text-[#0B1610] font-bold shadow-md"
                               : "text-[#F4F3EE]/75 hover:text-[#F4F3EE] hover:bg-white/5"

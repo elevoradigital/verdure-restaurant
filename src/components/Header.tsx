@@ -203,7 +203,7 @@ export default function Header({ onOpenReservation }: HeaderProps) {
                 onClick={toggleAmbience}
                 data-cursor="magnetic"
                 title={isAmbientPlaying ? "Mute garden ambience" : "Listen to garden ambience"}
-                className={`p-2 rounded-full border transition-all duration-200 cursor-pointer ${
+                className={`p-2 rounded-full border transition-colors duration-200 cursor-pointer ${
                   isEvening
                     ? isAmbientPlaying
                       ? "bg-[#C8A97E]/15 text-[#C8A97E] border-[#C8A97E]/30"
@@ -227,7 +227,7 @@ export default function Header({ onOpenReservation }: HeaderProps) {
               <MagneticButton
                 onClick={onOpenReservation}
                 data-cursor="magnetic"
-                className={`group w-full max-w-[155px] py-2 px-4 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 shadow-sm cursor-pointer flex items-center justify-center gap-1.5 ${
+                className={`group w-full max-w-[155px] py-2 px-4 rounded-full text-xs font-semibold uppercase tracking-wider transition-colors duration-300 shadow-sm cursor-pointer flex items-center justify-center gap-1.5 ${
                   isEvening
                     ? "bg-[#C8A97E] hover:bg-[#D9BA8F] text-[#0B1610]"
                     : "bg-[#1B3B2B] hover:bg-[#142E21] text-[#F4F3EE]"
@@ -263,7 +263,7 @@ export default function Header({ onOpenReservation }: HeaderProps) {
               <button
                 onClick={onOpenReservation}
                 type="button"
-                className={`text-xs font-semibold px-3 py-1.5 rounded-full text-[#F4F3EE] tracking-wide active:scale-95 transition-all shadow-sm ${
+                className={`text-xs font-semibold px-3 py-1.5 rounded-full text-[#F4F3EE] tracking-wide active:scale-95 transition-colors shadow-sm ${
                   isEvening ? "bg-[#2D5A43]" : "bg-[#1B3B2B]"
                 }`}
               >
