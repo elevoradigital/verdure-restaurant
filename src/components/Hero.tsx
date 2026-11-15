@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, MouseEvent } from "react";
+import React, { useState, useRef, MouseEvent, useEffect } from "react";
 import Image from "next/image";
 import {
   motion,
@@ -11,12 +11,116 @@ import {
   useInView,
   useMotionValue,
   useMotionTemplate,
+  useVelocity,
+  useAnimationFrame,
 } from "framer-motion";
 import { ArrowRight, Flame, X, ArrowUpRight } from "lucide-react";
 import MagneticButton from "./MagneticButton";
 import { useIsTouchDevice } from "@/hooks/useIsTouchDevice";
 import { useAmbience } from "@/context/AmbienceContext";
 import { useHydratedReducedMotion } from "@/hooks/useHydratedReducedMotion";
+
+function wrap(min: number, max: number, v: number) {
+  const rangeSize = max - min;
+  return ((((v - min) % rangeSize) + rangeSize) % rangeSize) + min;
+}
+
+// Isolated Leaf Component for Live Hearth Temperature: Prevents Hero component re-renders
+const LiveHearthTemp = React.memo(function LiveHearthTemp({
+  baseTemp,
+  isEvening,
+}: {
+  baseTemp: string;
+  isEvening: boolean;
+}) {
+  const isChilled = baseTemp.toLowerCase().includes("chilled");
+  const temps = isChilled
+    ? ["-4.0°C", "-3.8°C", "-4.2°C", "-3.9°C"]
+    : ["418°C", "420°C", "421°C", "419°C"];
+
+  const [tempIdx, setTempIdx] = useState(1);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTempIdx((prev) => (prev + 1) % temps.length);
+    }, 3500);
+    return () => clearInterval(timer);
+  }, [temps.length]);
+
+  return (
+    <div className="flex items-center gap-1.5 font-bold tracking-wider tabular-nums font-mono">
+      <span>{isChilled ? "❄ Chilled:" : "🔥 Wood Hearth:"}</span>
+      <span className={`px-1.5 py-0.5 rounded transition-colors duration-500 ${
+        isEvening ? "text-[#C8A97E] bg-[#C8A97E]/10" : "text-[#11261B] bg-white/40"
+      }`}>
+        {temps[tempIdx]}
+      </span>
+      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+    </div>
+  );
+});
+
+// Scroll-Velocity Reactive Marquee Ticker
+function VelocityMarquee({
+  isHeroInView,
+  prefersReducedMotion,
+}: {
+  isHeroInView: boolean;
+  prefersReducedMotion: boolean;
+}) {
+  const baseX = useMotionValue(0);
+  const { scrollY } = useScroll();
+  const scrollVelocity = useVelocity(scrollY);
+  const smoothVelocity = useSpring(scrollVelocity, {
+    damping: 50,
+    stiffness: 400,
+  });
+  const velocityFactor = useTransform(smoothVelocity, [0, 1000], [0, 5], {
+    clamp: false,
+  });
+
+  const x = useTransform(baseX, (v) => `${wrap(-50, 0, v)}%`);
+  const directionFactor = useRef<number>(1);
+
+  useAnimationFrame((_, delta) => {
+    if (!isHeroInView || prefersReducedMotion) return;
+
+    let moveBy = directionFactor.current * -0.015 * (delta / 16);
+
+    const vFactor = velocityFactor.get();
+    if (vFactor < -0.1) {
+      directionFactor.current = 1;
+    } else if (vFactor > 0.1) {
+      directionFactor.current = 1;
+    }
+
+    if (Math.abs(vFactor) > 0.05) {
+      moveBy += -1 * Math.abs(vFactor) * 0.035 * (delta / 16);
+    }
+
+    baseX.set(baseX.get() + moveBy);
+  });
+
+  return (
+    <motion.div
+      style={{ x }}
+      className="flex items-center gap-8 whitespace-nowrap text-xs font-mono font-medium tracking-wider uppercase opacity-85 will-change-transform"
+    >
+      <span>✦ ORGANIC SOURCING</span>
+      <span>✦ OPEN-FIRE HEARTH</span>
+      <span>✦ BOTANICAL CELLAR</span>
+      <span>✦ PRIVATE CHEF COUNTER</span>
+      <span>✦ SOIL-HEALTH GASTRONOMY</span>
+      <span>✦ ZERO-WASTE HARVEST</span>
+      <span>✦ ORGANIC SOURCING</span>
+      <span>✦ OPEN-FIRE HEARTH</span>
+      <span>✦ BOTANICAL CELLAR</span>
+      <span>✦ PRIVATE CHEF COUNTER</span>
+      <span>✦ SOIL-HEALTH GASTRONOMY</span>
+      <span>✦ ZERO-WASTE HARVEST</span>
+    </motion.div>
+  );
+}
 
 export interface HeroDishObject {
   id: string;
@@ -290,6 +394,66 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
         <div className={`absolute bottom-13 left-0 right-0 h-[1px] border-t ${
           isEvening ? "border-[#F4F3EE]/[0.07]" : "border-[#11261B]/[0.07]"
         }`} />
+
+        {/* Specular Light Pulse Gliding along Hairlines (Every 6s) */}
+        {isHeroInView && !prefersReducedMotion && (
+          <div className="absolute top-28 left-0 right-0 h-[1px] pointer-events-none overflow-hidden z-20">
+            <motion.div
+              initial={{ x: "-100%" }}
+              animate={{ x: "250%" }}
+              transition={{
+                duration: 2.2,
+                repeat: Infinity,
+                repeatDelay: 3.8,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="w-72 h-full bg-gradient-to-r from-transparent via-[#C8A97E] to-transparent opacity-60 will-change-transform"
+            />
+          </div>
+        )}
+
+        {/* Real-Time Sun / Leaf Caustic Shadow Sweep (Daylight: Swaying Olive Canopy) */}
+        {!isEvening && isHeroInView && !prefersReducedMotion && (
+          <motion.div
+            animate={{
+              x: ["-2%", "2%", "-2%"],
+              y: ["1%", "-1%", "1%"],
+              rotate: [0, 0.5, 0],
+            }}
+            transition={{
+              duration: 9,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="absolute inset-0 pointer-events-none mix-blend-multiply opacity-[0.07] z-0 will-change-transform overflow-hidden"
+            style={{
+              backgroundImage: `radial-gradient(ellipse 60% 40% at 30% 20%, rgba(17,38,27,0.8), transparent 70%),
+                                radial-gradient(ellipse 45% 35% at 75% 65%, rgba(17,38,27,0.7), transparent 60%),
+                                radial-gradient(circle 250px at 50% 50%, rgba(17,38,27,0.6), transparent 70%)`,
+              filter: "blur(28px)",
+            }}
+          />
+        )}
+
+        {/* Real-Time Candlelight / Ember Breathing Glow (Evening: Beeswax Candlelight Halo) */}
+        {isEvening && isHeroInView && !prefersReducedMotion && (
+          <motion.div
+            animate={{
+              scale: [0.96, 1.05, 0.98],
+              opacity: [0.12, 0.22, 0.14],
+            }}
+            transition={{
+              duration: 4.5,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="absolute inset-0 pointer-events-none z-0 will-change-transform"
+            style={{
+              background: "radial-gradient(circle 460px at 65% 45%, rgba(200, 169, 126, 0.25), transparent 70%)",
+              filter: "blur(40px)",
+            }}
+          />
+        )}
 
         {/* Architectural Crosshair (+) Intersections */}
         <span className={`absolute top-26 left-6 sm:left-10 lg:left-14 font-mono text-xs ${
@@ -671,6 +835,80 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
               </motion.div>
 
               {/* ---------------------------------------------------- */}
+              {/* LAYER 1.5: LIVE ORGANIC STEAM / AROMA WISPS (translateZ: 20px) */}
+              {/* ---------------------------------------------------- */}
+              {isHeroInView && !prefersReducedMotion && (
+                <>
+                  {/* Rising steam for hot hearth dishes (Dish 0 and 1) */}
+                  {(selectedDishIdx === 0 || selectedDishIdx === 1) && (
+                    <div
+                      style={{
+                        transformStyle: "preserve-3d",
+                        transform: "translateZ(20px)",
+                      }}
+                      className="absolute -top-12 sm:-top-16 left-1/2 -translate-x-1/2 w-48 h-36 pointer-events-none z-20 overflow-visible"
+                    >
+                      {[0, 1, 2].map((wisp) => (
+                        <motion.svg
+                          key={`steam-wisp-${selectedDishIdx}-${wisp}`}
+                          viewBox="0 0 40 100"
+                          className="absolute top-0 w-8 h-28"
+                          style={{ left: `${25 + wisp * 25}%` }}
+                          initial={{ y: 0, opacity: 0, scale: 0.9 }}
+                          animate={{
+                            y: [0, -38],
+                            x: wisp === 1 ? [-4, 6, -2] : [3, -5, 2],
+                            opacity: [0, 0.35, 0],
+                            scale: [0.9, 1.15],
+                          }}
+                          transition={{
+                            duration: 4.5,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                            delay: wisp * 1.3,
+                          }}
+                        >
+                          <path
+                            d="M 20 100 Q 12 70 24 50 T 16 10"
+                            fill="none"
+                            stroke={isEvening ? "rgba(244, 243, 238, 0.65)" : "rgba(17, 38, 27, 0.45)"}
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            filter="blur(1.5px)"
+                          />
+                        </motion.svg>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Downward cool mist halo for Chilled Gelato (Dish 2) */}
+                  {selectedDishIdx === 2 && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{
+                        y: [0, 14, 0],
+                        opacity: [0.12, 0.32, 0.12],
+                        scale: [0.96, 1.08, 0.96],
+                      }}
+                      transition={{
+                        duration: 5,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
+                      className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-64 h-16 rounded-full pointer-events-none z-10 blur-xl will-change-transform"
+                      style={{
+                        transformStyle: "preserve-3d",
+                        transform: "translateZ(10px)",
+                        background: isEvening
+                          ? "radial-gradient(ellipse at center, rgba(162, 173, 165, 0.4), transparent 70%)"
+                          : "radial-gradient(ellipse at center, rgba(45, 90, 67, 0.28), transparent 70%)",
+                      }}
+                    />
+                  )}
+                </>
+              )}
+
+              {/* ---------------------------------------------------- */}
               {/* LAYER 2: INTERACTIVE PULSING 3D HOTSPOTS (translateZ: 35px) */}
               {/* ---------------------------------------------------- */}
               <div
@@ -879,7 +1117,7 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                     <Flame className="w-3.5 h-3.5 text-[#C8A97E]" />
                   </div>
                   <div className="text-[10px] font-mono">
-                    <div className="font-bold tracking-wider">🔥 Wood Hearth: {currentDish.hearthTemp}</div>
+                    <LiveHearthTemp baseTemp={currentDish.hearthTemp} isEvening={isEvening} />
                     <div className="opacity-70">Zero-Kilometer Harvest</div>
                   </div>
                 </div>
@@ -941,24 +1179,9 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
             </motion.div>
           </div>
 
-          {/* Center Cell: Smooth Kinetic Continuous Marquee Ticker (Cols 4-8) - Paused off-screen */}
+          {/* Center Cell: Velocity-Sensitive Smooth Kinetic Marquee Ticker (Cols 4-8) - Paused off-screen */}
           <div className="md:col-span-6 overflow-hidden h-full flex items-center relative px-4 sm:px-6">
-            <motion.div
-              animate={isHeroInView && !prefersReducedMotion ? { x: ["0%", "-50%"] } : {}}
-              transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-              className="flex items-center gap-8 whitespace-nowrap text-xs font-mono font-medium tracking-wider uppercase opacity-85 will-change-transform"
-            >
-              <span>✦ ORGANIC SOURCING</span>
-              <span>✦ OPEN-FIRE HEARTH</span>
-              <span>✦ BOTANICAL CELLAR</span>
-              <span>✦ PRIVATE CHEF COUNTER</span>
-              <span>✦ SOIL-HEALTH GASTRONOMY</span>
-              <span>✦ ZERO-WASTE HARVEST</span>
-              <span>✦ ORGANIC SOURCING</span>
-              <span>✦ OPEN-FIRE HEARTH</span>
-              <span>✦ BOTANICAL CELLAR</span>
-              <span>✦ PRIVATE CHEF COUNTER</span>
-            </motion.div>
+            <VelocityMarquee isHeroInView={isHeroInView} prefersReducedMotion={prefersReducedMotion} />
           </div>
 
           {/* Right Cell: Live Booking Trigger (Cols 9-12) */}

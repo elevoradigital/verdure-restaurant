@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, MouseEvent, UIEvent } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence, useSpring, useScroll, useTransform, MotionValue } from "framer-motion";
+import { motion, AnimatePresence, useSpring, useScroll, useTransform, useInView, MotionValue } from "framer-motion";
 import { DishItem } from "./DishModal";
 import { Eye, ArrowRight, LayoutGrid, List } from "lucide-react";
 import MagneticButton from "./MagneticButton";
@@ -315,6 +315,8 @@ export default function SelectedPlates({
 }: SelectedPlatesProps) {
   const { isEvening } = useAmbience();
   const sectionRef = useRef<HTMLElement>(null);
+  const isPlatesInView = useInView(sectionRef, { margin: "100px" });
+  const prefersReducedMotion = useHydratedReducedMotion();
   const [activeCategory, setActiveCategory] = useState("All");
   const [viewMode, setViewMode] = useState<"grid" | "index">("grid");
   const [hoveredIndexDish, setHoveredIndexDish] = useState<DishItem | null>(null);
@@ -404,6 +406,47 @@ export default function SelectedPlates({
       }`}>
         02
       </div>
+
+      {/* Real-Time Sun / Leaf Caustic Shadow Sweep (Daylight: Swaying Olive Canopy) */}
+      {!isEvening && isPlatesInView && !prefersReducedMotion && (
+        <motion.div
+          animate={{
+            x: ["-2%", "2%", "-2%"],
+            y: ["1%", "-1%", "1%"],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="absolute inset-0 pointer-events-none mix-blend-multiply opacity-[0.06] z-0 will-change-transform overflow-hidden"
+          style={{
+            backgroundImage: `radial-gradient(ellipse 70% 50% at 20% 30%, rgba(17,38,27,0.7), transparent 70%),
+                              radial-gradient(ellipse 50% 40% at 80% 70%, rgba(17,38,27,0.6), transparent 60%)`,
+            filter: "blur(32px)",
+          }}
+        />
+      )}
+
+      {/* Real-Time Candlelight / Ember Breathing Glow (Evening) */}
+      {isEvening && isPlatesInView && !prefersReducedMotion && (
+        <motion.div
+          animate={{
+            scale: [0.97, 1.04, 0.97],
+            opacity: [0.1, 0.18, 0.1],
+          }}
+          transition={{
+            duration: 5,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="absolute inset-0 pointer-events-none z-0 will-change-transform"
+          style={{
+            background: "radial-gradient(circle 500px at 50% 40%, rgba(200, 169, 126, 0.2), transparent 70%)",
+            filter: "blur(40px)",
+          }}
+        />
+      )}
 
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
         

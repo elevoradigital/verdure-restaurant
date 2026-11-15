@@ -1,8 +1,43 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAmbience } from "@/context/AmbienceContext";
+
+// Isolated Concierge Status Ticker: Prevents parent floorplan re-renders
+const LiveConciergeTicker = React.memo(function LiveConciergeTicker({
+  isEvening,
+}: {
+  isEvening: boolean;
+}) {
+  const messages = [
+    "● LIVE FLOORPLAN SYNCED",
+    "● TABLE T-03 CHECKED IN 4M AGO",
+    "● HEARTH COUNTER: 2 SEATS OPEN",
+    "● SOMMELIER CELLAR VAULT ACTIVE",
+  ];
+  const [idx, setIdx] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIdx((prev) => (prev + 1) % messages.length);
+    }, 7000);
+    return () => clearInterval(timer);
+  }, [messages.length]);
+
+  return (
+    <div
+      className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-[10px] font-mono tracking-wider transition-colors duration-500 select-none ${
+        isEvening
+          ? "bg-[#C8A97E]/10 border-[#C8A97E]/25 text-[#C8A97E]"
+          : "bg-[#2D5A43]/20 border-[#2D5A43]/35 text-[#88B297]"
+      }`}
+    >
+      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+      <span className="font-semibold">{messages[idx]}</span>
+    </div>
+  );
+});
 
 export interface TableNode {
   id: string;
@@ -223,7 +258,7 @@ export default function TableFloorplan({
 
       {/* Blueprint Header with Zone Selector Pill Tabs */}
       <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-[#F4F3EE]/10">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
           <div className="flex flex-col text-left">
             <div className="flex items-center gap-2">
               <span className={`w-2 h-2 rounded-full animate-pulse ${isEvening ? "bg-[#C8A97E]" : "bg-[#6B8E78]"}`} />
@@ -237,6 +272,7 @@ export default function TableFloorplan({
               Sanctuary Floorplan
             </h3>
           </div>
+          <LiveConciergeTicker isEvening={isEvening} />
         </div>
 
         {/* Zone Tabs with Framer Motion sliding layoutId pill */}
@@ -313,6 +349,26 @@ export default function TableFloorplan({
           {/* SVG Background Grid */}
           <rect width="740" height="470" fill="url(#archGrid)" />
 
+          {/* Living Blueprint Botanical Radar Scanner Sweep (8s continuous sweep) */}
+          <motion.line
+            x1="45"
+            x2="695"
+            animate={{
+              y1: [40, 430, 40],
+              y2: [40, 430, 40],
+              opacity: [0.08, 0.28, 0.08],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            stroke={isEvening ? "#C8A97E" : "#88B297"}
+            strokeWidth="1.5"
+            strokeDasharray="6 4"
+            className="pointer-events-none"
+          />
+
           {/* OUTER ARCHITECTURAL PERIMETER WALLS */}
           <rect
             x="40"
@@ -350,11 +406,19 @@ export default function TableFloorplan({
           </text>
 
           {/* 2. EAST: Open Fire Hearth with Glowing Embers Accent */}
-          <path
+          <motion.path
             d="M 695 80 L 695 280"
             stroke={isEvening ? "#C8A97E" : "#E27D60"}
             strokeWidth={isEvening ? "5.5" : "4"}
             filter="url(#emberGlow)"
+            animate={{
+              opacity: [0.75, 1, 0.75],
+            }}
+            transition={{
+              duration: 2.8,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
           />
           <text
             x="675"
@@ -518,6 +582,30 @@ export default function TableFloorplan({
                   height="70"
                   fill="transparent"
                 />
+
+                {/* Gentle breathing halo on available table nodes */}
+                {!isBooked && (
+                  <motion.circle
+                    cx={table.x}
+                    cy={table.y}
+                    r={table.width / 2 + 5}
+                    fill="none"
+                    stroke={isEvening ? "#C8A97E" : "#88B297"}
+                    strokeWidth="1"
+                    strokeDasharray="2 3"
+                    animate={{
+                      scale: [1, 1.25, 1],
+                      opacity: [0.35, 0.05, 0.35],
+                    }}
+                    transition={{
+                      duration: 3.5,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: (parseInt(table.number, 10) || 0) * 0.3,
+                    }}
+                    style={{ transformOrigin: `${table.x}px ${table.y}px` }}
+                  />
+                )}
 
                 {/* Table Shape Representation */}
                 {table.shape === "circle" && (

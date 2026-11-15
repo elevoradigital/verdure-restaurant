@@ -3,13 +3,81 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
-import { Menu, X, Calendar, Phone, ArrowRight, ArrowUpRight, Volume2, VolumeX } from "lucide-react";
+import { Menu, X, Calendar, Phone, ArrowRight, ArrowUpRight } from "lucide-react";
 import MagneticButton from "./MagneticButton";
 import AmbienceToggle from "./AmbienceToggle";
 import { useAmbience } from "@/context/AmbienceContext";
 
 interface HeaderProps {
   onOpenReservation: () => void;
+}
+
+function AudioEqualizerPill({
+  isPlaying,
+  isEvening,
+  onToggle,
+}: {
+  isPlaying: boolean;
+  isEvening: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      data-cursor="magnetic"
+      title={isPlaying ? "Mute garden soundscape" : "Listen to live garden soundscape"}
+      className={`h-9 px-2.5 rounded-full border transition-colors duration-200 cursor-pointer flex items-center gap-1.5 ${
+        isEvening
+          ? isPlaying
+            ? "bg-[#C8A97E]/15 text-[#C8A97E] border-[#C8A97E]/30"
+            : "bg-[#12241B] text-[#95A79B] hover:text-[#F4F3EE] border-[#F4F3EE]/10"
+          : isPlaying
+          ? "bg-[#1B3B2B]/10 text-[#1B3B2B] border-[#1B3B2B]/20"
+          : "bg-[#EAE8E0]/70 text-[#5C645E] hover:text-[#141816] border-[#11261B]/10 hover:bg-[#EAE8E0]"
+      }`}
+      aria-label="Toggle live sound equalizer"
+    >
+      <div className="flex items-center gap-[2px] h-3.5 w-3.5 justify-center">
+        {[
+          { duration: 0.9, delay: 0 },
+          { duration: 1.2, delay: 0.15 },
+          { duration: 0.8, delay: 0.3 },
+          { duration: 1.05, delay: 0.2 },
+        ].map((bar, i) => (
+          <motion.span
+            key={i}
+            animate={
+              isPlaying
+                ? {
+                    scaleY: [0.2, 1, 0.35, 0.85, 0.2],
+                    transition: {
+                      duration: bar.duration,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: bar.delay,
+                    },
+                  }
+                : { scaleY: 0.2 }
+            }
+            style={{ transformOrigin: "bottom" }}
+            className={`w-[2px] h-3 rounded-full transition-colors ${
+              isEvening
+                ? isPlaying
+                  ? "bg-[#C8A97E]"
+                  : "bg-[#95A79B]"
+                : isPlaying
+                ? "bg-[#1B3B2B]"
+                : "bg-[#5C645E]"
+            }`}
+          />
+        ))}
+      </div>
+      <span className="font-mono text-[9px] uppercase tracking-wider font-semibold hidden xl:inline-block">
+        {isPlaying ? "LIVE" : "MUTE"}
+      </span>
+    </button>
+  );
 }
 
 export default function Header({ onOpenReservation }: HeaderProps) {
@@ -102,13 +170,13 @@ export default function Header({ onOpenReservation }: HeaderProps) {
           <div className="hidden md:grid md:grid-cols-12 items-stretch h-16">
             
             {/* Cell 1: Wordmark + Live Status Dot (Cols 1-4) */}
-            <div className={`col-span-4 flex items-center justify-between px-6 lg:px-10 border-r transition-colors duration-700 ${
+            <div className={`col-span-3 xl:col-span-4 flex items-center justify-between px-4 lg:px-6 xl:px-8 border-r transition-colors duration-700 ${
               isEvening ? "border-[#F4F3EE]/12" : "border-[#11261B]/12"
             }`}>
               <Link
                 href="#"
                 data-cursor="magnetic"
-                className="group flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1B3B2B] rounded-sm"
+                className="group flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1B3B2B] rounded-sm shrink-0"
               >
                 <span className={`font-serif text-2xl lg:text-3xl font-bold tracking-[0.18em] transition-colors duration-300 ${
                   isEvening ? "text-[#F4F3EE] group-hover:text-[#C8A97E]" : "text-[#141816] group-hover:text-[#1B3B2B]"
@@ -121,7 +189,7 @@ export default function Header({ onOpenReservation }: HeaderProps) {
               </Link>
 
               {/* Monospace Live Status Pill */}
-              <div className={`hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono tracking-wider uppercase border transition-colors ${
+              <div className={`hidden xl:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono tracking-wider uppercase border transition-colors ${
                 isEvening
                   ? "bg-[#12241B] border-[#C8A97E]/30 text-[#C8A97E]"
                   : "bg-[#EAE8E0] border-[#11261B]/15 text-[#1B3B2B]"
@@ -138,11 +206,11 @@ export default function Header({ onOpenReservation }: HeaderProps) {
               </div>
             </div>
 
-            {/* Cell 2: Architectural Navigation Links with 01, 02, 03 (Cols 5-8) */}
-            <div className={`col-span-4 flex items-center justify-center gap-6 lg:gap-8 px-4 border-r transition-colors duration-700 ${
+            {/* Cell 2: Architectural Navigation Links with 01, 02, 03 */}
+            <div className={`col-span-4 xl:col-span-3 flex items-center justify-center gap-4 lg:gap-6 xl:gap-8 px-2 lg:px-4 border-r transition-colors duration-700 ${
               isEvening ? "border-[#F4F3EE]/12" : "border-[#11261B]/12"
             }`}>
-              <nav className="flex items-center gap-6 lg:gap-8 h-full">
+              <nav className="flex items-center gap-4 lg:gap-6 xl:gap-8 h-full">
                 {navLinks.map((link) => {
                   const isActive = activeSection === link.id;
                   return (
@@ -150,7 +218,7 @@ export default function Header({ onOpenReservation }: HeaderProps) {
                       key={link.id}
                       href={link.href}
                       data-cursor="magnetic"
-                      className="relative h-full flex items-center gap-1.5 px-2 group cursor-pointer"
+                      className="relative h-full flex items-center gap-1.5 px-1.5 lg:px-2 group cursor-pointer"
                     >
                       <span className={`font-mono text-[10px] opacity-50 group-hover:opacity-100 transition-opacity ${
                         isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"
@@ -192,38 +260,21 @@ export default function Header({ onOpenReservation }: HeaderProps) {
               </nav>
             </div>
 
-            {/* Cell 3: Ambience Mode Toggle + Sound (Cols 9-10) */}
-            <div className={`col-span-2 flex items-center justify-center gap-2 px-3 border-r transition-colors duration-700 ${
+            {/* Cell 3: Ambience Mode Toggle + Live Audio Equalizer (Cols 8-10) */}
+            <div className={`col-span-3 xl:col-span-3 flex items-center justify-center gap-2 lg:gap-3 px-2 lg:px-4 border-r transition-colors duration-700 ${
               isEvening ? "border-[#F4F3EE]/12" : "border-[#11261B]/12"
             }`}>
-              <AmbienceToggle variant="navbar" />
+              <AmbienceToggle variant="navbar" className="shrink-0" />
 
-              <button
-                type="button"
-                onClick={toggleAmbience}
-                data-cursor="magnetic"
-                title={isAmbientPlaying ? "Mute garden ambience" : "Listen to garden ambience"}
-                className={`p-2 rounded-full border transition-colors duration-200 cursor-pointer ${
-                  isEvening
-                    ? isAmbientPlaying
-                      ? "bg-[#C8A97E]/15 text-[#C8A97E] border-[#C8A97E]/30"
-                      : "bg-[#12241B] text-[#95A79B] hover:text-[#F4F3EE] border-[#F4F3EE]/10"
-                    : isAmbientPlaying
-                    ? "bg-[#1B3B2B]/10 text-[#1B3B2B] border-[#1B3B2B]/20"
-                    : "bg-[#EAE8E0]/70 text-[#5C645E] hover:text-[#141816] border-[#11261B]/10 hover:bg-[#EAE8E0]"
-                }`}
-              >
-                {isAmbientPlaying ? (
-                  <Volume2 className={`w-3.5 h-3.5 animate-pulse ${isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"}`} />
-                ) : (
-                  <VolumeX className="w-3.5 h-3.5" />
-                )}
-                <span className="sr-only">Toggle garden sound</span>
-              </button>
+              <AudioEqualizerPill
+                isPlaying={isAmbientPlaying}
+                isEvening={isEvening}
+                onToggle={toggleAmbience}
+              />
             </div>
 
             {/* Cell 4: High-Contrast Magnetic CTA Button (Cols 11-12) */}
-            <div className="col-span-2 flex items-center justify-center px-4">
+            <div className="col-span-2 xl:col-span-2 flex items-center justify-center px-2 lg:px-4">
               <MagneticButton
                 onClick={onOpenReservation}
                 data-cursor="magnetic"
@@ -308,13 +359,20 @@ export default function Header({ onOpenReservation }: HeaderProps) {
                 </span>
                 <span className="w-1.5 h-1.5 rounded-full bg-[#6B8E78]" />
               </div>
-              <button
-                onClick={() => setMobileMenuOpen(false)}
-                className="p-2.5 rounded-full bg-[#1B3B2B] text-[#F4F3EE] border border-[#F4F3EE]/20 active:scale-90 transition-transform"
-                aria-label="Close navigation"
-              >
-                <X className="w-5 h-5" />
-              </button>
+              <div className="flex items-center gap-2">
+                <AudioEqualizerPill
+                  isPlaying={isAmbientPlaying}
+                  isEvening={isEvening}
+                  onToggle={toggleAmbience}
+                />
+                <button
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-2.5 rounded-full bg-[#1B3B2B] text-[#F4F3EE] border border-[#F4F3EE]/20 active:scale-90 transition-transform"
+                  aria-label="Close navigation"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
             </div>
 
             {/* Staggered Large Editorial Serif Nav Links */}
