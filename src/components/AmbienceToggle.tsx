@@ -47,7 +47,7 @@ export default function AmbienceToggle({
           )}
         </motion.div>
         <span>
-          {isEvening ? "Return to Daylight ☀" : "Preview Evening Ambience ☾"}
+          {isEvening ? "Return to Daylight" : "Preview Evening Ambience"}
         </span>
       </button>
     );
@@ -111,7 +111,7 @@ export default function AmbienceToggle({
           )}
           <span className="relative z-10 flex items-center gap-1.5">
             <Sun className="w-4 h-4" />
-            <span>☀ Day (12–4 PM)</span>
+            <span>Day (12–4 PM)</span>
           </span>
         </button>
 
@@ -136,7 +136,7 @@ export default function AmbienceToggle({
           )}
           <span className="relative z-10 flex items-center gap-1.5">
             <Moon className="w-4 h-4 text-[#C8A97E]" />
-            <span>☾ Evening (6–11 PM)</span>
+            <span>Evening (6–11 PM)</span>
           </span>
         </button>
       </div>

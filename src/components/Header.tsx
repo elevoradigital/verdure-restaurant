@@ -202,7 +202,7 @@ export default function Header({ onOpenReservation }: HeaderProps) {
                     isEvening ? "bg-[#C8A97E]" : "bg-[#1B3B2B]"
                   }`} />
                 </span>
-                <span>OPEN TODAY • 12 PM – 11 PM</span>
+                <span>OPEN TODAY — 12 PM – 11 PM</span>
               </div>
             </div>
 

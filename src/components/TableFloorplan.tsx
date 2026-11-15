@@ -11,10 +11,10 @@ const LiveConciergeTicker = React.memo(function LiveConciergeTicker({
   isEvening: boolean;
 }) {
   const messages = [
-    "● LIVE FLOORPLAN SYNCED",
-    "● TABLE T-03 CHECKED IN 4M AGO",
-    "● HEARTH COUNTER: 2 SEATS OPEN",
-    "● SOMMELIER CELLAR VAULT ACTIVE",
+    "Dining Room Plan Active",
+    "Table T-03 Checked In",
+    "Hearth Counter: 2 Seats Open",
+    "Cellar Vault Reserved",
   ];
   const [idx, setIdx] = useState(0);
 
@@ -64,7 +64,7 @@ export const floorplanTables: TableNode[] = [
     zone: "Indoor Dining",
     capacity: 2,
     capacityLabel: "2 Guests",
-    specs: "2 Seats • Garden Glass",
+    specs: "2 Seats — Garden Glass",
     feature: "Unobstructed garden views & acoustic quiet",
     x: 130,
     y: 110,
@@ -80,7 +80,7 @@ export const floorplanTables: TableNode[] = [
     zone: "Indoor Dining",
     capacity: 2,
     capacityLabel: "2 Guests",
-    specs: "2 Seats • Intimate Alcove",
+    specs: "2 Seats — Intimate Alcove",
     feature: "Tucked behind lime-wash stone pillar",
     x: 270,
     y: 110,
@@ -96,7 +96,7 @@ export const floorplanTables: TableNode[] = [
     zone: "Indoor Dining",
     capacity: 4,
     capacityLabel: "4 Guests",
-    specs: "4 Seats • Main Room",
+    specs: "4 Seats — Main Room",
     feature: "Direct sightline to culinary kitchen pass",
     x: 180,
     y: 240,
@@ -112,7 +112,7 @@ export const floorplanTables: TableNode[] = [
     zone: "Indoor Dining",
     capacity: 4,
     capacityLabel: "4 Guests",
-    specs: "4 Seats • Olive Tree Booth",
+    specs: "4 Seats — Olive Tree Booth",
     feature: "Curved plush banquette framed by live olive trees",
     x: 330,
     y: 240,
@@ -128,7 +128,7 @@ export const floorplanTables: TableNode[] = [
     zone: "Chef's Fire Counter",
     capacity: 2,
     capacityLabel: "2 Guests",
-    specs: "2 Seats • Live Embers View",
+    specs: "2 Seats — Live Embers View",
     feature: "Front-row seats to fruitwood open-fire embers",
     x: 520,
     y: 125,
@@ -144,7 +144,7 @@ export const floorplanTables: TableNode[] = [
     zone: "Chef's Fire Counter",
     capacity: 2,
     capacityLabel: "2 Guests",
-    specs: "2 Seats • Plating Theater",
+    specs: "2 Seats — Plating Theater",
     feature: "Watch head chef plate delicate botanical sauces",
     x: 520,
     y: 225,
@@ -160,7 +160,7 @@ export const floorplanTables: TableNode[] = [
     zone: "Botanical Courtyard",
     capacity: 4,
     capacityLabel: "4 Guests",
-    specs: "4 Seats • Open-Air Flora",
+    specs: "4 Seats — Open-Air Flora",
     feature: "Surrounded by night-blooming jasmine & herb wall",
     x: 210,
     y: 395,
@@ -176,7 +176,7 @@ export const floorplanTables: TableNode[] = [
     zone: "Indoor Dining",
     capacity: 8,
     capacityLabel: "6+ Guests",
-    specs: "8 Seats • Vault Chamber",
+    specs: "8 Seats — Vault Chamber",
     feature: "Acoustic private cellar surrounded by 350 natural wines",
     x: 530,
     y: 385,
@@ -265,7 +265,7 @@ export default function TableFloorplan({
               <span className={`font-mono text-xs uppercase tracking-widest font-semibold ${
                 isEvening ? "text-[#C8A97E]" : "text-[#6B8E78]"
               }`}>
-                {isEvening ? "Candlelit Blueprint • Evening Focus" : "Architectural Blueprint • Daylight Focus"}
+                {isEvening ? "Candlelit Service — Evening Focus" : "Daylight Service — Afternoon Focus"}
               </span>
             </div>
             <h3 className="font-serif text-xl sm:text-2xl text-[#F4F3EE] font-normal tracking-wide">
@@ -349,26 +349,6 @@ export default function TableFloorplan({
           {/* SVG Background Grid */}
           <rect width="740" height="470" fill="url(#archGrid)" />
 
-          {/* Living Blueprint Botanical Radar Scanner Sweep (8s continuous sweep) */}
-          <motion.line
-            x1="45"
-            x2="695"
-            animate={{
-              y1: [40, 430, 40],
-              y2: [40, 430, 40],
-              opacity: [0.08, 0.28, 0.08],
-            }}
-            transition={{
-              duration: 8,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-            stroke={isEvening ? "#C8A97E" : "#88B297"}
-            strokeWidth="1.5"
-            strokeDasharray="6 4"
-            className="pointer-events-none"
-          />
-
           {/* OUTER ARCHITECTURAL PERIMETER WALLS */}
           <rect
             x="40"
@@ -402,7 +382,7 @@ export default function TableFloorplan({
             letterSpacing="2.5"
             fontWeight={!isEvening ? "bold" : "normal"}
           >
-            {!isEvening ? "BOTANICAL GLASS WALL — ☀ SUNLIT GARDEN SERVICE" : "BOTANICAL GLASS WALL — NORTH GARDEN VIEW"}
+            {!isEvening ? "BOTANICAL GLASS WALL — SUNLIT GARDEN SERVICE" : "BOTANICAL GLASS WALL — NORTH GARDEN VIEW"}
           </text>
 
           {/* 2. EAST: Open Fire Hearth with Glowing Embers Accent */}
@@ -431,7 +411,7 @@ export default function TableFloorplan({
             letterSpacing="2.5"
             fontWeight={isEvening ? "bold" : "normal"}
           >
-            {isEvening ? "OPEN FIRE HEARTH • ☾ CANDLELIT EMBERS" : "OPEN FIRE HEARTH • LIVE EMBERS"}
+            {isEvening ? "OPEN FIRE HEARTH — CANDLELIT EMBERS" : "OPEN FIRE HEARTH — LIVE EMBERS"}
           </text>
 
           {/* Chef's Hearth Counter Divider Wall */}
@@ -464,7 +444,7 @@ export default function TableFloorplan({
             letterSpacing="2"
             fontWeight={isEvening ? "bold" : "normal"}
           >
-            {isEvening ? "NATURAL WINE CELLAR VAULT ☾ SOMMELIER SELECTION" : "NATURAL WINE CELLAR VAULT"}
+            {isEvening ? "NATURAL WINE CELLAR VAULT — SOMMELIER ARCH" : "NATURAL WINE CELLAR VAULT"}
           </text>
 
           {/* 4. SOUTH-WEST: Courtyard Pergola Boundary */}
@@ -489,7 +469,7 @@ export default function TableFloorplan({
             letterSpacing="2"
             fontWeight={!isEvening ? "bold" : "normal"}
           >
-            {!isEvening ? "COURTYARD PERGOLA ☀ OPEN-AIR SUNLIGHT" : "COURTYARD PERGOLA & LIVING HERB WALL"}
+            {!isEvening ? "COURTYARD PERGOLA — OPEN-AIR SUNLIGHT" : "COURTYARD PERGOLA & LIVING HERB WALL"}
           </text>
 
           {/* 5. SOUTH-CENTER: Main Entrance with Door Swing Arc */}
@@ -763,7 +743,7 @@ export default function TableFloorplan({
                       fontWeight="bold"
                       textAnchor="middle"
                     >
-                      ☀ DAYLIGHT
+                      DAYLIGHT
                     </text>
                   </g>
                 )}
@@ -789,7 +769,7 @@ export default function TableFloorplan({
                       fontWeight="bold"
                       textAnchor="middle"
                     >
-                      ☾ EVENING
+                      EVENING
                     </text>
                   </g>
                 )}
@@ -899,7 +879,7 @@ export default function TableFloorplan({
               </span>
             </div>
             <div className="text-xs text-[#A2ADA5] mt-0.5">
-              {activeTable.specs} • {activeTable.feature}
+              {activeTable.specs} — {activeTable.feature}
             </div>
           </div>
         </div>

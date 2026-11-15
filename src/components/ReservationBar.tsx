@@ -75,39 +75,37 @@ export default function ReservationBar() {
           <div className="inline-flex items-center gap-2 mb-2 font-mono text-[10px] sm:text-[11px] tracking-[0.25em] uppercase font-bold">
             <span className={`w-1.5 h-1.5 rounded-full ${isEvening ? "bg-[#C8A97E]" : "bg-[#1B3B2B]"}`} />
             <span className={isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"}>
-              [ 04 // TABLE RESERVATIONS ]
+              04 — Reservations
             </span>
           </div>
 
           <h2 className={`font-serif text-3xl sm:text-4xl lg:text-5xl font-normal tracking-tight transition-colors duration-700 ${
             isEvening ? "text-[#F4F3EE]" : "text-[#141816]"
           }`}>
-            Reserve Your Sanctuary Table
+            Reservations
           </h2>
           <p className={`mt-2.5 text-xs sm:text-sm font-normal max-w-md mx-auto transition-colors duration-700 ${
             isEvening ? "text-[#95A79B]" : "text-[#5C645E]"
           }`}>
-            {isEvening
-              ? "Tasting menus guided by open hearth embers and sommelier cellar pairings."
-              : "Airy sunlit botanical lunch and garden terrace degustation seatings."}
+            Lunch and dinner seatings released thirty days in advance.
           </p>
         </div>
 
         {/* ======================================================== */}
         {/* UNIFIED 2-COLUMN ARCHITECTURAL CONCIERGE CONSOLE         */}
         {/* ======================================================== */}
-        <div className={`rounded-3xl border shadow-xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x transition-colors duration-700 ${
+        <div className={`rounded-xl border overflow-hidden grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x transition-colors duration-700 ${
           isEvening
-            ? "bg-[#12241B] border-[#F4F3EE]/12 divide-[#F4F3EE]/10 text-[#F4F3EE] shadow-[0_20px_60px_rgba(0,0,0,0.6)]"
-            : "bg-[#EAE8E0] border-[#11261B]/12 divide-[#11261B]/10 text-[#141816] shadow-[0_20px_50px_rgba(17,38,27,0.08)]"
+            ? "bg-[#12241B] border-[#F4F3EE]/12 divide-[#F4F3EE]/10 text-[#F4F3EE]"
+            : "bg-[#EAE8E0] border-[#11261B]/12 divide-[#11261B]/10 text-[#141816]"
         }`}>
           
           {/* LEFT COLUMN: INTERACTIVE SVG FLOORPLAN (COLS 1-7) */}
           <div className="lg:col-span-7 p-4 sm:p-6 lg:p-8 flex flex-col justify-between">
             <div className="flex items-center justify-between pb-3 border-b border-current/10 mb-4">
               <div className="flex items-center gap-2 font-mono text-xs">
-                <span className={`w-2 h-2 rounded-full animate-ping ${isEvening ? "bg-[#C8A97E]" : "bg-[#2D5A43]"}`} />
-                <span className="font-bold tracking-wider uppercase">Interactive Blueprint Map</span>
+                <span className={`w-2 h-2 rounded-full ${isEvening ? "bg-[#C8A97E]" : "bg-[#2D5A43]"}`} />
+                <span className="font-bold tracking-wider uppercase">Dining Room Plan</span>
               </div>
               <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full border ${
                 isEvening ? "border-[#C8A97E]/30 text-[#C8A97E]" : "border-[#1B3B2B]/20 text-[#1B3B2B]"
@@ -134,9 +132,9 @@ export default function ReservationBar() {
             {/* Selected Table Hero Card */}
             <div>
               <div className="text-[10px] font-mono tracking-widest uppercase opacity-60 mb-1">
-                ACTIVE TABLE ASSIGNMENT
+                Selected Table
               </div>
-              <div className={`p-4 rounded-2xl border transition-colors ${
+              <div className={`p-4 rounded-lg border transition-colors ${
                 isEvening
                   ? "bg-[#070F0A] border-[#C8A97E]/40"
                   : "bg-[#F4F3EE] border-[#1B3B2B]/20"
@@ -168,7 +166,7 @@ export default function ReservationBar() {
             {/* Party Size Selector */}
             <div>
               <label className="block text-[11px] font-mono tracking-wider uppercase font-semibold mb-2">
-                1. Party Size
+                Guests
               </label>
               <div className="grid grid-cols-3 gap-2">
                 {guestOptions.map((opt) => {
@@ -178,7 +176,7 @@ export default function ReservationBar() {
                       key={opt}
                       type="button"
                       onClick={() => setGuests(opt)}
-                      className={`py-2 px-2.5 rounded-xl text-xs font-mono transition-colors duration-200 cursor-pointer border ${
+                      className={`py-2 px-2.5 rounded-lg text-xs font-mono transition-colors duration-200 cursor-pointer border ${
                         isSelected
                           ? isEvening
                             ? "bg-[#C8A97E] text-[#0B1610] font-bold border-[#C8A97E] shadow-sm"
@@ -198,7 +196,7 @@ export default function ReservationBar() {
             {/* Time Slot Selector */}
             <div>
               <label className="block text-[11px] font-mono tracking-wider uppercase font-semibold mb-2">
-                2. Seating Time ({isEvening ? "Candlelit Tasting" : "Daylight Lunch"})
+                Seating Time
               </label>
               <div className="grid grid-cols-2 gap-2">
                 {dateTimeOptions.map((time) => {
@@ -208,7 +206,7 @@ export default function ReservationBar() {
                       key={time}
                       type="button"
                       onClick={() => setDateTime(time)}
-                      className={`py-2 px-2.5 rounded-xl text-xs font-mono transition-colors duration-200 cursor-pointer border truncate ${
+                      className={`py-2 px-2.5 rounded-lg text-xs font-mono transition-colors duration-200 cursor-pointer border truncate ${
                         isSelected
                           ? isEvening
                             ? "bg-[#C8A97E] text-[#0B1610] font-bold border-[#C8A97E] shadow-sm"
@@ -230,19 +228,19 @@ export default function ReservationBar() {
               <MagneticButton
                 onClick={() => setIsModalOpen(true)}
                 data-cursor="magnetic"
-                className={`w-full py-4 rounded-2xl text-xs font-semibold uppercase tracking-[0.14em] transition-colors duration-300 shadow-xl flex items-center justify-center gap-2 cursor-pointer ${
+                className={`w-full py-3.5 rounded-full text-xs font-semibold uppercase tracking-[0.14em] transition-colors duration-300 shadow-md flex items-center justify-center gap-2 cursor-pointer ${
                   isEvening
                     ? "bg-[#C8A97E] hover:bg-[#D9BA8F] text-[#0B1610]"
                     : "bg-[#1B3B2B] hover:bg-[#142E21] text-[#F4F3EE]"
                 }`}
               >
-                <span>Confirm Table {selectedTable.id}</span>
+                <span>Reserve Table {selectedTable.id}</span>
                 <ArrowRight className="w-4 h-4 ml-1" />
               </MagneticButton>
 
               <div className="text-[10px] font-mono text-center opacity-60 mt-3 space-y-0.5">
-                <div>• Instant Digital VIP Table Pass generated</div>
-                <div>• Direct WhatsApp Sync & No Cancellation Fees</div>
+                <div>Instant digital pass confirmation</div>
+                <div>Complimentary cancellation up to 24 hours prior</div>
               </div>
             </div>
 

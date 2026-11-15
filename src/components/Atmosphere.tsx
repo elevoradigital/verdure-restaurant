@@ -20,9 +20,9 @@ export default function Atmosphere() {
   const prefersReducedMotion = useHydratedReducedMotion();
 
   const zones = [
-    { id: "dining", num: "01", label: "Main Dining", image: "/images/atmosphere-dining.jpg", caption: "Main Dining • Hand-cut limestone" },
-    { id: "hearth", num: "02", label: "Hearth Counter", image: "/images/gallery-hearth.jpg", caption: "Hearth Counter • 420°C Fruitwood" },
-    { id: "courtyard", num: "03", label: "Courtyard", image: "/images/gallery-garden.jpg", caption: "Botanical Courtyard • Living flora" },
+    { id: "dining", num: "01", label: "Main Dining", image: "/images/atmosphere-dining.jpg", caption: "Main Dining — Hand-cut limestone" },
+    { id: "hearth", num: "02", label: "Hearth Counter", image: "/images/gallery-hearth.jpg", caption: "Hearth Counter — 420°C Fruitwood" },
+    { id: "courtyard", num: "03", label: "Courtyard", image: "/images/gallery-garden.jpg", caption: "Botanical Courtyard — Living flora" },
   ];
 
   const currentZone = zones[activeZoneIdx];
@@ -58,7 +58,7 @@ export default function Atmosphere() {
 
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12">
           
-          <div className="relative rounded-3xl overflow-hidden p-6 sm:p-10 md:p-14 lg:p-16 border border-[#F4F3EE]/12 bg-[#0B1610] text-[#F4F3EE] shadow-2xl">
+          <div className="relative rounded-xl overflow-hidden p-6 sm:p-10 md:p-14 lg:p-16 border border-[#F4F3EE]/12 bg-[#0B1610] text-[#F4F3EE]">
             {/* Ambient decorative glow */}
             <div className="absolute top-0 right-0 w-96 h-96 bg-[#2D5A43]/20 rounded-full blur-3xl pointer-events-none -z-0" />
             <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#C8A97E]/10 rounded-full blur-3xl pointer-events-none -z-0" />
@@ -72,9 +72,9 @@ export default function Atmosphere() {
                 
                 {/* Index Pill */}
                 <div className="inline-flex items-center justify-center lg:justify-start gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#C8A97E] animate-pulse" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#C8A97E]" />
                   <span className="font-mono text-xs tracking-[0.2em] text-[#C8A97E] uppercase font-bold">
-                    [ 03 // SPATIAL ARCHITECTURE ]
+                    03 — The Dining Room
                   </span>
                 </div>
 
@@ -90,7 +90,7 @@ export default function Atmosphere() {
 
                 {/* 3-Cell Spatial Spec Grid with 1px hairlines */}
                 <div className="pt-4 border-t border-[#F4F3EE]/12">
-                  <div className="grid grid-cols-3 divide-x divide-[#F4F3EE]/12 border border-[#F4F3EE]/12 rounded-2xl overflow-hidden bg-white/[0.02]">
+                  <div className="grid grid-cols-3 divide-x divide-[#F4F3EE]/12 border border-[#F4F3EE]/12 rounded-lg overflow-hidden bg-white/[0.02]">
                     <div className="p-3 sm:p-4 text-left">
                       <div className="text-[10px] font-mono tracking-widest text-[#C8A97E] uppercase font-bold">
                         CAPACITY
@@ -149,7 +149,7 @@ export default function Atmosphere() {
               {/* ======================================================== */}
               <div className="lg:col-span-7 flex justify-center">
                 <div
-                  className="group relative w-full aspect-[4/3] sm:aspect-[16/11] rounded-2xl sm:rounded-3xl overflow-hidden border border-[#F4F3EE]/15 shadow-2xl transition-colors duration-500 hover:border-[#C8A97E]/50 select-none"
+                  className="group relative w-full aspect-[4/3] sm:aspect-[16/11] rounded-xl overflow-hidden border border-[#F4F3EE]/15 transition-colors duration-500 hover:border-[#C8A97E]/50 select-none"
                 >
                   {/* Internal Parallax Image with Smooth Crossfade */}
                   <div

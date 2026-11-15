@@ -44,7 +44,7 @@ const LiveClock = React.memo(function LiveClock() {
     return () => clearInterval(interval);
   }, []);
 
-  return <span>BENGALURU • {time || "19:30:00"} IST</span>;
+  return <span>BENGALURU — {time || "19:30:00"} IST</span>;
 });
 
 export default function Footer() {
@@ -113,7 +113,7 @@ export default function Footer() {
                 isEvening ? "text-[#C8A97E]" : "text-[#2D5A43]"
               }`}
             >
-              [ 01 // BOTANICAL ARCHITECTURE & ARCHIVE ]
+              Archive
             </span>
           </div>
           <span
@@ -121,7 +121,7 @@ export default function Footer() {
               isEvening ? "text-white/40" : "text-[#11261B]/40"
             }`}
           >
-            LAT 12.9716° N • LON 77.5946° E
+            LAT 12.9716° N — LON 77.5946° E
           </span>
         </div>
 
@@ -158,7 +158,7 @@ export default function Footer() {
                 isEvening ? "text-[#95A79B]" : "text-[#5C645E]"
               }`}
             >
-              A multisensory botanical sanctuary where soil microbiology, wild foraging, and open-hearth embers convene in quiet architectural serenity.
+              A contemporary botanical kitchen celebrating wood fire, wild harvests, and natural wines in the heart of Bengaluru.
             </p>
 
             {/* Newsletter Subscription */}
@@ -225,7 +225,7 @@ export default function Footer() {
                   isEvening ? "text-[#C8A97E]" : "text-[#2D5A43]"
                 }`}
               >
-                [ 02 // SERVICE HOURS ]
+                Hours
               </span>
             </div>
             <div
@@ -290,7 +290,7 @@ export default function Footer() {
                   isEvening ? "text-[#C8A97E]" : "text-[#2D5A43]"
                 }`}
               >
-                [ 03 // LOCATION & DESK ]
+                Location
               </span>
             </div>
             <div
@@ -363,7 +363,7 @@ export default function Footer() {
                   isEvening ? "text-[#C8A97E]" : "text-[#2D5A43]"
                 }`}
               >
-                [ 04 // RECOGNITION ]
+                Inquiries
               </span>
             </div>
             <ul
@@ -371,29 +371,50 @@ export default function Footer() {
                 isEvening ? "text-[#95A79B]" : "text-[#5C645E]"
               }`}
             >
-              <li className="flex items-center justify-between group cursor-default">
-                <span>Michelin Green Star 2026</span>
-                <ArrowUpRight
-                  className={`w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300 ${
-                    isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"
+              <li>
+                <a
+                  href="#reserve"
+                  className={`flex items-center justify-between group transition-colors ${
+                    isEvening ? "hover:text-[#F4F3EE]" : "hover:text-[#141816]"
                   }`}
-                />
+                >
+                  <span>Private Events</span>
+                  <ArrowUpRight
+                    className={`w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300 ${
+                      isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"
+                    }`}
+                  />
+                </a>
               </li>
-              <li className="flex items-center justify-between group cursor-default">
-                <span>Architectural Digest SOTY</span>
-                <ArrowUpRight
-                  className={`w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300 ${
-                    isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"
+              <li>
+                <a
+                  href="#reserve"
+                  className={`flex items-center justify-between group transition-colors ${
+                    isEvening ? "hover:text-[#F4F3EE]" : "hover:text-[#141816]"
                   }`}
-                />
+                >
+                  <span>Gift Experiences</span>
+                  <ArrowUpRight
+                    className={`w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300 ${
+                      isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"
+                    }`}
+                  />
+                </a>
               </li>
-              <li className="flex items-center justify-between group cursor-default">
-                <span>Awwwards Site of the Day</span>
-                <ArrowUpRight
-                  className={`w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300 ${
-                    isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"
+              <li>
+                <a
+                  href="mailto:press@verdure.in"
+                  className={`flex items-center justify-between group transition-colors ${
+                    isEvening ? "hover:text-[#F4F3EE]" : "hover:text-[#141816]"
                   }`}
-                />
+                >
+                  <span>Press Enquiries</span>
+                  <ArrowUpRight
+                    className={`w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300 ${
+                      isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"
+                    }`}
+                  />
+                </a>
               </li>
               <li className="pt-2">
                 <a
@@ -561,7 +582,7 @@ export default function Footer() {
             >
               Privacy Policy
             </a>
-            <span>•</span>
+            <span className="opacity-40">·</span>
             <a
               href="#"
               className={`transition-colors ${
@@ -570,7 +591,7 @@ export default function Footer() {
             >
               Allergen Protocol
             </a>
-            <span>•</span>
+            <span className="opacity-40">·</span>
             <a
               href="#"
               className={`transition-colors ${

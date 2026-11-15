@@ -71,7 +71,7 @@ export default function MobileStickyBar({
                 <span className={`text-[10px] font-mono transition-colors duration-700 ${
                   isEvening ? "text-[#C8A97E]" : "text-[#A2ADA5]"
                 }`}>
-                  {isEvening ? "Tonight • 4 Tables Left" : "Daylight Service • 6 Tables Left"}
+                  {isEvening ? "Tonight — 4 Tables Left" : "Daylight Service — 6 Tables Left"}
                 </span>
               </div>
             </div>

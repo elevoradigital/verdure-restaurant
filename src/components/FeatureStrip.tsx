@@ -19,26 +19,23 @@ export default function FeatureStrip() {
       symbol: "+",
       title: "Organic Sourcing",
       subtitle: "Regenerative local harvests.",
-      desc: "Daily dawn foraging from biodynamic farms within 40 km, honoring natural micro-climate cycles.",
-      accent: "Botanical Soil Health",
+      desc: "Harvested at dawn from partner farms within forty kilometres of our kitchen.",
     },
     {
       num: "02",
       tag: "EMBER",
-      symbol: "□",
+      symbol: "+",
       title: "Open Fire Craft",
       subtitle: "Charred over fruitwood embers.",
-      desc: "Zero gas burners. Primitive hearth temperature control over cured applewood and white oak coals.",
-      accent: "Wood Hearth 420°C",
+      desc: "No gas, no induction. Every course is finished over aged applewood and white oak coals.",
     },
     {
       num: "03",
       tag: "INTIMATE",
-      symbol: "✳",
+      symbol: "+",
       title: "Private Dining",
       subtitle: "Intimate chef-led tables.",
-      desc: "Secluded 8-guest chamber tucked behind the wine vault with tailored multi-course storytelling.",
-      accent: "Sommelier Cellar Pairings",
+      desc: "An eight-seat limestone table behind the cellar arch for unhurried evening tastings.",
     },
   ];
 
@@ -74,11 +71,11 @@ export default function FeatureStrip() {
           <div className="flex items-center gap-2">
             <span className={`w-1.5 h-1.5 rounded-full ${isEvening ? "bg-[#C8A97E]" : "bg-[#2D5A43]"}`} />
             <span className="tracking-[0.18em] uppercase font-bold">
-              [ 01 — 03 // THE CULINARY ARCHITECTURE ]
+              01 — Philosophy
             </span>
           </div>
           <span className="tracking-[0.16em] uppercase hidden sm:inline-block font-semibold">
-            ZERO-KILOMETER PHILOSOPHY
+            Zero-Kilometer Sourcing
           </span>
         </div>
 
@@ -171,11 +168,11 @@ export default function FeatureStrip() {
                 {/* Footer metadata & animated progress bar */}
                 <div className="relative z-10 mt-6 pt-4 border-t border-current/10">
                   <div className="flex items-center justify-between text-[11px] font-mono">
-                    <span className={`opacity-80 ${isEvening ? "text-[#95A79B]" : "text-[#5C645E]"}`}>
-                      {item.accent}
+                    <span className={`opacity-70 ${isEvening ? "text-[#95A79B]" : "text-[#5C645E]"}`}>
+                      Autumn Service
                     </span>
-                    <span className="font-bold opacity-60 group-hover:opacity-100 transition-opacity">
-                      EXPLORE →
+                    <span className="font-semibold opacity-60 group-hover:opacity-100 transition-opacity">
+                      Read More
                     </span>
                   </div>
 

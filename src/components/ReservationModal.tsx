@@ -12,6 +12,7 @@ import {
   ArrowRight,
   ShieldCheck,
   Sparkles,
+  ArrowUpRight,
 } from "lucide-react";
 import { useAmbience } from "@/context/AmbienceContext";
 
@@ -189,7 +190,7 @@ export default function ReservationModal({
                       </span>
                     )}
                     <span className="flex items-center gap-1 font-semibold text-[#2D5A43] bg-[#2D5A43]/10 px-2 py-0.5 rounded-full">
-                      {formData.serviceMode?.includes("Evening") ? "☾ Evening Service" : "☀ Daylight Service"}
+                      {formData.serviceMode?.includes("Evening") ? "Evening Service" : "Daylight Service"}
                     </span>
                   </div>
 
@@ -353,7 +354,7 @@ export default function ReservationModal({
                     <div className="flex items-start justify-between pb-3 border-b border-white/15">
                       <div>
                         <div className="text-[9px] font-mono tracking-[0.25em] text-[#C8A97E] uppercase font-bold">
-                          VERDURE CULINARY PASS // 2026
+                          VERDURE CULINARY PASS — 2026
                         </div>
                         <div className="font-serif text-lg font-bold tracking-wider mt-0.5">
                           VIP TABLE PASS
@@ -415,7 +416,7 @@ export default function ReservationModal({
 
                     {/* Bottom Pass Footer */}
                     <div className="pt-2 border-t border-white/15 flex items-center justify-between text-[10px] font-mono text-white/60">
-                      <span>VERDURE • 14 Olive Lane</span>
+                      <span>VERDURE — 14 Olive Lane</span>
                       <span className="text-[#C8A97E] font-semibold">Priority Entry</span>
                     </div>
                   </div>
@@ -427,12 +428,13 @@ export default function ReservationModal({
                       data-cursor="magnetic"
                       onClick={() => {
                         const passId = bookingRef || `VRD-2026-${formData.tableId ? formData.tableId.replace("-", "") : "T04"}`;
-                        const summary = `🍽️ *VERDURE Table Confirmation*\nPass ID: ${passId}\nGuest: ${formData.name}\nTable: ${formData.tableId} (${formData.tableName})\nParty: ${formData.guests}\nTime: ${formData.dateTime}\n\nPresent this digital pass upon arrival at 14 Olive Lane, Bengaluru.`;
+                        const summary = `*VERDURE Table Confirmation*\nPass ID: ${passId}\nGuest: ${formData.name}\nTable: ${formData.tableId} (${formData.tableName})\nParty: ${formData.guests}\nTime: ${formData.dateTime}\n\nPresent this digital pass upon arrival at 14 Olive Lane, Bengaluru.`;
                         window.open(`https://wa.me/?text=${encodeURIComponent(summary)}`, "_blank");
                       }}
                       className="w-full py-3 px-4 rounded-full bg-[#25D366] hover:bg-[#20ba5a] text-black font-semibold text-xs tracking-wider uppercase transition-colors duration-200 shadow-md active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
                     >
-                      <span>Send Pass to WhatsApp ↗</span>
+                      <span>Send Pass to WhatsApp</span>
+                      <ArrowUpRight className="w-3.5 h-3.5" />
                     </button>
 
                     <button

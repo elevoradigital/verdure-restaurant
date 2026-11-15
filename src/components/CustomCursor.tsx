@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import {
   motion,
   useMotionValue,
@@ -17,9 +17,6 @@ export default function CustomCursor() {
   const { isEvening } = useAmbience();
   const prefersReducedMotion = useHydratedReducedMotion();
   const [isTouchDevice, setIsTouchDevice] = useState(true);
-
-  // Direct ref for live coordinate telemetry (Zero React Re-Renders)
-  const coordsRef = useRef<HTMLSpanElement>(null);
 
   // Raw hardware-accelerated coordinate motion values (no React state re-renders)
   const mouseX = useMotionValue(-100);
@@ -62,12 +59,6 @@ export default function CustomCursor() {
     const handleMouseMove = (e: MouseEvent) => {
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
-
-      if (coordsRef.current) {
-        const xStr = Math.round(e.clientX).toString().padStart(4, "0");
-        const yStr = Math.round(e.clientY).toString().padStart(4, "0");
-        coordsRef.current.textContent = `X: ${xStr} // Y: ${yStr}`;
-      }
     };
 
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
@@ -185,7 +176,7 @@ export default function CustomCursor() {
             >
               <Sparkles className="w-3 h-3 animate-spin [animation-duration:8s]" />
               <span className="font-mono text-[11px] font-bold tracking-wider uppercase">
-                {label || "✢ TILT 3D"}
+                {label || "TILT VIEW"}
               </span>
             </motion.div>
           )}
@@ -205,8 +196,9 @@ export default function CustomCursor() {
               }`}
             >
               <span className="font-mono text-[11px] font-bold tracking-wider uppercase">
-                {label || "TILT / VIEW →"}
+                {label || "VIEW DISH"}
               </span>
+              <ArrowRight className="w-3 h-3" />
             </motion.div>
           )}
 
@@ -263,38 +255,6 @@ export default function CustomCursor() {
             </motion.div>
           )}
         </AnimatePresence>
-      </motion.div>
-
-      {/* LAYER 3: FLOATING BOTANICAL RETICLE & LIVE TELEMETRY BADGE */}
-      <motion.div
-        style={{
-          x: ringX,
-          y: ringY,
-        }}
-        animate={{
-          opacity: isVisible && !isHidden && variant === "default" ? 1 : 0,
-          scale: isVisible && !isHidden && variant === "default" ? 1 : 0.8,
-        }}
-        transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute top-0 left-0 pointer-events-none -translate-x-1/2 -translate-y-1/2"
-      >
-        {/* Subtle rotating compass ring (28px diameter) */}
-        <div
-          className={`w-7 h-7 rounded-full border border-dashed animate-[spin_20s_linear_infinite] transition-colors duration-500 ${
-            isEvening ? "border-[#C8A97E]/30" : "border-[#11261B]/20"
-          }`}
-        />
-
-        {/* Real-time micro-telemetry coordinate readout (X: 0000 // Y: 0000) */}
-        <div
-          className={`absolute top-5 left-5 px-1.5 py-0.5 rounded text-[8px] font-mono tracking-widest uppercase whitespace-nowrap border pointer-events-none transition-colors duration-500 backdrop-blur-sm ${
-            isEvening
-              ? "bg-[#0B1610]/80 text-[#95A79B] border-[#F4F3EE]/10"
-              : "bg-[#F4F3EE]/80 text-[#5C645E] border-[#11261B]/10"
-          }`}
-        >
-          <span ref={coordsRef}>X: 0000 // Y: 0000</span>
-        </div>
       </motion.div>
     </div>
   );

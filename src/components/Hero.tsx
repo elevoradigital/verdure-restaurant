@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, MouseEvent, useEffect } from "react";
+import React, { useState, useRef, MouseEvent } from "react";
 import Image from "next/image";
 import {
   motion,
@@ -14,7 +14,7 @@ import {
   useVelocity,
   useAnimationFrame,
 } from "framer-motion";
-import { ArrowRight, Flame, X, ArrowUpRight } from "lucide-react";
+import { ArrowRight, X, ArrowUpRight } from "lucide-react";
 import MagneticButton from "./MagneticButton";
 import { useIsTouchDevice } from "@/hooks/useIsTouchDevice";
 import { useAmbience } from "@/context/AmbienceContext";
@@ -24,41 +24,6 @@ function wrap(min: number, max: number, v: number) {
   const rangeSize = max - min;
   return ((((v - min) % rangeSize) + rangeSize) % rangeSize) + min;
 }
-
-// Isolated Leaf Component for Live Hearth Temperature: Prevents Hero component re-renders
-const LiveHearthTemp = React.memo(function LiveHearthTemp({
-  baseTemp,
-  isEvening,
-}: {
-  baseTemp: string;
-  isEvening: boolean;
-}) {
-  const isChilled = baseTemp.toLowerCase().includes("chilled");
-  const temps = isChilled
-    ? ["-4.0°C", "-3.8°C", "-4.2°C", "-3.9°C"]
-    : ["418°C", "420°C", "421°C", "419°C"];
-
-  const [tempIdx, setTempIdx] = useState(1);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTempIdx((prev) => (prev + 1) % temps.length);
-    }, 3500);
-    return () => clearInterval(timer);
-  }, [temps.length]);
-
-  return (
-    <div className="flex items-center gap-1.5 font-bold tracking-wider tabular-nums font-mono">
-      <span>{isChilled ? "❄ Chilled:" : "🔥 Wood Hearth:"}</span>
-      <span className={`px-1.5 py-0.5 rounded transition-colors duration-500 ${
-        isEvening ? "text-[#C8A97E] bg-[#C8A97E]/10" : "text-[#11261B] bg-white/40"
-      }`}>
-        {temps[tempIdx]}
-      </span>
-      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-    </div>
-  );
-});
 
 // Scroll-Velocity Reactive Marquee Ticker
 function VelocityMarquee({
@@ -106,18 +71,29 @@ function VelocityMarquee({
       style={{ x }}
       className="flex items-center gap-8 whitespace-nowrap text-xs font-mono font-medium tracking-wider uppercase opacity-85 will-change-transform"
     >
-      <span>✦ ORGANIC SOURCING</span>
-      <span>✦ OPEN-FIRE HEARTH</span>
-      <span>✦ BOTANICAL CELLAR</span>
-      <span>✦ PRIVATE CHEF COUNTER</span>
-      <span>✦ SOIL-HEALTH GASTRONOMY</span>
-      <span>✦ ZERO-WASTE HARVEST</span>
-      <span>✦ ORGANIC SOURCING</span>
-      <span>✦ OPEN-FIRE HEARTH</span>
-      <span>✦ BOTANICAL CELLAR</span>
-      <span>✦ PRIVATE CHEF COUNTER</span>
-      <span>✦ SOIL-HEALTH GASTRONOMY</span>
-      <span>✦ ZERO-WASTE HARVEST</span>
+      <span>ORGANIC SOURCING</span>
+      <span className="opacity-40">—</span>
+      <span>OPEN-FIRE HEARTH</span>
+      <span className="opacity-40">—</span>
+      <span>BOTANICAL CELLAR</span>
+      <span className="opacity-40">—</span>
+      <span>PRIVATE CHEF COUNTER</span>
+      <span className="opacity-40">—</span>
+      <span>SOIL-HEALTH GASTRONOMY</span>
+      <span className="opacity-40">—</span>
+      <span>ZERO-WASTE HARVEST</span>
+      <span className="opacity-40">—</span>
+      <span>ORGANIC SOURCING</span>
+      <span className="opacity-40">—</span>
+      <span>OPEN-FIRE HEARTH</span>
+      <span className="opacity-40">—</span>
+      <span>BOTANICAL CELLAR</span>
+      <span className="opacity-40">—</span>
+      <span>PRIVATE CHEF COUNTER</span>
+      <span className="opacity-40">—</span>
+      <span>SOIL-HEALTH GASTRONOMY</span>
+      <span className="opacity-40">—</span>
+      <span>ZERO-WASTE HARVEST</span>
     </motion.div>
   );
 }
@@ -132,7 +108,7 @@ export interface HeroDishObject {
   image: string;
   hearthTemp: string;
   prep: string;
-  badgeTag: string;
+  badgeTag?: string;
   hotspots: {
     id: string;
     tag: string;
@@ -156,11 +132,10 @@ export const heroDishObjects: HeroDishObject[] = [
     image: "/images/hero-bowl.jpg",
     hearthTemp: "420°C",
     prep: "Charred Botanical & Herb Oil",
-    badgeTag: "OBJECT NO. 01 // HEARTH",
     hotspots: [
       {
         id: "01",
-        tag: "01 / HARVEST",
+        tag: "01 — Harvest",
         title: "Heirloom Micro-Herbs",
         subline: "Picked at dawn daily.",
         metric: "Zero-Kilometer Farm",
@@ -170,7 +145,7 @@ export const heroDishObjects: HeroDishObject[] = [
       },
       {
         id: "02",
-        tag: "02 / EXTRACTION",
+        tag: "02 — Extraction",
         title: "Cold-Pressed Basil Oil",
         subline: "Infused over 48 hours.",
         metric: "100% Wild Botanical",
@@ -180,7 +155,7 @@ export const heroDishObjects: HeroDishObject[] = [
       },
       {
         id: "03",
-        tag: "03 / VESSEL",
+        tag: "03 — Vessel",
         title: "Hand-Thrown Stoneware",
         subline: "Custom matte forest glaze.",
         metric: "Artisan Fired",
@@ -200,11 +175,10 @@ export const heroDishObjects: HeroDishObject[] = [
     image: "/images/mushroom-tart.jpg",
     hearthTemp: "380°C",
     prep: "Wild Chanterelle & Black Garlic",
-    badgeTag: "OBJECT NO. 02 // FORAGED",
     hotspots: [
       {
         id: "01",
-        tag: "01 / FORAGE",
+        tag: "01 — Forage",
         title: "Wild Forest Chanterelles",
         subline: "Hand-foraged in Nilgiri mist.",
         metric: "Alpine Forest Sourced",
@@ -214,7 +188,7 @@ export const heroDishObjects: HeroDishObject[] = [
       },
       {
         id: "02",
-        tag: "02 / REDUCTION",
+        tag: "02 — Reduction",
         title: "Aged Black Garlic Glaze",
         subline: "Fermented over 60 days.",
         metric: "House Fermentation",
@@ -224,7 +198,7 @@ export const heroDishObjects: HeroDishObject[] = [
       },
       {
         id: "03",
-        tag: "03 / CRUST",
+        tag: "03 — Crust",
         title: "Spelt & Walnut Shell",
         subline: "Stone-ground ancient grains.",
         metric: "Single-Estate Grain",
@@ -244,11 +218,10 @@ export const heroDishObjects: HeroDishObject[] = [
     image: "/images/pistachio-gelato.jpg",
     hearthTemp: "CHILLED",
     prep: "Smoked Matcha & Olive Drop",
-    badgeTag: "OBJECT NO. 03 // CELLAR",
     hotspots: [
       {
         id: "01",
-        tag: "01 / ROAST",
+        tag: "01 — Roast",
         title: "Sicilian Bronte Pistachio",
         subline: "Slow-roasted stone paste.",
         metric: "D.O.P. Origin",
@@ -258,7 +231,7 @@ export const heroDishObjects: HeroDishObject[] = [
       },
       {
         id: "02",
-        tag: "02 / INFUSION",
+        tag: "02 — Infusion",
         title: "Ember-Smoked Matcha",
         subline: "Shizuoka ceremonial grade.",
         metric: "Single-Origin Uji",
@@ -268,7 +241,7 @@ export const heroDishObjects: HeroDishObject[] = [
       },
       {
         id: "03",
-        tag: "03 / FINISH",
+        tag: "03 — Finish",
         title: "Cold-Pressed Olive Drop",
         subline: "Early harvest pepper note.",
         metric: "First Harvest EVOO",
@@ -510,10 +483,10 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                   ? "bg-[#12241B] border-[#C8A97E]/30 text-[#C8A97E]"
                   : "bg-[#EAE8E0] border-[#11261B]/15 text-[#1B3B2B]"
               }`}>
-                <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${
+                <span className={`w-1.5 h-1.5 rounded-full ${
                   isEvening ? "bg-[#C8A97E]" : "bg-[#1B3B2B]"
                 }`} />
-                <span>[ ARCHIVE 01 // MODERN BOTANICAL KITCHEN ]</span>
+                <span>No. 01 — Modern Botanical Kitchen</span>
               </div>
             </motion.div>
 
@@ -571,7 +544,7 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
               <p className={`text-sm sm:text-base leading-relaxed text-center sm:text-left max-w-sm transition-colors duration-700 ${
                 isEvening ? "text-[#95A79B]" : "text-[#5C645E]"
               }`}>
-                Seasonal botanical plates sculpted over open fruitwood embers.
+                Leaves, roots, and wild mushrooms cooked over applewood embers.
               </p>
 
               {/* Action Buttons: Primary Magnetic + Secondary with Rotating Arrow */}
@@ -605,7 +578,7 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
               </div>
             </motion.div>
 
-            {/* 4. Interactive 3-Plate Switcher Dock (SELECT TASTING OBJECT) */}
+            {/* 4. Refined Signature Courses Print Index */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={isReady ? { opacity: 1, y: 0 } : {}}
@@ -615,14 +588,14 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
               }`}
             >
               <div className="flex items-center justify-between mb-3 text-left">
-                <span className={`text-[10px] font-mono tracking-[0.25em] uppercase font-bold flex items-center gap-1.5 ${
+                <span className={`text-[10px] font-mono tracking-[0.2em] uppercase font-bold flex items-center gap-1.5 ${
                   isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"
                 }`}>
                   <span className={`w-1.5 h-1.5 rounded-full ${isEvening ? "bg-[#C8A97E]" : "bg-[#1B3B2B]"}`} />
-                  SELECT TASTING OBJECT
+                  Signature Courses
                 </span>
                 <span className={`text-[10px] font-mono ${isEvening ? "text-[#95A79B]" : "text-[#5C645E]"}`}>
-                  Interactive Model
+                  Wood-Fired Tasting
                 </span>
               </div>
 
@@ -639,18 +612,18 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                         setSelectedDishIdx(idx);
                         setActiveHotspot(dish.hotspots[0].id);
                       }}
-                      className={`relative p-2 sm:p-2.5 rounded-2xl border text-left transition-colors duration-300 cursor-pointer overflow-hidden ${
+                      className={`relative p-2.5 rounded-lg border text-left transition-colors duration-300 cursor-pointer overflow-hidden ${
                         isSelected
                           ? isEvening
-                            ? "bg-[#12241B] border-[#C8A97E]/80 shadow-[0_6px_20px_rgba(200,169,126,0.18)]"
-                            : "bg-[#EAE8E0] border-[#1B3B2B]/80 shadow-[0_6px_20px_rgba(27,59,43,0.12)]"
+                            ? "bg-[#12241B] border-[#C8A97E] shadow-sm"
+                            : "bg-[#EAE8E0] border-[#1B3B2B] shadow-sm"
                           : isEvening
                           ? "bg-[#070F0A]/60 border-white/5 hover:border-white/20 text-[#95A79B]"
                           : "bg-white/60 border-black/5 hover:border-black/20 text-[#5C645E]"
                       }`}
                     >
                       <div className="flex items-center gap-2">
-                        <div className="relative w-8 h-8 rounded-lg overflow-hidden shrink-0 border border-current/10">
+                        <div className="relative w-8 h-8 rounded-md overflow-hidden shrink-0 border border-current/10">
                           <Image
                             src={dish.image}
                             alt={dish.name}
@@ -666,7 +639,7 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                             </span>
                             <span className="font-semibold">{dish.price}</span>
                           </div>
-                          <div className={`font-serif text-[12px] sm:text-[13px] leading-tight font-medium ${
+                          <div className={`font-serif text-[12px] sm:text-[13px] leading-tight font-medium truncate ${
                             isSelected
                               ? isEvening ? "text-[#F4F3EE]" : "text-[#141816]"
                               : isEvening ? "text-[#95A79B]" : "text-[#5C645E]"
@@ -676,23 +649,15 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                         </div>
                       </div>
 
-                      {/* Active indicator dot and border */}
+                      {/* Active indicator border */}
                       {isSelected && (
-                        <>
-                          <motion.div
-                            layoutId="activeDockPillBorder"
-                            className={`absolute inset-0 rounded-2xl border-2 pointer-events-none ${
-                              isEvening ? "border-[#C8A97E]" : "border-[#1B3B2B]"
-                            }`}
-                            transition={{ type: "spring", stiffness: 300, damping: 28 }}
-                          />
-                          <motion.div
-                            layoutId="activeDishIndicator"
-                            className={`absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full ${
-                              isEvening ? "bg-[#C8A97E]" : "bg-[#1B3B2B]"
-                            }`}
-                          />
-                        </>
+                        <motion.div
+                          layoutId="activeDockPillBorder"
+                          className={`absolute inset-0 rounded-lg border-2 pointer-events-none ${
+                            isEvening ? "border-[#C8A97E]" : "border-[#1B3B2B]"
+                          }`}
+                          transition={{ type: "spring", stiffness: 300, damping: 28 }}
+                        />
                       )}
                     </button>
                   );
@@ -709,7 +674,7 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
             <motion.div
               ref={cardRef}
               data-cursor="hero3d"
-              data-cursor-label="✢ TILT 3D"
+              data-cursor-label="TILT VIEW"
               onMouseMove={handleMouseMove}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
@@ -1021,10 +986,10 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                               />
                             </svg>
 
-                            <div className={`w-[200px] p-3 rounded-2xl border shadow-xl text-left ${
+                            <div className={`w-[200px] p-3 rounded-lg border shadow-md text-left ${
                               isEvening
-                                ? "bg-[#12241B]/[0.98] text-[#F4F3EE] border-[#C8A97E]/30 shadow-[0_12px_32px_rgba(0,0,0,0.7)]"
-                                : "bg-[#F4F3EE]/[0.98] text-[#141816] border-[#11261B]/15 shadow-[0_12px_32px_rgba(17,38,27,0.2)]"
+                                ? "bg-[#12241B]/[0.98] text-[#F4F3EE] border-[#C8A97E]/30"
+                                : "bg-[#F4F3EE]/[0.98] text-[#141816] border-[#11261B]/15"
                             }`}>
                               <div className="flex items-center justify-between pb-1 border-b border-current/10">
                                 <span className={`text-[9px] font-mono tracking-widest uppercase font-bold ${
@@ -1049,7 +1014,7 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                                 {spot.subline}
                               </div>
                               <div className="mt-2 pt-1.5 border-t border-current/10 flex items-center justify-between text-[9px] font-mono">
-                                <span className={`px-1.5 py-0.5 rounded-full ${
+                                <span className={`px-1.5 py-0.5 rounded ${
                                   isEvening ? "bg-[#C8A97E]/15 text-[#C8A97E]" : "bg-[#1B3B2B]/10 text-[#1B3B2B]"
                                 }`}>
                                   {spot.metric}
@@ -1065,91 +1030,21 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                 })}
               </div>
 
-              {/* ---------------------------------------------------- */}
-              {/* LAYER 3: OVERLAPPING FLOATING 3D CARDS (translateZ: 55px) */}
-              {/* ---------------------------------------------------- */}
-              
-              {/* Top-Left Overlapping Frosted Card (-top-4 -left-3 sm:-left-6 max-w-[230px]) */}
-              <motion.div
-                style={{
-                  transformStyle: "preserve-3d",
-                  transform: "translateZ(55px)",
-                }}
-                className={`absolute -top-4 -left-3 sm:-left-6 z-20 max-w-[230px] pointer-events-auto transition-[opacity,transform] duration-300 ${
-                  activeHotspot !== null
-                    ? "opacity-20 scale-95 pointer-events-none"
-                    : "opacity-100 scale-100"
-                }`}
-              >
-                <div className={`p-3 sm:p-3.5 rounded-2xl border shadow-xl transition-colors duration-500 text-left ${
-                  isEvening
-                    ? "bg-[#12241B]/[0.98] text-[#F4F3EE] border-[#C8A97E]/30 shadow-[0_12px_28px_rgba(0,0,0,0.6)]"
-                    : "bg-[#F4F3EE]/[0.98] text-[#141816] border-[#11261B]/15 shadow-[0_12px_28px_rgba(17,38,27,0.18)]"
-                }`}>
-                  <div className={`text-[9px] font-mono tracking-widest uppercase font-bold ${
-                    isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"
-                  }`}>
-                    {currentDish.badgeTag}
-                  </div>
-                  <div className="font-serif text-xs sm:text-sm font-semibold mt-0.5">
-                    {currentDish.name} • {currentDish.price}
-                  </div>
-                  <div className="flex items-center gap-2 mt-1 text-[11px] font-mono">
-                    <span className="opacity-70">{currentDish.prep}</span>
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Bottom-Left Overlapping Dark Forest Card (-left-6 bottom-12) */}
-              <motion.div
-                style={{
-                  transformStyle: "preserve-3d",
-                  transform: "translateZ(50px)",
-                }}
-                className="absolute -left-2 sm:-left-6 bottom-10 sm:bottom-12 z-30 pointer-events-auto"
-              >
-                <div className={`px-3.5 py-2.5 rounded-2xl shadow-2xl border text-left flex items-center gap-2.5 transition-colors duration-500 ${
-                  isEvening
-                    ? "bg-[#070F0A] text-[#F4F3EE] border-[#C8A97E]/30"
-                    : "bg-[#11261B] text-[#F4F3EE] border-white/10"
-                }`}>
-                  <div className="p-1.5 rounded-xl bg-white/10">
-                    <Flame className="w-3.5 h-3.5 text-[#C8A97E]" />
-                  </div>
-                  <div className="text-[10px] font-mono">
-                    <LiveHearthTemp baseTemp={currentDish.hearthTemp} isEvening={isEvening} />
-                    <div className="opacity-70">Zero-Kilometer Harvest</div>
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Bottom-Right Floating Action Pill (right-4 bottom-4) */}
-              <motion.div
-                style={{
-                  transformStyle: "preserve-3d",
-                  transform: "translateZ(45px)",
-                }}
-                className="absolute right-2 sm:right-4 bottom-2 sm:bottom-4 z-30 pointer-events-auto"
-              >
-                <button
-                  type="button"
-                  data-cursor="magnetic"
-                  onClick={onOpenReservation}
-                  className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-full border shadow-md text-[11px] font-mono font-medium transition-colors cursor-pointer ${
-                    isEvening
-                      ? "bg-[#12241B]/[0.98] border-[#C8A97E]/30 text-[#F4F3EE] hover:bg-[#C8A97E] hover:text-[#0B1610]"
-                      : "bg-[#F4F3EE]/[0.98] border-[#11261B]/15 text-[#141816] hover:bg-[#1B3B2B] hover:text-[#F4F3EE]"
-                  }`}
-                >
-                  <span className={`w-1.5 h-1.5 rounded-full ${
-                    isEvening ? "bg-[#C8A97E]" : "bg-[#2D5A43]"
-                  }`} />
-                  <span>{isEvening ? "● Candlelit Tasting • 6 PM – 11 PM" : "● Daylight Tasting • 12 PM – 4 PM"}</span>
-                  <span className="font-bold underline ml-1">Book →</span>
-                </button>
-              </motion.div>
-
             </motion.div>
+
+            {/* Museum-style Caption Strip tucked neatly below the frame */}
+            <div className={`w-full mt-3.5 pt-2.5 border-t flex items-center justify-between text-xs font-mono tracking-wide transition-colors ${
+              isEvening ? "border-[#F4F3EE]/10 text-[#95A79B]" : "border-[#11261B]/10 text-[#5C645E]"
+            }`}>
+              <div className="flex items-center gap-2">
+                <span className={`w-1.5 h-1.5 rounded-full ${isEvening ? "bg-[#C8A97E]" : "bg-[#2D5A43]"}`} />
+                <span className="font-medium">
+                  Plate {currentDish.num} — {currentDish.name}, {currentDish.prep} ({currentDish.price})
+                </span>
+              </div>
+              <span className="text-[10px] uppercase opacity-75 hidden sm:inline-block">Wood-Fired Service</span>
+            </div>
+
           </div>
 
         </div>

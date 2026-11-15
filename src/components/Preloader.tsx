@@ -9,10 +9,10 @@ interface PreloaderProps {
 }
 
 const CULINARY_LOGS = [
-  "● CALIBRATING STUDIO LIGHT & DAYLIGHT AMBIENCE...",
-  "● IGNITING FRUITWOOD HEARTH (420°C)...",
-  "● PLATING 3D BOTANICAL OBJECTS...",
-  "● SANCTUARY TABLE FLOORPLAN READY.",
+  "Preparing daylight service...",
+  "Kindling fruitwood hearth...",
+  "Plating seasonal courses...",
+  "Dining room floorplan ready.",
 ];
 
 const HERO_ASSETS_TO_PRELOAD = [
@@ -218,13 +218,13 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         {/* TOP LEDGER ROW */}
         <header className="w-full flex items-center justify-between pb-4 border-b border-[#F4F3EE]/10 text-[11px] font-mono tracking-widest uppercase">
           <div className="flex items-center gap-2.5 text-[#95A79B]">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#C8A97E] animate-pulse" />
-            <span className="font-semibold">[ ARCHIVE 01 // VERDURE BOTANICAL KITCHEN ]</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-[#C8A97E]" />
+            <span className="font-semibold">No. 01 — Verdure Botanical Kitchen</span>
           </div>
 
           <div className="flex items-center gap-4 sm:gap-8">
             <span className="text-[#6B8E78] hidden sm:inline-block">
-              BENGALURU • 12.9716° N, 77.5946° E
+              BENGALURU — 12.9716° N, 77.5946° E
             </span>
 
             <button
@@ -324,21 +324,21 @@ export default function Preloader({ onComplete }: PreloaderProps) {
           {/* Left Cell: Live Culinary Calibration Logs */}
           <div className="flex flex-col justify-end">
             <span className="text-[10px] font-mono tracking-widest text-[#6B8E78] uppercase mb-1">
-              SYSTEM INITIALIZATION
+              KITCHEN PREPARATION
             </span>
             <span
               ref={statusLogRef}
               className="text-[11px] sm:text-xs font-mono tracking-wider text-[#95A79B] uppercase font-medium h-5 flex items-center"
             >
-              ● CALIBRATING STUDIO LIGHT & DAYLIGHT AMBIENCE...
+              Preparing daylight service...
             </span>
           </div>
 
           {/* Center Cell: Razor-Thin Progress Hairline */}
           <div className="flex flex-col justify-end gap-1.5 pb-1">
             <div className="flex items-center justify-between text-[10px] font-mono tracking-widest text-[#6B8E78] uppercase">
-              <span>INGESTION STATUS</span>
-              <span className="text-[#C8A97E] font-semibold">CALIBRATING // 60FPS</span>
+              <span>SERVICE READINESS</span>
+              <span className="text-[#C8A97E] font-semibold">BOTANICAL KITCHEN</span>
             </div>
             <div className="w-full h-[1.5px] bg-[#F4F3EE]/15 relative overflow-hidden rounded-full">
               <div

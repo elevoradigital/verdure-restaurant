@@ -4,7 +4,7 @@ import React, { useState, useRef, MouseEvent, UIEvent } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence, useSpring, useScroll, useTransform, useInView, MotionValue } from "framer-motion";
 import { DishItem } from "./DishModal";
-import { Eye, ArrowRight, LayoutGrid, List } from "lucide-react";
+import { ArrowRight, LayoutGrid, List, ArrowUpRight } from "lucide-react";
 import MagneticButton from "./MagneticButton";
 import { useIsTouchDevice } from "@/hooks/useIsTouchDevice";
 import { useAmbience } from "@/context/AmbienceContext";
@@ -133,7 +133,6 @@ function MotionPlateCard({
 }) {
   const { isEvening } = useAmbience();
   const cardRef = useRef<HTMLDivElement>(null);
-  const [isHovered, setIsHovered] = useState(false);
   const isTouchDevice = useIsTouchDevice();
   const prefersReducedMotion = useHydratedReducedMotion();
 
@@ -164,23 +163,16 @@ function MotionPlateCard({
     rotateY.set(rY);
   };
 
-  const handleMouseEnter = () => {
-    if (!isTouchDevice && !prefersReducedMotion) setIsHovered(true);
-  };
-
   const handleMouseLeave = () => {
-    setIsHovered(false);
     rotateX.set(0);
     rotateY.set(0);
   };
-
-  const isElevated = !prefersReducedMotion && (isHovered || (isTouchDevice && isMobileActive));
 
   return (
     <motion.div
       layout
       data-cursor="plate"
-      data-cursor-label="TILT / VIEW →"
+      data-cursor-label="VIEW DISH"
       initial={{ opacity: 0, scale: 0.94, y: 32 }}
       whileInView={{ opacity: 1, scale: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
@@ -188,122 +180,67 @@ function MotionPlateCard({
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       ref={cardRef}
       onMouseMove={handleMouseMove}
-      onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onClick={() => onSelectDish(dish)}
       whileTap={{ scale: 0.98 }}
       style={{
         rotateX: isTouchDevice ? 0 : rotateX,
         rotateY: isTouchDevice ? 0 : rotateY,
+        y: scrollShiftY,
         transformStyle: "preserve-3d",
       }}
-      className={`group relative rounded-3xl p-5 cursor-pointer flex flex-col justify-between preserve-3d transition-colors duration-700 border ${
+      className={`group relative rounded-lg p-5 cursor-pointer flex flex-col justify-between preserve-3d transition-colors duration-500 border ${
         isEvening
-          ? "bg-[#12241B] border-[#F4F3EE]/10 shadow-[0_12px_32px_rgba(0,0,0,0.5)] [box-shadow:inset_0_1px_0_0_rgba(200,169,126,0.25)]"
-          : "bg-[#F4F3EE] border-[#11261B]/10 shadow-sm hover:shadow-md"
+          ? isMobileActive
+            ? "bg-[#12241B] border-[#C8A97E]/70"
+            : "bg-[#12241B] border-[#F4F3EE]/10 hover:border-[#C8A97E]/40"
+          : isMobileActive
+            ? "bg-[#F4F3EE] border-[#1B3B2B]/70"
+            : "bg-[#F4F3EE] border-[#11261B]/10 hover:border-[#1B3B2B]/40"
       }`}
     >
-      {/* Top Metadata Row: NO. 01 | SIGNATURE */}
-      <div className="flex items-center justify-between pb-3 mb-2 border-b border-current/10 text-[10px] font-mono tracking-widest uppercase">
+      {/* 1. Top Row: Monospace number on left, price on right */}
+      <div className="flex items-center justify-between pb-3 mb-3 border-b border-current/10 text-xs font-mono">
         <span className={`font-bold ${isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"}`}>
-          NO. 0{index + 1}
+          0{index + 1}
         </span>
-        <span className={`px-2 py-0.5 rounded-full ${
-          isEvening ? "bg-[#C8A97E]/10 text-[#C8A97E]" : "bg-[#1B3B2B]/10 text-[#1B3B2B]"
-        }`}>
-          {dish.tags[0] || "SIGNATURE"}
+        <span className={`font-semibold ${isEvening ? "text-[#F4F3EE]" : "text-[#141816]"}`}>
+          {dish.price}
         </span>
       </div>
 
-      {/* 3D Ceramic Plate Container */}
-      <motion.div
-        style={
-          prefersReducedMotion || isTouchDevice
-            ? undefined
-            : {
-                y: scrollShiftY,
-              }
-        }
-        animate={
-          isElevated
-            ? {
-                y: -8,
-                scale: 1.04,
-                boxShadow: isEvening
-                  ? "0 28px 52px -10px rgba(0, 0, 0, 0.65), 0 0 24px rgba(200, 169, 126, 0.22)"
-                  : "0 24px 44px -10px rgba(17, 38, 27, 0.24), 0 10px 20px -6px rgba(17, 38, 27, 0.14)",
-              }
-            : {
-                y: 0,
-                scale: 1,
-                boxShadow: isEvening
-                  ? "0 8px 20px -4px rgba(0, 0, 0, 0.45)"
-                  : "0 6px 16px -4px rgba(17, 38, 27, 0.06)",
-              }
-        }
-        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-        className={`relative w-full aspect-[4/3] rounded-2xl overflow-hidden mb-4 transition-colors duration-700 ${
-          isEvening ? "bg-[#0B1610]" : "bg-[#EAE8E0]"
-        }`}
-      >
+      {/* 2. Center: Crisp, uncluttered food photograph with subtle zoom */}
+      <div className={`relative w-full aspect-[4/3] rounded-md overflow-hidden mb-4 transition-colors duration-500 ${
+        isEvening ? "bg-[#0B1610]" : "bg-[#EAE8E0]"
+      }`}>
         <Image
           src={dish.image}
           alt={dish.name}
           fill
-          className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-108"
+          className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.03]"
           sizes="(max-width: 768px) 85vw, (max-width: 1200px) 33vw, 380px"
         />
+      </div>
 
-        {/* Hover Quick View Pill Overlay */}
-        <div className="absolute inset-0 bg-[#070F0A]/35 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#F4F3EE]/95 text-[#141816] text-xs font-medium shadow-md backdrop-blur-sm">
-            <Eye className="w-3.5 h-3.5 text-[#1B3B2B]" />
-            <span>View Dish</span>
-          </span>
-        </div>
-
-        {/* Category Pill */}
-        <div className="absolute top-3 left-3 z-10 pointer-events-none">
-          <span className={`px-2.5 py-1 rounded-full backdrop-blur-sm text-[10px] font-mono tracking-wider uppercase font-semibold border ${
-            isEvening
-              ? "bg-[#070F0A]/85 text-[#F4F3EE] border-[#F4F3EE]/15"
-              : "bg-[#F4F3EE]/90 text-[#141816] border-[#11261B]/10"
-          }`}>
-            {dish.category}
-          </span>
-        </div>
-      </motion.div>
-
-      {/* Typography: Title + 3-word ingredient line */}
-      <div className="space-y-1">
-        <h3 className={`font-serif text-lg sm:text-xl font-medium tracking-tight transition-colors duration-300 ${
+      {/* 3. Bottom: Roman Serif Title + clean ingredients + plain italic pairing */}
+      <div className="space-y-1.5">
+        <h3 className={`font-serif text-xl font-normal tracking-tight transition-colors duration-300 ${
           isEvening
             ? "text-[#F4F3EE] group-hover:text-[#C8A97E]"
             : "text-[#141816] group-hover:text-[#1B3B2B]"
         }`}>
           {dish.name}
         </h3>
-        <p className={`text-xs line-clamp-1 transition-colors duration-500 ${
+        <p className={`text-xs leading-relaxed line-clamp-1 transition-colors duration-500 ${
           isEvening ? "text-[#95A79B]" : "text-[#5C645E]"
         }`}>
-          {dish.ingredients.slice(0, 3).join(" • ")}
+          {dish.ingredients.join(", ")}
         </p>
-      </div>
-
-      {/* Bottom Row: Sommelier Pairing Badge + Monospace Price */}
-      <div className="mt-4 pt-3 border-t border-current/10 flex items-center justify-between">
-        <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full border ${
-          isEvening
-            ? "bg-[#070F0A] border-[#C8A97E]/30 text-[#C8A97E]"
-            : "bg-[#EAE8E0] border-[#11261B]/10 text-[#2D5A43]"
+        <p className={`text-[11px] italic pt-1 transition-colors duration-500 ${
+          isEvening ? "text-[#C8A97E]/80" : "text-[#2D5A43]"
         }`}>
-          🍷 {activePairing}
-        </span>
-        <span className={`font-mono text-xs sm:text-sm font-bold tracking-tight ${
-          isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"
-        }`}>
-          {dish.price}
-        </span>
+          Paired with: {activePairing}
+        </p>
       </div>
     </motion.div>
   );
@@ -458,7 +395,7 @@ export default function SelectedPlates({
             <div className="inline-flex items-center gap-2 mb-2 font-mono text-[10px] sm:text-[11px] tracking-[0.2em] uppercase font-bold">
               <span className={`w-1.5 h-1.5 rounded-full ${isEvening ? "bg-[#C8A97E]" : "bg-[#2D5A43]"}`} />
               <span className={isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"}>
-                [ 02 // SEASONAL CURATION ]
+                02 — Autumn / Winter Menu
               </span>
             </div>
 
@@ -519,7 +456,7 @@ export default function SelectedPlates({
               })}
             </div>
 
-            {/* View Mode Toggle: ⊞ 3D Grid | ☰ Editorial Index */}
+            {/* View Mode Toggle: Grid | Index */}
             <div className={`hidden md:inline-flex items-center p-1 rounded-full border text-xs font-mono transition-colors ${
               isEvening
                 ? "bg-[#12241B] border-[#F4F3EE]/15 text-[#95A79B]"
@@ -537,7 +474,7 @@ export default function SelectedPlates({
                 }`}
               >
                 <LayoutGrid className="w-3.5 h-3.5" />
-                <span>3D Grid</span>
+                <span>Grid</span>
               </button>
 
               <button
@@ -552,7 +489,7 @@ export default function SelectedPlates({
                 }`}
               >
                 <List className="w-3.5 h-3.5" />
-                <span>Editorial Index</span>
+                <span>Index</span>
               </button>
             </div>
           </div>
@@ -619,7 +556,7 @@ export default function SelectedPlates({
                         <p className={`text-xs font-mono opacity-60 ${
                           isEvening ? "text-[#95A79B]" : "text-[#5C645E]"
                         }`}>
-                          {dish.ingredients.join(" • ")}
+                          {dish.ingredients.join(", ")}
                         </p>
                       </div>
                     </div>
@@ -682,8 +619,9 @@ export default function SelectedPlates({
                         {hoveredIndexDish.price}
                       </span>
                     </div>
-                    <div className="text-[10px] font-mono opacity-70 mt-1">
-                      Click to inspect culinary formulation ↗
+                    <div className="text-[10px] font-mono opacity-70 mt-1 flex items-center gap-1">
+                      <span>Click to view details</span>
+                      <ArrowUpRight className="w-2.5 h-2.5" />
                     </div>
                   </div>
                 </motion.div>
