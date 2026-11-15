@@ -64,8 +64,8 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     };
   }, [onComplete]);
 
+  // If already loaded in this browsing session, immediately fast-forward
   useEffect(() => {
-    // If already loaded in this browsing session, immediately fast-forward
     try {
       if (sessionStorage.getItem("verdure_loaded") === "true") {
         const skipTimer = setTimeout(() => {
@@ -79,7 +79,10 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         return () => clearTimeout(skipTimer);
       }
     } catch {}
+  }, [onComplete]);
 
+  // Snappy countdown engine (60-120fps hardware RAF loop) & Asset preloading
+  useEffect(() => {
     // Lock body scroll while the preloader curtain is mounted
     if (typeof document !== "undefined") {
       document.body.style.overflow = "hidden";
@@ -93,9 +96,8 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       }
     });
 
-    // Snappy 1050ms precision countdown engine (60-120fps hardware RAF loop)
     const startTime = performance.now();
-    const duration = 1050;
+    const duration = prefersReducedMotion ? 100 : 1050;
     const ringCircumference = 2 * Math.PI * 88; // ~552.92px
     let animationFrameId: number;
 
@@ -158,7 +160,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         document.documentElement.style.overflow = "";
       }
     };
-  }, [onComplete, prefersReducedMotion, startExitSequence]);
+  }, [prefersReducedMotion, startExitSequence]);
 
   if (isUnmounted) return null;
 
