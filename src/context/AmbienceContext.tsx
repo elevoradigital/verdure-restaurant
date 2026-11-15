@@ -147,10 +147,6 @@ export function AmbienceProvider({ children }: { children: React.ReactNode }) {
         sessionStorage.setItem(STORAGE_KEY, newMode);
       } catch {}
 
-      const prefersReduced =
-        typeof window !== "undefined" &&
-        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
       const doc = typeof document !== "undefined" ? (document as Document & {
         startViewTransition?: (callback: () => void) => {
           ready: Promise<void>;
@@ -158,7 +154,7 @@ export function AmbienceProvider({ children }: { children: React.ReactNode }) {
         };
       }) : null;
 
-      if (!doc || !doc.startViewTransition || prefersReduced) {
+      if (!doc || !doc.startViewTransition) {
         currentMode = newMode;
         applyThemeDOM(newMode);
         emitChange();

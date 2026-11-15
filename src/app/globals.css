@@ -96,11 +96,6 @@
     }
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    body, a, button, [role="button"], label {
-      cursor: auto !important;
-    }
-  }
 
   h1, h2, h3, .font-serif {
     font-family: 'Playfair Display', Georgia, Cambria, 'Times New Roman', serif;
@@ -468,13 +463,6 @@ html.ambience-evening .ambient-evening-only {
   will-change: transform;
 }
 
-/* Custom smooth transitions */
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-}
-
 /* -------------------------------------------------------------------------- */
 /* 10. Awwwards Origin-Aware Circular View Transitions ("Solar-to-Ember")      */
 /* -------------------------------------------------------------------------- */
@@ -491,12 +479,5 @@ html.ambience-evening .ambient-evening-only {
 
 ::view-transition-new(root) {
   z-index: 9999;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation: none !important;
-  }
 }
 

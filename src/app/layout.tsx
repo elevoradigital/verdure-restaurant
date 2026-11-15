@@ -4,6 +4,7 @@ import { AmbienceProvider } from "@/context/AmbienceContext";
 import { CursorProvider } from "@/context/CursorContext";
 import AmbienceSweep from "@/components/AmbienceSweep";
 import CustomCursor from "@/components/CustomCursor";
+import MotionRootProvider from "@/components/MotionRootProvider";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://verdure.dining"),
@@ -56,10 +57,12 @@ export default function RootLayout({
       <body className="font-sans antialiased selection:bg-[#1B3B2B] selection:text-[#F4F3EE] overflow-x-hidden min-h-screen">
         <AmbienceProvider>
           <CursorProvider>
-            <div className="film-grain-overlay" aria-hidden="true" />
-            <CustomCursor />
-            <AmbienceSweep />
-            {children}
+            <MotionRootProvider>
+              <div className="film-grain-overlay" aria-hidden="true" />
+              <CustomCursor />
+              <AmbienceSweep />
+              {children}
+            </MotionRootProvider>
           </CursorProvider>
         </AmbienceProvider>
       </body>
