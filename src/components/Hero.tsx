@@ -231,14 +231,28 @@ function Hero({ onOpenReservation, isReady = true }: HeroProps) {
   const sheenY = useMotionValue(50);
   const sheenBackground = useMotionTemplate`radial-gradient(circle 350px at ${sheenX}% ${sheenY}%, var(--sheen-light), transparent 60%)`;
 
-  // Scroll-Linked Hero Parallax
+  // Scroll-Linked Hero Parallax & Depth Recession
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"],
   });
 
-  const textColY = useTransform(scrollYProgress, [0, 1], [0, -40]);
-  const textColOpacity = useTransform(scrollYProgress, [0, 0.85], [1, 0.25]);
+  const textColY = useTransform(scrollYProgress, [0, 1], [0, -90]);
+  const textColOpacity = useTransform(scrollYProgress, [0, 0.85], [1, 0.15]);
+
+  // Right 3D Stage Scroll-Tilt & Zoom
+  const stageScrollY = useTransform(scrollYProgress, [0, 1], [0, -45]);
+  const stageScrollRotateX = useTransform(scrollYProgress, [0, 1], [0, 12]);
+  const stageScrollRotateZ = useTransform(scrollYProgress, [0, 1], [0, -3]);
+  const stageScrollScale = useTransform(scrollYProgress, [0, 1], [1, 1.06]);
+  const compassScrollRotate = useTransform(scrollYProgress, [0, 1], [0, 180]);
+  const crosshairRotate = useTransform(scrollYProgress, [0, 1], [0, 180]);
+
+  const combinedRotateX = useTransform(
+    [mouseRotateX, stageScrollRotateX],
+    ([mX, sX]) => (isHovered ? (mX as number) : (sX as number))
+  );
+  const combinedRotateY = useTransform(mouseRotateY, (mY) => (isHovered ? (mY as number) : 0));
 
   const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
@@ -313,11 +327,11 @@ function Hero({ onOpenReservation, isReady = true }: HeroProps) {
           }}
         />
 
-        {/* Architectural Crosshair (+) Intersections */}
-        <span className="absolute top-26 left-6 sm:left-10 lg:left-14 font-mono text-xs text-[var(--accent-primary)] opacity-40">+</span>
-        <span className="absolute top-26 right-6 sm:right-10 lg:right-14 font-mono text-xs text-[var(--accent-primary)] opacity-40">+</span>
-        <span className="absolute bottom-15 left-6 sm:left-10 lg:left-14 font-mono text-xs text-[var(--accent-primary)] opacity-40">+</span>
-        <span className="absolute bottom-15 right-6 sm:right-10 lg:right-14 font-mono text-xs text-[var(--accent-primary)] opacity-40">+</span>
+        {/* Architectural Crosshair (+) Intersections — Scroll-Spinning */}
+        <motion.span style={{ rotate: crosshairRotate }} className="absolute top-26 left-6 sm:left-10 lg:left-14 font-mono text-xs text-[var(--accent-primary)] opacity-40 inline-block will-change-transform">+</motion.span>
+        <motion.span style={{ rotate: crosshairRotate }} className="absolute top-26 right-6 sm:right-10 lg:right-14 font-mono text-xs text-[var(--accent-primary)] opacity-40 inline-block will-change-transform">+</motion.span>
+        <motion.span style={{ rotate: crosshairRotate }} className="absolute bottom-15 left-6 sm:left-10 lg:left-14 font-mono text-xs text-[var(--accent-primary)] opacity-40 inline-block will-change-transform">+</motion.span>
+        <motion.span style={{ rotate: crosshairRotate }} className="absolute bottom-15 right-6 sm:right-10 lg:right-14 font-mono text-xs text-[var(--accent-primary)] opacity-40 inline-block will-change-transform">+</motion.span>
 
         {/* Far-Left Rotated Monospace Coordinate Label */}
         <div className="hidden xl:flex absolute left-4 top-1/2 -translate-y-1/2 items-center gap-3 [writing-mode:vertical-lr] rotate-180">
@@ -517,8 +531,11 @@ function Hero({ onOpenReservation, isReady = true }: HeroProps) {
               animate={isReady ? { opacity: 1, scale: 1, y: 0 } : {}}
               transition={{ duration: 0.85, delay: 0.25, ease: easeCurve }}
               style={{
-                rotateX: isHovered ? mouseRotateX : undefined,
-                rotateY: isHovered ? mouseRotateY : undefined,
+                y: stageScrollY,
+                rotateZ: stageScrollRotateZ,
+                scale: stageScrollScale,
+                rotateX: combinedRotateX,
+                rotateY: combinedRotateY,
                 transformStyle: "preserve-3d",
                 backfaceVisibility: "hidden",
                 WebkitBackfaceVisibility: "hidden",
@@ -530,12 +547,13 @@ function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                 {/* ---------------------------------------------------- */}
                 {/* LAYER 0: ROTATING ARCHITECTURAL COMPASS & ORBITAL RINGS */}
                 {/* ---------------------------------------------------- */}
-              <div
+              <motion.div
                 style={{
                   transformStyle: "preserve-3d",
                   transform: "translateZ(-25px)",
+                  rotate: compassScrollRotate,
                 }}
-                className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10"
+                className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10 will-change-transform"
               >
                 {/* Outer Ring: Rotating Clockwise (Native CSS Keyframe) */}
                 <div
@@ -558,7 +576,7 @@ function Hero({ onOpenReservation, isReady = true }: HeroProps) {
 
                 {/* Deep Offset Architectural Backdrop Slab */}
                 <div className="absolute -right-3 -bottom-3 w-full h-full rounded-t-[140px] rounded-b-[28px] -z-20 bg-[var(--bg-surface)] opacity-80" />
-              </div>
+              </motion.div>
 
               {/* ---------------------------------------------------- */}
               {/* LAYER 1: DISH LEVITATION & SCULPTED FRAME            */}

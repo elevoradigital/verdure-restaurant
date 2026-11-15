@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { useAmbience } from "@/context/AmbienceContext";
+import { useIsTouchDevice } from "@/hooks/useIsTouchDevice";
 
 // Isolated Concierge Status Ticker: Prevents parent floorplan re-renders
 const LiveConciergeTicker = React.memo(function LiveConciergeTicker({
@@ -202,8 +203,23 @@ function TableFloorplan({
   currentDateTime = "Today, 8:00 PM",
 }: TableFloorplanProps) {
   const { isEvening } = useAmbience();
+  const floorplanRef = useRef<HTMLDivElement>(null);
+  const isTouchDevice = useIsTouchDevice();
   const [activeZone, setActiveZone] = useState<string>("All Spaces");
   const [hoveredTable, setHoveredTable] = useState<TableNode | null>(null);
+
+  // 3D Blueprint Perspective Flattening linked to scroll
+  const { scrollYProgress: blueprintScrollProgress } = useScroll({
+    target: floorplanRef,
+    offset: ["start 90%", "start 35%"],
+  });
+  const blueprintRotateX = useTransform(
+    blueprintScrollProgress,
+    [0, 1],
+    isTouchDevice ? [0, 0] : [14, 0]
+  );
+  const blueprintScale = useTransform(blueprintScrollProgress, [0, 1], [0.94, 1]);
+  const blueprintY = useTransform(blueprintScrollProgress, [0, 1], [40, 0]);
 
   const zones = [
     "All Spaces",
@@ -238,11 +254,21 @@ function TableFloorplan({
   };
 
   return (
-    <div className={`w-full rounded-3xl sm:rounded-[2rem] p-4 sm:p-7 md:p-9 text-[#F4F3EE] border shadow-2xl relative overflow-hidden select-none transition-colors duration-200 ${
-      isEvening
-        ? "bg-[#0B1610] border-[#C8A97E]/30 [box-shadow:0_24px_60px_rgba(0,0,0,0.8),0_0_35px_rgba(200,169,126,0.12)]"
-        : "bg-[#11261B] border-[#F4F3EE]/15 shadow-2xl"
-    }`}>
+    <motion.div
+      ref={floorplanRef}
+      style={{
+        perspective: 1200,
+        rotateX: blueprintRotateX,
+        scale: blueprintScale,
+        y: blueprintY,
+        transformStyle: "preserve-3d",
+      }}
+      className={`w-full rounded-3xl sm:rounded-[2rem] p-4 sm:p-7 md:p-9 text-[#F4F3EE] border shadow-2xl relative overflow-hidden select-none transition-colors duration-200 will-change-transform ${
+        isEvening
+          ? "bg-[#0B1610] border-[#C8A97E]/30 [box-shadow:0_24px_60px_rgba(0,0,0,0.8),0_0_35px_rgba(200,169,126,0.12)]"
+          : "bg-[#11261B] border-[#F4F3EE]/15 shadow-2xl"
+      }`}
+    >
       
       {/* Background Architectural Grid Lines */}
       <div
@@ -537,14 +563,22 @@ function TableFloorplan({
             }
 
             return (
-              <g
+              <motion.g
                 key={table.id}
+                initial={{ scale: 0.2, opacity: 0 }}
+                whileInView={{ scale: 1, opacity: nodeOpacity }}
+                viewport={{ once: true, margin: "-20px" }}
+                transition={{
+                  type: "spring",
+                  stiffness: 340,
+                  damping: 24,
+                  delay: (parseInt(table.number, 10) || 1) * 0.05,
+                }}
                 data-cursor="tablePin"
                 data-cursor-label={isBooked ? "BOOKED" : `SELECT ${table.id}`}
-                opacity={nodeOpacity}
                 style={{
                   cursor: isBooked ? "not-allowed" : "pointer",
-                  transition: "opacity 0.3s, transform 0.2s",
+                  transformOrigin: `${table.x}px ${table.y}px`,
                 }}
                 onClick={() => {
                   if (!isBooked) {
@@ -788,7 +822,7 @@ function TableFloorplan({
                     BOOKED
                   </text>
                 )}
-              </g>
+              </motion.g>
             );
           })}
         </svg>
@@ -916,7 +950,7 @@ function TableFloorplan({
         </span>
       </div>
 
-    </div>
+    </motion.div>
   );
 }
 

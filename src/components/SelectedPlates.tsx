@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, MouseEvent, UIEvent } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence, useSpring, useScroll, useTransform, MotionValue } from "framer-motion";
+import { motion, AnimatePresence, useSpring, useScroll, useTransform, useVelocity, MotionValue } from "framer-motion";
 import { DishItem } from "./DishModal";
 import { ArrowRight, LayoutGrid, List, ArrowUpRight } from "lucide-react";
 import MagneticButton from "./MagneticButton";
@@ -124,12 +124,18 @@ const MotionPlateCard = React.memo(function MotionPlateCard({
   onSelectDish,
   isMobileActive = false,
   scrollShiftY,
+  cardSkewY,
+  cardScaleY,
+  imageShiftY,
 }: {
   dish: DishItem;
   index: number;
   onSelectDish: (dish: DishItem) => void;
   isMobileActive?: boolean;
   scrollShiftY?: MotionValue<number>;
+  cardSkewY?: MotionValue<number>;
+  cardScaleY?: MotionValue<number>;
+  imageShiftY?: MotionValue<string>;
 }) {
   const { isEvening } = useAmbience();
   const cardRef = useRef<HTMLDivElement>(null);
@@ -171,8 +177,12 @@ const MotionPlateCard = React.memo(function MotionPlateCard({
   return (
     <motion.div
       layout
-      style={{ y: scrollShiftY }}
-      className="w-full h-full"
+      style={{
+        y: scrollShiftY,
+        skewY: isTouchDevice ? 0 : cardSkewY,
+        scaleY: isTouchDevice ? 1 : cardScaleY,
+      }}
+      className="w-full h-full will-change-transform"
     >
       <motion.div
         data-cursor="plate"
@@ -209,17 +219,22 @@ const MotionPlateCard = React.memo(function MotionPlateCard({
           </span>
         </div>
 
-        {/* 2. Center: Crisp, uncluttered food photograph with subtle zoom & tilt on hover */}
+        {/* 2. Center: Food photograph with counter-parallax window & subtle zoom on hover */}
         <div className="relative w-full aspect-[4/3] rounded-md overflow-hidden mb-4 bg-[var(--bg-surface)]">
-          <Image
-            src={dish.image}
-            alt={dish.name}
-            fill
-            loading="lazy"
-            decoding="async"
-            className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.06] group-hover:-rotate-[1.5deg]"
-            sizes="(max-width: 768px) 85vw, (max-width: 1200px) 33vw, 380px"
-          />
+          <motion.div
+            style={{ y: imageShiftY, scale: 1.12 }}
+            className="relative w-full h-full will-change-transform"
+          >
+            <Image
+              src={dish.image}
+              alt={dish.name}
+              fill
+              loading="lazy"
+              decoding="async"
+              className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.06] group-hover:-rotate-[1.5deg]"
+              sizes="(max-width: 768px) 85vw, (max-width: 1200px) 33vw, 380px"
+            />
+          </motion.div>
         </div>
 
         {/* 3. Bottom: Roman Serif Title + clean ingredients + plain italic pairing */}
@@ -272,12 +287,36 @@ function SelectedPlates({
     previewY.set(e.clientY - rect.top - 80);
   };
 
-  // Scroll Depth across the dish grid section: shifts plates y: [10, -10]
-  const { scrollYProgress } = useScroll({
+  // 1. Scroll-Velocity Kinetic Skew & Scale
+  const { scrollY, scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
   });
-  const plateScrollShiftY = useTransform(scrollYProgress, [0, 1], [10, -10]);
+  const scrollVelocity = useVelocity(scrollY);
+  const smoothVelocity = useSpring(scrollVelocity, {
+    stiffness: 300,
+    damping: 35,
+  });
+  const cardSkewY = useTransform(smoothVelocity, [-1500, 1500], [-2.5, 2.5]);
+  const cardScaleY = useTransform(smoothVelocity, [-1500, 0, 1500], [0.985, 1, 0.985]);
+
+  // 2. 3-Column Staggered Parallax Speeds (Desktop >= 768px, mobile-safe cap)
+  const isTouchDevice = useIsTouchDevice();
+  const col1ScrollY = useTransform(scrollYProgress, [0, 1], isTouchDevice ? [0, 0] : [25, -25]);
+  const col2ScrollY = useTransform(scrollYProgress, [0, 1], isTouchDevice ? [0, 0] : [65, -65]);
+  const col3ScrollY = useTransform(scrollYProgress, [0, 1], isTouchDevice ? [0, 0] : [15, -35]);
+  const colScrollYs = [col1ScrollY, col2ScrollY, col3ScrollY];
+
+  // 3. Internal food image counter-parallax
+  const imageShiftY = useTransform(scrollYProgress, [0, 1], ["-6%", "6%"]);
+
+  // 4. Self-drawing top horizontal 1px hairline linked to scroll
+  const { scrollYProgress: hairlineScrollProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start 90%", "start 40%"],
+  });
+  const topHairlineScaleX = useTransform(hairlineScrollProgress, [0, 1], [0, 1]);
+  const crosshairRotate = useTransform(hairlineScrollProgress, [0, 1], [0, 180]);
 
   const categories = ["All", "Small Plates", "Mains", "Cellar"];
 
@@ -324,6 +363,12 @@ function SelectedPlates({
       onMouseMove={handleIndexMouseMove}
       className="section-contain py-16 sm:py-20 lg:py-28 relative scroll-mt-10 overflow-hidden bg-[var(--bg-canvas)] border-b border-[var(--border-hairline)] transition-colors duration-300 ease-out"
     >
+      {/* Self-Drawing Top Horizontal 1px Hairline (Scroll-Linked) */}
+      <motion.div
+        style={{ scaleX: topHairlineScaleX, transformOrigin: "left" }}
+        className="w-full h-[1px] bg-[var(--border-hairline)] will-change-transform"
+      />
+
       {/* Anchor alias for #menu */}
       <div id="menu" className="absolute -top-10 left-0 pointer-events-none" />
 
@@ -355,7 +400,12 @@ function SelectedPlates({
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 sm:gap-6 pb-8 sm:pb-10 border-b border-[var(--border-hairline)]">
           <div>
             <div className="inline-flex items-center gap-2 mb-2 font-mono text-[10px] sm:text-[11px] tracking-[0.2em] uppercase font-bold">
-              <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-primary)]" />
+              <motion.span
+                style={{ rotate: crosshairRotate }}
+                className="text-[var(--accent-primary)] inline-block will-change-transform text-xs"
+              >
+                +
+              </motion.span>
               <span className="text-[var(--accent-primary)]">
                 02 — Autumn / Winter Menu
               </span>
@@ -453,7 +503,10 @@ function SelectedPlates({
                   dish={dish}
                   index={idx}
                   onSelectDish={onSelectDish}
-                  scrollShiftY={plateScrollShiftY}
+                  scrollShiftY={colScrollYs[idx % 3]}
+                  cardSkewY={cardSkewY}
+                  cardScaleY={cardScaleY}
+                  imageShiftY={imageShiftY}
                 />
               ))}
             </AnimatePresence>
@@ -577,6 +630,10 @@ function SelectedPlates({
                   index={idx}
                   onSelectDish={onSelectDish}
                   isMobileActive={activeMobileIndex === idx}
+                  scrollShiftY={colScrollYs[0]}
+                  cardSkewY={cardSkewY}
+                  cardScaleY={cardScaleY}
+                  imageShiftY={imageShiftY}
                 />
               </div>
             ))}

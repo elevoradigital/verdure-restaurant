@@ -156,10 +156,13 @@ export default function Header({ onOpenReservation }: HeaderProps) {
 
   return (
     <>
-      {/* 1. Top Fixed 2px Scroll Progress Bar in Botanical Sage #2D5A43 */}
+      {/* 1. Top Fixed 2px Scroll Progress Bar in Botanical Sage #2D5A43 / Candlelight Amber #C8A97E */}
       <motion.div
-        className="fixed top-0 left-0 right-0 h-[2px] bg-[#2D5A43] origin-left z-50 pointer-events-none"
-        style={{ scaleX }}
+        className="fixed top-0 left-0 right-0 h-[2px] origin-left z-50 pointer-events-none transition-colors duration-300"
+        style={{
+          scaleX,
+          backgroundColor: isEvening ? "#C8A97E" : "#2D5A43",
+        }}
       />
 
       {/* 2. Smart Architectural Structural Grid Navbar */}
@@ -304,6 +307,16 @@ export default function Header({ onOpenReservation }: HeaderProps) {
             </div>
           </div>
         </div>
+
+        {/* Full-Width 1px Bottom Border Scroll Progress Indicator */}
+        <motion.div
+          style={{
+            scaleX: scrollYProgress,
+            transformOrigin: "0% 50%",
+            backgroundColor: isEvening ? "#C8A97E" : "#2D5A43",
+          }}
+          className="absolute -bottom-[1px] left-0 right-0 h-[1.5px] pointer-events-none will-change-transform z-10 transition-colors duration-300"
+        />
       </motion.header>
 
       {/* 3. Choreographed Full-Screen Deep Forest Green Mobile Menu Drawer (#11261B, 100dvh) */}

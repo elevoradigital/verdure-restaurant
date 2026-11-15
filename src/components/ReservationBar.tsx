@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import ReservationModal from "./ReservationModal";
 import MagneticButton from "./MagneticButton";
@@ -9,6 +10,7 @@ import { useAmbience } from "@/context/AmbienceContext";
 
 function ReservationBar() {
   const { isEvening } = useAmbience();
+  const sectionRef = useRef<HTMLElement>(null);
   const [guests, setGuests] = useState("2 Guests");
   const [selectedDayTime, setSelectedDayTime] = useState("Today, 1:00 PM");
   const [selectedEveningTime, setSelectedEveningTime] = useState("Today, 8:00 PM");
@@ -22,6 +24,14 @@ function ReservationBar() {
   };
   const [selectedTable, setSelectedTable] = useState<TableNode>(floorplanTables[3]); // T-04 Botanical Window Booth
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Self-drawing top horizontal 1px hairline linked to scroll
+  const { scrollYProgress: hairlineProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start 90%", "start 40%"],
+  });
+  const topHairlineScaleX = useTransform(hairlineProgress, [0, 1], [0, 1]);
+  const crosshairRotate = useTransform(hairlineProgress, [0, 1], [0, 180]);
 
   const guestOptions = [
     "1 Guest",
@@ -57,19 +67,31 @@ function ReservationBar() {
   return (
     <section
       id="reserve"
+      ref={sectionRef}
       className="section-contain pt-28 sm:pt-32 lg:pt-36 pb-16 sm:pb-20 lg:pb-28 relative scroll-mt-24 overflow-hidden bg-[var(--bg-canvas)] border-b border-[var(--border-hairline)] transition-colors duration-300 ease-out"
     >
+      {/* Self-Drawing Top Horizontal 1px Hairline (Scroll-Linked) */}
+      <motion.div
+        style={{ scaleX: topHairlineScaleX, transformOrigin: "left" }}
+        className="w-full h-[1px] bg-[var(--border-hairline)] will-change-transform"
+      />
+
       {/* Oversized Background Watermark */}
       <div className="absolute -right-4 -top-8 pointer-events-none select-none font-serif text-[18vw] font-bold leading-none tracking-tighter opacity-[0.035] -z-0 text-[var(--text-primary)]">
         04
       </div>
 
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 relative z-10 pt-6">
         
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
           <div className="inline-flex items-center gap-2 mb-2 font-mono text-[10px] sm:text-[11px] tracking-[0.25em] uppercase font-bold">
-            <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-primary)]" />
+            <motion.span
+              style={{ rotate: crosshairRotate }}
+              className="text-xs font-mono text-[var(--accent-primary)] font-bold inline-block will-change-transform"
+            >
+              +
+            </motion.span>
             <span className="text-[var(--accent-primary)]">
               04 — Reservations
             </span>

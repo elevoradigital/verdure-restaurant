@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import {
   ArrowUpRight,
   Check,
@@ -56,6 +56,22 @@ function Footer() {
   const [isArrowHovered, setIsArrowHovered] = useState(false);
   const prefersReducedMotion = useHydratedReducedMotion();
 
+  // Scroll-linked Top Self-Drawing Line & Rotating Crosshairs
+  const { scrollYProgress: hairlineProgress } = useScroll({
+    target: footerRef,
+    offset: ["start 95%", "start 55%"],
+  });
+  const topHairlineScaleX = useTransform(hairlineProgress, [0, 1], [0, 1]);
+  const crosshairRotate = useTransform(hairlineProgress, [0, 1], [0, 180]);
+
+  // Scroll-linked Monumental Watermark Rise & Scale
+  const { scrollYProgress: footerScrollProgress } = useScroll({
+    target: footerRef,
+    offset: ["start end", "end end"],
+  });
+  const watermarkY = useTransform(footerScrollProgress, [0.35, 1], ["35%", "0%"]);
+  const watermarkScale = useTransform(footerScrollProgress, [0.35, 1], [0.95, 1]);
+
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !email.includes("@")) return;
@@ -76,20 +92,24 @@ function Footer() {
       ref={footerRef}
       className="section-contain relative pt-12 pb-8 overflow-hidden bg-[var(--footer-bg)] text-[var(--text-primary)] transition-colors duration-300 ease-out"
     >
-      {/* Top Self-Drawing 1px Architectural Border with Crosshairs */}
+      {/* Top Self-Drawing 1px Architectural Border with Rotating Crosshairs */}
       <div className="relative w-full">
         <motion.div
-          initial={{ scaleX: 0 }}
-          animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
-          transition={{ duration: 0.95, ease: easeCurve }}
-          className="w-full h-[1px] origin-left bg-[var(--border-hairline)]"
+          style={{ scaleX: topHairlineScaleX, transformOrigin: "left" }}
+          className="w-full h-[1px] bg-[var(--border-hairline)] will-change-transform"
         />
-        <span className="absolute left-4 -top-2.5 font-mono text-[10px] select-none pointer-events-none text-[var(--text-muted)] opacity-50">
+        <motion.span
+          style={{ rotate: crosshairRotate }}
+          className="absolute left-4 -top-2.5 font-mono text-[10px] select-none pointer-events-none text-[var(--text-muted)] opacity-50 inline-block will-change-transform"
+        >
           +
-        </span>
-        <span className="absolute right-4 -top-2.5 font-mono text-[10px] select-none pointer-events-none text-[var(--text-muted)] opacity-50">
+        </motion.span>
+        <motion.span
+          style={{ rotate: crosshairRotate }}
+          className="absolute right-4 -top-2.5 font-mono text-[10px] select-none pointer-events-none text-[var(--text-muted)] opacity-50 inline-block will-change-transform"
+        >
           +
-        </span>
+        </motion.span>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
@@ -382,11 +402,16 @@ function Footer() {
           </button>
         </div>
 
-        {/* Monumental Edge-to-Edge VERDURE Watermark */}
+        {/* Monumental Edge-to-Edge VERDURE Watermark with Scroll Rise */}
         <div className="relative w-full pt-6 pb-2 overflow-hidden flex justify-center items-center pointer-events-none select-none">
-          <span className="font-serif text-[16vw] leading-[0.75] font-light tracking-[-0.04em] uppercase text-[var(--text-primary)] opacity-[0.04]">
-            VERDURE
-          </span>
+          <motion.div
+            style={{ y: watermarkY, scale: watermarkScale }}
+            className="will-change-transform flex justify-center items-center"
+          >
+            <span className="font-serif text-[16vw] leading-[0.75] font-light tracking-[-0.04em] uppercase text-[var(--text-primary)] opacity-[0.04]">
+              VERDURE
+            </span>
+          </motion.div>
         </div>
 
         {/* Bottom Studio Credit Bar & Legal Links */}

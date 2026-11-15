@@ -68,13 +68,15 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     // If already loaded in this browsing session, immediately fast-forward
     try {
       if (sessionStorage.getItem("verdure_loaded") === "true") {
-        onComplete();
-        setIsUnmounted(true);
+        const skipTimer = setTimeout(() => {
+          onComplete();
+          setIsUnmounted(true);
+        }, 0);
         if (typeof document !== "undefined") {
           document.body.style.overflow = "";
           document.documentElement.style.overflow = "";
         }
-        return;
+        return () => clearTimeout(skipTimer);
       }
     } catch {}
 
@@ -156,7 +158,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         document.documentElement.style.overflow = "";
       }
     };
-  }, [prefersReducedMotion, startExitSequence]);
+  }, [onComplete, prefersReducedMotion, startExitSequence]);
 
   if (isUnmounted) return null;
 
