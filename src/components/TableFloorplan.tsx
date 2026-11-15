@@ -195,7 +195,7 @@ interface TableFloorplanProps {
   onConfirmSelection?: () => void;
 }
 
-export default function TableFloorplan({
+function TableFloorplan({
   selectedTableId,
   onSelectTable,
   guestCountFilter = "2 Guests",
@@ -919,3 +919,5 @@ export default function TableFloorplan({
     </div>
   );
 }
+
+export default React.memo(TableFloorplan);

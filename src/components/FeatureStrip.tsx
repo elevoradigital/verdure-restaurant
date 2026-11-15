@@ -4,7 +4,7 @@ import React, { useState, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { useHydratedReducedMotion } from "@/hooks/useHydratedReducedMotion";
 
-export default function FeatureStrip() {
+function FeatureStrip() {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-10% 0px" });
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -43,7 +43,7 @@ export default function FeatureStrip() {
     <section
       id="pillars"
       ref={sectionRef}
-      className="relative overflow-hidden bg-[var(--bg-canvas)] border-b border-[var(--border-hairline)] transition-colors duration-300 ease-out"
+      className="section-contain relative overflow-hidden bg-[var(--bg-canvas)] border-b border-[var(--border-hairline)] transition-colors duration-300 ease-out"
     >
       {/* 1. Self-Drawing Top Horizontal 1px Hairline */}
       <motion.div
@@ -174,3 +174,5 @@ export default function FeatureStrip() {
     </section>
   );
 }
+
+export default React.memo(FeatureStrip);

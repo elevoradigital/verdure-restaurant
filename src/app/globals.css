@@ -481,3 +481,12 @@ html.ambience-evening .ambient-evening-only {
   z-index: 9999;
 }
 
+/* -------------------------------------------------------------------------- */
+/* 11. Hardware Layout & Paint Containment for Below-the-Fold Sections        */
+/* -------------------------------------------------------------------------- */
+.section-contain {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 850px;
+}
+
+

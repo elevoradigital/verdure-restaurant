@@ -54,6 +54,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       setIsUnmounted(true);
       if (typeof document !== "undefined") {
         document.body.style.overflow = "";
+        document.documentElement.style.overflow = "";
       }
     }, 980);
 
@@ -64,22 +65,22 @@ export default function Preloader({ onComplete }: PreloaderProps) {
   }, [onComplete]);
 
   useEffect(() => {
+    // If already loaded in this browsing session, immediately fast-forward
+    try {
+      if (sessionStorage.getItem("verdure_loaded") === "true") {
+        onComplete();
+        setIsUnmounted(true);
+        if (typeof document !== "undefined") {
+          document.body.style.overflow = "";
+          document.documentElement.style.overflow = "";
+        }
+        return;
+      }
+    } catch {}
+
     // Lock body scroll while the preloader curtain is mounted
     if (typeof document !== "undefined") {
       document.body.style.overflow = "hidden";
-    }
-
-    // Reduced motion shortcut: simple 300ms fadeout
-    if (prefersReducedMotion) {
-      const skipTimer = setTimeout(() => {
-        startExitSequence();
-      }, 300);
-      return () => {
-        clearTimeout(skipTimer);
-        if (typeof document !== "undefined") {
-          document.body.style.overflow = "";
-        }
-      };
     }
 
     // Silent background asset preloading for the 3 Hero tasting dishes
@@ -90,9 +91,9 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       }
     });
 
-    // 1650ms precision countdown engine (60-120fps hardware RAF loop)
+    // Snappy 1050ms precision countdown engine (60-120fps hardware RAF loop)
     const startTime = performance.now();
-    const duration = 1650;
+    const duration = 1050;
     const ringCircumference = 2 * Math.PI * 88; // ~552.92px
     let animationFrameId: number;
 
@@ -152,6 +153,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       cancelAnimationFrame(animationFrameId);
       if (typeof document !== "undefined") {
         document.body.style.overflow = "";
+        document.documentElement.style.overflow = "";
       }
     };
   }, [prefersReducedMotion, startExitSequence]);

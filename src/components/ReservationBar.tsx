@@ -7,7 +7,7 @@ import MagneticButton from "./MagneticButton";
 import TableFloorplan, { floorplanTables, TableNode } from "./TableFloorplan";
 import { useAmbience } from "@/context/AmbienceContext";
 
-export default function ReservationBar() {
+function ReservationBar() {
   const { isEvening } = useAmbience();
   const [guests, setGuests] = useState("2 Guests");
   const [selectedDayTime, setSelectedDayTime] = useState("Today, 1:00 PM");
@@ -57,7 +57,7 @@ export default function ReservationBar() {
   return (
     <section
       id="reserve"
-      className="pt-28 sm:pt-32 lg:pt-36 pb-16 sm:pb-20 lg:pb-28 relative scroll-mt-24 overflow-hidden bg-[var(--bg-canvas)] border-b border-[var(--border-hairline)] transition-colors duration-300 ease-out"
+      className="section-contain pt-28 sm:pt-32 lg:pt-36 pb-16 sm:pb-20 lg:pb-28 relative scroll-mt-24 overflow-hidden bg-[var(--bg-canvas)] border-b border-[var(--border-hairline)] transition-colors duration-300 ease-out"
     >
       {/* Oversized Background Watermark */}
       <div className="absolute -right-4 -top-8 pointer-events-none select-none font-serif text-[18vw] font-bold leading-none tracking-tighter opacity-[0.035] -z-0 text-[var(--text-primary)]">
@@ -251,3 +251,5 @@ export default function ReservationBar() {
     </section>
   );
 }
+
+export default React.memo(ReservationBar);

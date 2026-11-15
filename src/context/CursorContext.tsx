@@ -129,19 +129,31 @@ export function CursorProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
+  const contextValue = React.useMemo(
+    () => ({
+      variant,
+      label,
+      isVisible,
+      isHovered,
+      isMouseDown,
+      setCursor,
+      resetCursor,
+      setCursorLabel,
+    }),
+    [
+      variant,
+      label,
+      isVisible,
+      isHovered,
+      isMouseDown,
+      setCursor,
+      resetCursor,
+      setCursorLabel,
+    ]
+  );
+
   return (
-    <CursorContext.Provider
-      value={{
-        variant,
-        label,
-        isVisible,
-        isHovered,
-        isMouseDown,
-        setCursor,
-        resetCursor,
-        setCursorLabel,
-      }}
-    >
+    <CursorContext.Provider value={contextValue}>
       {children}
     </CursorContext.Provider>
   );

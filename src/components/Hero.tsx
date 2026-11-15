@@ -207,7 +207,7 @@ interface HeroProps {
   isReady?: boolean;
 }
 
-export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
+function Hero({ onOpenReservation, isReady = true }: HeroProps) {
   const { isEvening } = useAmbience();
   const sectionRef = useRef<HTMLElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -523,13 +523,13 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                 backfaceVisibility: "hidden",
                 WebkitBackfaceVisibility: "hidden",
               }}
-              className={`relative w-full max-w-md sm:max-w-lg lg:max-w-none aspect-[4/4.2] sm:aspect-[4/3.8] select-none preserve-3d ${
-                !isHovered ? "animate-stage-idle" : ""
-              }`}
+              className="relative w-full max-w-md sm:max-w-lg lg:max-w-none aspect-[4/4.2] sm:aspect-[4/3.8] select-none preserve-3d"
             >
-              {/* ---------------------------------------------------- */}
-              {/* LAYER 0: ROTATING ARCHITECTURAL COMPASS & ORBITAL RINGS */}
-              {/* ---------------------------------------------------- */}
+              {/* Inner Continuous Idle Ambient Stage (Decoupled from Framer Motion transform) */}
+              <div className={`relative w-full h-full preserve-3d ${!isHovered ? "animate-stage-idle" : ""}`}>
+                {/* ---------------------------------------------------- */}
+                {/* LAYER 0: ROTATING ARCHITECTURAL COMPASS & ORBITAL RINGS */}
+                {/* ---------------------------------------------------- */}
               <div
                 style={{
                   transformStyle: "preserve-3d",
@@ -566,7 +566,6 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
               <div
                 style={{
                   transformStyle: "preserve-3d",
-                  transform: "translateZ(0px)",
                   boxShadow: "0 28px 56px -12px rgba(0, 0, 0, 0.45)",
                   backfaceVisibility: "hidden",
                   WebkitBackfaceVisibility: "hidden",
@@ -798,6 +797,7 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                 })}
               </div>
 
+              </div>
             </motion.div>
 
             {/* Museum-style Caption Strip tucked neatly below the frame */}
@@ -866,3 +866,5 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
     </section>
   );
 }
+
+export default React.memo(Hero);

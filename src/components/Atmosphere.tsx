@@ -10,7 +10,7 @@ import AmbienceToggle from "./AmbienceToggle";
 import { useIsTouchDevice } from "@/hooks/useIsTouchDevice";
 import { useHydratedReducedMotion } from "@/hooks/useHydratedReducedMotion";
 
-export default function Atmosphere() {
+function Atmosphere() {
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [activeZoneIdx, setActiveZoneIdx] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -45,7 +45,7 @@ export default function Atmosphere() {
       <section
         id="atmosphere"
         ref={containerRef}
-        className="py-16 sm:py-20 lg:py-28 overflow-hidden scroll-mt-10 bg-[var(--section-dark)] border-b border-[var(--border-hairline)] transition-colors duration-300 ease-out"
+        className="section-contain py-16 sm:py-20 lg:py-28 overflow-hidden scroll-mt-10 bg-[var(--section-dark)] border-b border-[var(--border-hairline)] transition-colors duration-300 ease-out"
       >
         {/* Anchor alias for #space */}
         <div id="space" className="absolute -top-10 left-0 pointer-events-none" />
@@ -191,6 +191,8 @@ export default function Atmosphere() {
                           src={currentZone.image}
                           alt={currentZone.caption}
                           fill
+                          loading="lazy"
+                          decoding="async"
                           className="object-cover object-center"
                           sizes="(max-width: 1024px) 100vw, 60vw"
                         />
@@ -247,3 +249,5 @@ export default function Atmosphere() {
     </>
   );
 }
+
+export default React.memo(Atmosphere);

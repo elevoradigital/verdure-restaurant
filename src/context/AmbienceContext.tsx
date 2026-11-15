@@ -208,17 +208,20 @@ export function AmbienceProvider({ children }: { children: React.ReactNode }) {
     applyThemeDOM(mode);
   }, [mode]);
 
+  const contextValue = React.useMemo(
+    () => ({
+      mode,
+      isEvening,
+      toggleAmbience,
+      setAmbience,
+      isTransitioning,
+      lastOrigin,
+    }),
+    [mode, isEvening, toggleAmbience, setAmbience, isTransitioning, lastOrigin]
+  );
+
   return (
-    <AmbienceContext.Provider
-      value={{
-        mode,
-        isEvening,
-        toggleAmbience,
-        setAmbience,
-        isTransitioning,
-        lastOrigin,
-      }}
-    >
+    <AmbienceContext.Provider value={contextValue}>
       {children}
     </AmbienceContext.Provider>
   );

@@ -118,7 +118,7 @@ const dishesData: DishItem[] = [
 ];
 
 // Single 3D Plate Card for Mode A (3D Grid)
-function MotionPlateCard({
+const MotionPlateCard = React.memo(function MotionPlateCard({
   dish,
   index,
   onSelectDish,
@@ -171,72 +171,78 @@ function MotionPlateCard({
   return (
     <motion.div
       layout
-      data-cursor="plate"
-      data-cursor-label="VIEW DISH"
-      initial={{ opacity: 0, y: 36 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      exit={{ opacity: 0, scale: 0.94, y: 16 }}
-      whileHover={{ y: -6 }}
-      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      ref={cardRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      onClick={() => onSelectDish(dish)}
-      whileTap={{ scale: 0.98 }}
-      style={{
-        rotateX: isTouchDevice ? 0 : rotateX,
-        rotateY: isTouchDevice ? 0 : rotateY,
-        y: scrollShiftY,
-        transformStyle: "preserve-3d",
-      }}
-      className={`group relative rounded-lg p-5 cursor-pointer flex flex-col justify-between preserve-3d transition-colors duration-200 border bg-[var(--bg-card)] ${
-        isMobileActive
-          ? "border-[var(--accent-primary)] shadow-sm"
-          : "border-[var(--border-hairline)] hover:border-[var(--border-active)]"
-      }`}
+      style={{ y: scrollShiftY }}
+      className="w-full h-full"
     >
-      {/* 1. Top Row: Monospace number on left, price on right */}
-      <div className="flex items-center justify-between pb-3 mb-3 border-b border-current/10 text-xs font-mono">
-        <span className="font-bold text-[var(--accent-primary)]">
-          0{index + 1}
-        </span>
-        <span className="font-semibold text-[var(--text-primary)]">
-          {dish.price}
-        </span>
-      </div>
-
-      {/* 2. Center: Crisp, uncluttered food photograph with subtle zoom & tilt on hover */}
-      <div className="relative w-full aspect-[4/3] rounded-md overflow-hidden mb-4 bg-[var(--bg-surface)]">
-        <Image
-          src={dish.image}
-          alt={dish.name}
-          fill
-          className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.06] group-hover:-rotate-[1.5deg]"
-          sizes="(max-width: 768px) 85vw, (max-width: 1200px) 33vw, 380px"
-        />
-      </div>
-
-      {/* 3. Bottom: Roman Serif Title + clean ingredients + plain italic pairing */}
-      <div className="space-y-1.5">
-        <div className="flex items-center justify-between">
-          <h3 className="font-serif text-xl font-normal tracking-tight text-[var(--text-primary)] group-hover:text-[var(--accent-primary)] transition-colors duration-200">
-            {dish.name}
-          </h3>
-          <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 shrink-0 ml-2 text-[var(--accent-primary)]" />
+      <motion.div
+        data-cursor="plate"
+        data-cursor-label="VIEW DISH"
+        initial={{ opacity: 0, y: 36 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-50px" }}
+        exit={{ opacity: 0, scale: 0.94, y: 16 }}
+        whileHover={{ y: -6 }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        ref={cardRef}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        onClick={() => onSelectDish(dish)}
+        whileTap={{ scale: 0.98 }}
+        style={{
+          rotateX: isTouchDevice ? 0 : rotateX,
+          rotateY: isTouchDevice ? 0 : rotateY,
+          transformStyle: "preserve-3d",
+        }}
+        className={`group relative rounded-lg p-5 cursor-pointer flex flex-col justify-between preserve-3d transition-colors duration-200 border bg-[var(--bg-card)] ${
+          isMobileActive
+            ? "border-[var(--accent-primary)] shadow-sm"
+            : "border-[var(--border-hairline)] hover:border-[var(--border-active)]"
+        }`}
+      >
+        {/* 1. Top Row: Monospace number on left, price on right */}
+        <div className="flex items-center justify-between pb-3 mb-3 border-b border-current/10 text-xs font-mono">
+          <span className="font-bold text-[var(--accent-primary)]">
+            0{index + 1}
+          </span>
+          <span className="font-semibold text-[var(--text-primary)]">
+            {dish.price}
+          </span>
         </div>
-        <p className="text-xs leading-relaxed line-clamp-1 text-[var(--text-muted)]">
-          {dish.ingredients.join(", ")}
-        </p>
-        <p className="text-[11px] italic pt-1 text-[var(--accent-primary)] opacity-85">
-          Paired with: {activePairing}
-        </p>
-      </div>
+
+        {/* 2. Center: Crisp, uncluttered food photograph with subtle zoom & tilt on hover */}
+        <div className="relative w-full aspect-[4/3] rounded-md overflow-hidden mb-4 bg-[var(--bg-surface)]">
+          <Image
+            src={dish.image}
+            alt={dish.name}
+            fill
+            loading="lazy"
+            decoding="async"
+            className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.06] group-hover:-rotate-[1.5deg]"
+            sizes="(max-width: 768px) 85vw, (max-width: 1200px) 33vw, 380px"
+          />
+        </div>
+
+        {/* 3. Bottom: Roman Serif Title + clean ingredients + plain italic pairing */}
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between">
+            <h3 className="font-serif text-xl font-normal tracking-tight text-[var(--text-primary)] group-hover:text-[var(--accent-primary)] transition-colors duration-200">
+              {dish.name}
+            </h3>
+            <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 shrink-0 ml-2 text-[var(--accent-primary)]" />
+          </div>
+          <p className="text-xs leading-relaxed line-clamp-1 text-[var(--text-muted)]">
+            {dish.ingredients.join(", ")}
+          </p>
+          <p className="text-[11px] italic pt-1 text-[var(--accent-primary)] opacity-85">
+            Paired with: {activePairing}
+          </p>
+        </div>
+      </motion.div>
     </motion.div>
   );
-}
+});
 
-export default function SelectedPlates({
+function SelectedPlates({
   onSelectDish,
   onOpenReservation,
 }: SelectedPlatesProps) {
@@ -316,7 +322,7 @@ export default function SelectedPlates({
       id="plates"
       ref={sectionRef}
       onMouseMove={handleIndexMouseMove}
-      className="py-16 sm:py-20 lg:py-28 relative scroll-mt-10 overflow-hidden bg-[var(--bg-canvas)] border-b border-[var(--border-hairline)] transition-colors duration-300 ease-out"
+      className="section-contain py-16 sm:py-20 lg:py-28 relative scroll-mt-10 overflow-hidden bg-[var(--bg-canvas)] border-b border-[var(--border-hairline)] transition-colors duration-300 ease-out"
     >
       {/* Anchor alias for #menu */}
       <div id="menu" className="absolute -top-10 left-0 pointer-events-none" />
@@ -622,3 +628,5 @@ export default function SelectedPlates({
     </section>
   );
 }
+
+export default React.memo(SelectedPlates);

@@ -10,7 +10,7 @@ interface MobileStickyBarProps {
   isModalActive?: boolean;
 }
 
-export default function MobileStickyBar({
+function MobileStickyBar({
   onOpenReservation,
   isModalActive = false,
 }: MobileStickyBarProps) {
@@ -18,18 +18,25 @@ export default function MobileStickyBar({
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      // Show when scrolled down past hero (>320px) and hide when reaching reservation section
+    let ticking = false;
+
+    const updateVisibility = () => {
       const scrolledPastHero = window.scrollY > 320;
-      
-      const reserveEl = document.getElementById("story");
+      const reserveEl = document.getElementById("reserve") || document.getElementById("story");
       let nearReserve = false;
       if (reserveEl) {
         const rect = reserveEl.getBoundingClientRect();
         nearReserve = rect.top <= window.innerHeight * 0.72;
       }
-
       setIsVisible(scrolledPastHero && !nearReserve && !isModalActive);
+      ticking = false;
+    };
+
+    const handleScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(updateVisibility);
+      }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -112,3 +119,5 @@ export default function MobileStickyBar({
     </AnimatePresence>
   );
 }
+
+export default React.memo(MobileStickyBar);

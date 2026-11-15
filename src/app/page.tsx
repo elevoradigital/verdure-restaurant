@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import Preloader from "@/components/Preloader";
 import Header from "@/components/Header";
@@ -24,15 +24,36 @@ export default function Home() {
 
   const isReady = isPreloaderDone || prefersReducedMotion;
 
-  const handleOpenReservation = (dishName?: string) => {
+  const handlePreloaderComplete = useCallback(() => {
+    setIsPreloaderDone(true);
+  }, []);
+
+  const handleOpenReservation = useCallback((dishName?: string) => {
     setPreferredDishNote(dishName);
     setIsReservationOpen(true);
-  };
+  }, []);
+
+  const handleCloseReservation = useCallback(() => {
+    setIsReservationOpen(false);
+    setPreferredDishNote(undefined);
+  }, []);
+
+  const handleSelectDish = useCallback((dish: DishItem) => {
+    setSelectedDish(dish);
+  }, []);
+
+  const handleCloseDishModal = useCallback(() => {
+    setSelectedDish(null);
+  }, []);
+
+  const handleEightCourseReservation = useCallback(() => {
+    handleOpenReservation("Eight-Course Autumn Symphony");
+  }, [handleOpenReservation]);
 
   return (
     <>
       {/* 1. Custom Full-Screen Editorial Loader */}
-      <Preloader onComplete={() => setIsPreloaderDone(true)} />
+      <Preloader onComplete={handlePreloaderComplete} />
 
       {/* Main Application Container with Curtain Scale Entrance */}
       <motion.main
@@ -46,11 +67,11 @@ export default function Home() {
         className="relative min-h-screen bg-[var(--bg-canvas)] text-[var(--text-primary)] transition-colors duration-300 ease-out overflow-x-hidden"
       >
         {/* 2. Top Scroll Progress Line & Smart Architectural Navbar */}
-        <Header onOpenReservation={() => handleOpenReservation()} />
+        <Header onOpenReservation={handleOpenReservation} />
 
         {/* 3. Hero Section Choreography & 3D Floating Levitation */}
         <Hero
-          onOpenReservation={() => handleOpenReservation()}
+          onOpenReservation={handleOpenReservation}
           isReady={isReady}
         />
 
@@ -59,8 +80,8 @@ export default function Home() {
 
         {/* 5. "Selected Plates" FLIP Filter Morphing & 3D Plate Lift */}
         <SelectedPlates
-          onSelectDish={(dish) => setSelectedDish(dish)}
-          onOpenReservation={() => handleOpenReservation("Eight-Course Autumn Symphony")}
+          onSelectDish={handleSelectDish}
+          onOpenReservation={handleEightCourseReservation}
         />
 
         {/* 6. Curtain Mask Reveal & Scroll Parallax Atmosphere Section */}
@@ -74,24 +95,21 @@ export default function Home() {
 
         {/* 9. Mobile Bottom Sticky Booking Action Bar */}
         <MobileStickyBar
-          onOpenReservation={() => handleOpenReservation()}
+          onOpenReservation={handleOpenReservation}
           isModalActive={isReservationOpen || selectedDish !== null}
         />
 
         {/* Interactive Dish Detail Preview Modal */}
         <DishModal
           dish={selectedDish}
-          onClose={() => setSelectedDish(null)}
-          onBookDish={(name) => handleOpenReservation(name)}
+          onClose={handleCloseDishModal}
+          onBookDish={handleOpenReservation}
         />
 
         {/* Global Interactive Table Reservation Modal */}
         <ReservationModal
           isOpen={isReservationOpen}
-          onClose={() => {
-            setIsReservationOpen(false);
-            setPreferredDishNote(undefined);
-          }}
+          onClose={handleCloseReservation}
           initialDetails={{
             guests: "2 Guests",
             dateTime: "Today, 8:00 PM",

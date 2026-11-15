@@ -47,7 +47,7 @@ const LiveClock = React.memo(function LiveClock() {
   return <span>BENGALURU — {time || "19:30:00"} IST</span>;
 });
 
-export default function Footer() {
+function Footer() {
   const { isEvening, toggleAmbience } = useAmbience();
   const footerRef = useRef<HTMLElement>(null);
   const isInView = useInView(footerRef, { once: true, margin: "-60px 0px" });
@@ -74,7 +74,7 @@ export default function Footer() {
   return (
     <footer
       ref={footerRef}
-      className="relative pt-12 pb-8 overflow-hidden bg-[var(--footer-bg)] text-[var(--text-primary)] transition-colors duration-300 ease-out"
+      className="section-contain relative pt-12 pb-8 overflow-hidden bg-[var(--footer-bg)] text-[var(--text-primary)] transition-colors duration-300 ease-out"
     >
       {/* Top Self-Drawing 1px Architectural Border with Crosshairs */}
       <div className="relative w-full">
@@ -430,3 +430,5 @@ export default function Footer() {
     </footer>
   );
 }
+
+export default React.memo(Footer);
