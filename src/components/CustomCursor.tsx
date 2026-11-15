@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   motion,
   useMotionValue,
@@ -10,13 +10,14 @@ import {
 import { useCursor } from "@/context/CursorContext";
 import { useAmbience } from "@/context/AmbienceContext";
 import { useHydratedReducedMotion } from "@/hooks/useHydratedReducedMotion";
+import { useIsTouchDevice } from "@/hooks/useIsTouchDevice";
 import { Sparkles, ArrowRight, Plus } from "lucide-react";
 
 export default function CustomCursor() {
   const { variant, label, isVisible, isMouseDown } = useCursor();
   const { isEvening } = useAmbience();
   const prefersReducedMotion = useHydratedReducedMotion();
-  const [isTouchDevice, setIsTouchDevice] = useState(true);
+  const isTouchDevice = useIsTouchDevice();
 
   // Raw hardware-accelerated coordinate motion values (no React state re-renders)
   const mouseX = useMotionValue(-100);
@@ -45,15 +46,8 @@ export default function CustomCursor() {
   const ringY = useSpring(mouseY, ringSpringConfig);
 
   useEffect(() => {
-    // Detect coarse-pointer / touch devices (<768px or no hover)
-    const checkTouch = () => {
-      const hasCoarse = window.matchMedia("(pointer: coarse), (hover: none)").matches;
-      const isSmallScreen = window.innerWidth < 768;
-      setIsTouchDevice(hasCoarse || isSmallScreen);
-    };
-
-    checkTouch();
-    window.addEventListener("resize", checkTouch);
+    // Immediate return on touch/coarse devices: 0 listeners attached on mobile
+    if (isTouchDevice) return;
 
     // Single passive mousemove listener for 60-120fps coordinate tracking
     const handleMouseMove = (e: MouseEvent) => {
@@ -64,10 +58,9 @@ export default function CustomCursor() {
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
 
     return () => {
-      window.removeEventListener("resize", checkTouch);
       window.removeEventListener("mousemove", handleMouseMove);
     };
-  }, [mouseX, mouseY]);
+  }, [isTouchDevice, mouseX, mouseY]);
 
   // Touch screen or reduced motion guardrail -> deactivate custom cursor cleanly
   if (isTouchDevice || prefersReducedMotion) {

@@ -96,26 +96,38 @@ export default function Header({ onOpenReservation }: HeaderProps) {
   });
 
   useEffect(() => {
+    let lastCheckedPos = 0;
+    let ticking = false;
+
     return scrollY.on("change", (latest) => {
       setIsScrolled(latest > 40);
 
-      // Active Section Viewport Spy across #pillars, #plates, #atmosphere, #reserve
-      const sectionMapping = [
-        { id: "plates", alias: "menu" },
-        { id: "atmosphere", alias: "space" },
-        { id: "pillars", alias: "story" },
-        { id: "reserve", alias: "reserve" },
-      ];
+      // Throttled section spy: run only when scrolled >= 60px to prevent mobile layout thrashing
+      if (Math.abs(latest - lastCheckedPos) < 60) return;
+      lastCheckedPos = latest;
 
-      for (const sec of sectionMapping) {
-        const el = document.getElementById(sec.id) || document.getElementById(sec.alias);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top <= 260 && rect.bottom >= 180) {
-            setActiveSection(sec.id);
-            break;
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const sectionMapping = [
+            { id: "plates", alias: "menu" },
+            { id: "atmosphere", alias: "space" },
+            { id: "pillars", alias: "story" },
+            { id: "reserve", alias: "reserve" },
+          ];
+
+          for (const sec of sectionMapping) {
+            const el = document.getElementById(sec.id) || document.getElementById(sec.alias);
+            if (el) {
+              const rect = el.getBoundingClientRect();
+              if (rect.top <= 260 && rect.bottom >= 180) {
+                setActiveSection(sec.id);
+                break;
+              }
+            }
           }
-        }
+          ticking = false;
+        });
+        ticking = true;
       }
     });
   }, [scrollY]);

@@ -66,7 +66,7 @@ export default function FeatureStrip() {
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.2 }}
+          viewport={{ once: true, margin: "-50px" }}
           transition={{ duration: 0.6, ease: easeCurve }}
           className={`flex items-center justify-between py-4 border-b text-xs font-mono transition-colors duration-700 ${
             isEvening
@@ -95,7 +95,7 @@ export default function FeatureStrip() {
                 key={item.title}
                 initial={{ opacity: 0, y: 36 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.2 }}
+                viewport={{ once: true, margin: "-50px" }}
                 transition={{
                   duration: 0.75,
                   delay: 0.1 + idx * 0.12,

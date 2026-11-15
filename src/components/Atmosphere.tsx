@@ -59,9 +59,15 @@ export default function Atmosphere() {
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12">
           
           <div className="relative rounded-xl overflow-hidden p-6 sm:p-10 md:p-14 lg:p-16 border border-[#F4F3EE]/12 bg-[#0B1610] text-[#F4F3EE]">
-            {/* Ambient decorative glow */}
-            <div className="absolute top-0 right-0 w-96 h-96 bg-[#2D5A43]/20 rounded-full blur-3xl pointer-events-none -z-0" />
-            <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#C8A97E]/10 rounded-full blur-3xl pointer-events-none -z-0" />
+            {/* Ambient decorative glow (Zero-cost radial gradient, no blur filter) */}
+            <div
+              className="absolute top-0 right-0 w-96 h-96 rounded-full pointer-events-none -z-0"
+              style={{ background: "radial-gradient(circle at center, rgba(45,90,67,0.25) 0%, transparent 70%)" }}
+            />
+            <div
+              className="absolute bottom-0 left-0 w-80 h-80 rounded-full pointer-events-none -z-0"
+              style={{ background: "radial-gradient(circle at center, rgba(200,169,126,0.15) 0%, transparent 70%)" }}
+            />
 
             <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
               
@@ -71,7 +77,7 @@ export default function Atmosphere() {
               <motion.div
                 initial={{ opacity: 0, y: 36 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.2 }}
+                viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.8, ease: easeCurve }}
                 className="lg:col-span-5 flex flex-col justify-center text-center lg:text-left space-y-6"
               >
@@ -156,7 +162,7 @@ export default function Atmosphere() {
               <motion.div
                 initial={{ opacity: 0, y: 36 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.2 }}
+                viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.8, delay: 0.15, ease: easeCurve }}
                 className="lg:col-span-7 flex justify-center"
               >

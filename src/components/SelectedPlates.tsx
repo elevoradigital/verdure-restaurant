@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, MouseEvent, UIEvent } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence, useSpring, useScroll, useTransform, useInView, MotionValue } from "framer-motion";
+import { motion, AnimatePresence, useSpring, useScroll, useTransform, MotionValue } from "framer-motion";
 import { DishItem } from "./DishModal";
 import { ArrowRight, LayoutGrid, List, ArrowUpRight } from "lucide-react";
 import MagneticButton from "./MagneticButton";
@@ -175,7 +175,7 @@ function MotionPlateCard({
       data-cursor-label="VIEW DISH"
       initial={{ opacity: 0, y: 36 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: false, amount: 0.2 }}
+      viewport={{ once: true, margin: "-50px" }}
       exit={{ opacity: 0, scale: 0.94, y: 16 }}
       whileHover={{ y: -6 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
@@ -256,8 +256,6 @@ export default function SelectedPlates({
 }: SelectedPlatesProps) {
   const { isEvening } = useAmbience();
   const sectionRef = useRef<HTMLElement>(null);
-  const isPlatesInView = useInView(sectionRef, { margin: "100px" });
-  const prefersReducedMotion = useHydratedReducedMotion();
   const [activeCategory, setActiveCategory] = useState("All");
   const [viewMode, setViewMode] = useState<"grid" | "index">("grid");
   const [hoveredIndexDish, setHoveredIndexDish] = useState<DishItem | null>(null);
@@ -348,43 +346,23 @@ export default function SelectedPlates({
         02
       </div>
 
-      {/* Real-Time Sun / Leaf Caustic Shadow Sweep (Daylight: Swaying Olive Canopy) */}
-      {!isEvening && isPlatesInView && !prefersReducedMotion && (
-        <motion.div
-          animate={{
-            x: ["-2%", "2%", "-2%"],
-            y: ["1%", "-1%", "1%"],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="absolute inset-0 pointer-events-none mix-blend-multiply opacity-[0.06] z-0 will-change-transform overflow-hidden"
+      {/* Real-Time Sun / Leaf Caustic Shadow Sweep (Zero-CPU Native CSS Keyframe) */}
+      {!isEvening && (
+        <div
+          className="animate-dappled-sweep absolute inset-0 pointer-events-none opacity-[0.06] z-0 overflow-hidden"
           style={{
-            backgroundImage: `radial-gradient(ellipse 70% 50% at 20% 30%, rgba(17,38,27,0.7), transparent 70%),
-                              radial-gradient(ellipse 50% 40% at 80% 70%, rgba(17,38,27,0.6), transparent 60%)`,
-            filter: "blur(32px)",
+            backgroundImage: `radial-gradient(ellipse 70% 50% at 20% 30%, rgba(17,38,27,0.7) 0%, transparent 70%),
+                              radial-gradient(ellipse 50% 40% at 80% 70%, rgba(17,38,27,0.6) 0%, transparent 60%)`,
           }}
         />
       )}
 
-      {/* Real-Time Candlelight / Ember Breathing Glow (Evening) */}
-      {isEvening && isPlatesInView && !prefersReducedMotion && (
-        <motion.div
-          animate={{
-            scale: [0.97, 1.04, 0.97],
-            opacity: [0.1, 0.18, 0.1],
-          }}
-          transition={{
-            duration: 5,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="absolute inset-0 pointer-events-none z-0 will-change-transform"
+      {/* Real-Time Candlelight / Ember Breathing Glow (Zero-CPU Native CSS Keyframe) */}
+      {isEvening && (
+        <div
+          className="animate-hearth-breathe absolute inset-0 pointer-events-none z-0"
           style={{
-            background: "radial-gradient(circle 500px at 50% 40%, rgba(200, 169, 126, 0.2), transparent 70%)",
-            filter: "blur(40px)",
+            background: "radial-gradient(circle 500px at 50% 40%, rgba(200, 169, 126, 0.2) 0%, transparent 70%)",
           }}
         />
       )}
@@ -406,7 +384,7 @@ export default function SelectedPlates({
             <motion.h2
               initial={{ opacity: 0, y: 36 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false, amount: 0.2 }}
+              viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
               className={`font-serif text-3xl sm:text-4xl lg:text-5xl font-normal tracking-tight transition-colors duration-700 ${
                 isEvening ? "text-[#F4F3EE]" : "text-[#141816]"

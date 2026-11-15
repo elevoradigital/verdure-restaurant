@@ -39,14 +39,10 @@ function ContinuousMarquee() {
 
   return (
     <div className="overflow-hidden flex w-full">
-      <motion.div
-        animate={{ x: ["0%", "-50%"] }}
-        transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-        className="flex shrink-0 items-center whitespace-nowrap text-xs font-mono font-medium tracking-wider uppercase opacity-85 will-change-transform"
-      >
+      <div className="animate-marquee-scroll flex shrink-0 items-center whitespace-nowrap text-xs font-mono font-medium tracking-wider uppercase opacity-85">
         {renderTrack()}
         {renderTrack()}
-      </motion.div>
+      </div>
     </div>
   );
 }
@@ -310,60 +306,29 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
           isEvening ? "border-[#F4F3EE]/[0.07]" : "border-[#11261B]/[0.07]"
         }`} />
 
-        {/* Specular Light Pulse Gliding along Hairlines (Every 6s) */}
+        {/* Specular Light Pulse Gliding along Hairlines (Native CSS GPU Keyframe) */}
         <div className="absolute top-28 left-0 right-0 h-[1px] pointer-events-none overflow-hidden z-20">
-          <motion.div
-            initial={{ x: "-100%" }}
-            animate={{ x: "250%" }}
-            transition={{
-              duration: 2.2,
-              repeat: Infinity,
-              repeatDelay: 3.8,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            className="w-72 h-full bg-gradient-to-r from-transparent via-[#C8A97E] to-transparent opacity-60 will-change-transform"
-          />
+          <div className="animate-hairline-glide w-72 h-full bg-gradient-to-r from-transparent via-[#C8A97E] to-transparent opacity-60" />
         </div>
 
-        {/* Real-Time Sun / Leaf Caustic Shadow Sweep (Daylight: Swaying Olive Canopy) */}
+        {/* Real-Time Sun / Leaf Caustic Shadow Sweep (Zero-CPU Native CSS GPU Keyframe) */}
         {!isEvening && (
-          <motion.div
-            animate={{
-              x: ["-4%", "4%", "-4%"],
-              y: ["-2%", "3%", "-2%"],
-              rotate: [-2, 2, -2],
-            }}
-            transition={{
-              duration: 8,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-            className="absolute inset-0 pointer-events-none mix-blend-multiply opacity-[0.09] z-0 will-change-transform overflow-hidden"
+          <div
+            className="animate-dappled-sweep absolute inset-0 pointer-events-none opacity-[0.08] z-0 overflow-hidden"
             style={{
-              backgroundImage: `radial-gradient(ellipse 60% 40% at 30% 20%, rgba(17,38,27,0.85), transparent 70%),
-                                radial-gradient(ellipse 45% 35% at 75% 65%, rgba(17,38,27,0.75), transparent 60%),
-                                radial-gradient(circle 260px at 50% 50%, rgba(17,38,27,0.65), transparent 70%)`,
-              filter: "blur(28px)",
+              backgroundImage: `radial-gradient(ellipse 60% 40% at 30% 20%, rgba(17,38,27,0.85) 0%, transparent 70%),
+                                radial-gradient(ellipse 45% 35% at 75% 65%, rgba(17,38,27,0.75) 0%, transparent 60%),
+                                radial-gradient(circle 260px at 50% 50%, rgba(17,38,27,0.65) 0%, transparent 70%)`,
             }}
           />
         )}
 
-        {/* Real-Time Candlelight / Ember Breathing Glow (Evening: Beeswax Candlelight Halo) */}
+        {/* Real-Time Candlelight / Ember Breathing Glow (Zero-CPU Native CSS GPU Keyframe) */}
         {isEvening && (
-          <motion.div
-            animate={{
-              scale: [0.92, 1.08, 0.92],
-              opacity: [0.18, 0.35, 0.18],
-            }}
-            transition={{
-              duration: 4,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-            className="absolute inset-0 pointer-events-none z-0 will-change-transform"
+          <div
+            className="animate-hearth-breathe absolute inset-0 pointer-events-none z-0"
             style={{
-              background: "radial-gradient(circle 500px at 65% 45%, rgba(200, 169, 126, 0.35), transparent 70%)",
-              filter: "blur(36px)",
+              background: "radial-gradient(circle 500px at 65% 45%, rgba(200, 169, 126, 0.35) 0%, transparent 70%)",
             }}
           />
         )}
@@ -618,13 +583,15 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
               animate={isReady ? { opacity: 1, scale: 1, y: 0 } : {}}
               transition={{ duration: 0.85, delay: 0.25, ease: easeCurve }}
               style={{
-                rotateX: mouseRotateX,
-                rotateY: mouseRotateY,
+                rotateX: isHovered ? mouseRotateX : undefined,
+                rotateY: isHovered ? mouseRotateY : undefined,
                 transformStyle: "preserve-3d",
-                willChange: "transform",
                 backfaceVisibility: "hidden",
+                WebkitBackfaceVisibility: "hidden",
               }}
-              className="relative w-full max-w-md sm:max-w-lg lg:max-w-none aspect-[4/4.2] sm:aspect-[4/3.8] select-none preserve-3d"
+              className={`relative w-full max-w-md sm:max-w-lg lg:max-w-none aspect-[4/4.2] sm:aspect-[4/3.8] select-none preserve-3d ${
+                !isHovered ? "animate-stage-idle" : ""
+              }`}
             >
               {/* ---------------------------------------------------- */}
               {/* LAYER 0: ROTATING ARCHITECTURAL COMPASS & ORBITAL RINGS */}
@@ -636,11 +603,9 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                 }}
                 className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10"
               >
-                {/* Outer Ring: Rotating Clockwise (360deg over 32s) */}
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 32, repeat: Infinity, ease: "linear" }}
-                  className={`absolute w-[118%] h-[118%] rounded-full border transition-colors duration-700 pointer-events-none flex items-center justify-center ${
+                {/* Outer Ring: Rotating Clockwise (Native CSS Keyframe) */}
+                <div
+                  className={`animate-ring-cw absolute w-[118%] h-[118%] rounded-full border transition-colors duration-700 pointer-events-none flex items-center justify-center ${
                     isEvening ? "border-[#C8A97E]/30 text-[#C8A97E]/50" : "border-[#11261B]/25 text-[#11261B]/40"
                   }`}
                 >
@@ -652,13 +617,11 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                   <span className="absolute bottom-[14%] right-[14%] font-mono text-[7px] opacity-60">135°</span>
                   <span className="absolute bottom-[14%] left-[14%] font-mono text-[7px] opacity-60">225°</span>
                   <span className="absolute top-[14%] left-[14%] font-mono text-[7px] opacity-60">315°</span>
-                </motion.div>
+                </div>
 
-                {/* Inner Dashed Ring: Rotating Counter-Clockwise (360deg over 24s) */}
-                <motion.div
-                  animate={{ rotate: -360 }}
-                  transition={{ duration: 24, repeat: Infinity, ease: "linear" }}
-                  className={`absolute w-[105%] h-[105%] rounded-full border border-dashed transition-colors duration-700 pointer-events-none ${
+                {/* Inner Dashed Ring: Rotating Counter-Clockwise (Native CSS Keyframe) */}
+                <div
+                  className={`animate-ring-ccw absolute w-[105%] h-[105%] rounded-full border border-dashed transition-colors duration-700 pointer-events-none ${
                     isEvening ? "border-[#C8A97E]/25" : "border-[#11261B]/20"
                   }`}
                 />
@@ -670,33 +633,19 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
               </div>
 
               {/* ---------------------------------------------------- */}
-              {/* LAYER 1: DISH LEVITATION, IDLE SWAY & SCULPTED FRAME */}
+              {/* LAYER 1: DISH LEVITATION & SCULPTED FRAME            */}
               {/* ---------------------------------------------------- */}
-              <motion.div
-                animate={{
-                  y: [0, -14, 0],
-                  rotateZ: [-1.2, 1.2, -1.2],
-                  scale: [1, 1.015, 1],
-                  rotateX: isHovered ? 0 : [3, -3, 3],
-                  rotateY: isHovered ? 0 : [-4, 4, -4],
-                }}
-                transition={{
-                  y: { duration: 4.8, repeat: Infinity, ease: "easeInOut" },
-                  rotateZ: { duration: 4.8, repeat: Infinity, ease: "easeInOut" },
-                  scale: { duration: 4.8, repeat: Infinity, ease: "easeInOut" },
-                  rotateX: isHovered ? { duration: 0.3 } : { duration: 7, repeat: Infinity, ease: "easeInOut" },
-                  rotateY: isHovered ? { duration: 0.3 } : { duration: 7, repeat: Infinity, ease: "easeInOut" },
-                }}
+              <div
                 style={{
                   transformStyle: "preserve-3d",
                   transform: "translateZ(0px)",
                   boxShadow: isEvening
                     ? "0 28px 56px -12px rgba(0, 0, 0, 0.75)"
                     : "0 24px 48px -15px rgba(17, 38, 27, 0.25)",
-                  willChange: "transform",
                   backfaceVisibility: "hidden",
+                  WebkitBackfaceVisibility: "hidden",
                 }}
-                className={`relative w-full h-full rounded-t-[140px] rounded-b-[28px] overflow-hidden border p-1.5 transition-colors duration-700 ${
+                className={`animate-bowl-float relative w-full h-full rounded-t-[140px] rounded-b-[28px] overflow-hidden border p-1.5 transition-colors duration-700 ${
                   isEvening ? "bg-[#12241B] border-[#C8A97E]/30" : "bg-[#EAE8E0] border-[#11261B]/20"
                 }`}
               >
@@ -739,29 +688,20 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                       : "bg-gradient-to-t from-[#11261B]/40 via-transparent to-transparent"
                   }`} />
                 </div>
-              </motion.div>
+              </div>
 
-              {/* Synchronized Pedestal Shadow beneath bowl */}
-              <motion.div
-                animate={{
-                  scale: [1, 0.86, 1],
-                  opacity: [0.35, 0.18, 0.35],
-                }}
-                transition={{
-                  duration: 4.8,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="absolute -bottom-5 left-1/2 -translate-x-1/2 w-4/5 h-8 rounded-full pointer-events-none -z-10 blur-xl"
+              {/* Synchronized Pedestal Shadow beneath bowl (Native CSS Keyframe, Zero Blur Matrix) */}
+              <div
+                className="animate-shadow-breathe absolute -bottom-5 left-1/2 w-4/5 h-8 rounded-full pointer-events-none -z-10"
                 style={{
                   background: isEvening
-                    ? "radial-gradient(ellipse at center, rgba(0, 0, 0, 0.8), transparent 70%)"
-                    : "radial-gradient(ellipse at center, rgba(17, 38, 27, 0.4), transparent 70%)",
+                    ? "radial-gradient(ellipse at center, rgba(0, 0, 0, 0.8) 0%, transparent 70%)"
+                    : "radial-gradient(ellipse at center, rgba(17, 38, 27, 0.45) 0%, transparent 70%)",
                 }}
               />
 
               {/* ---------------------------------------------------- */}
-              {/* LAYER 1.5: VISIBLE RISING BOTANICAL STEAM / WISPS    */}
+              {/* LAYER 1.5: VISIBLE RISING BOTANICAL STEAM (Zero-CPU) */}
               {/* ---------------------------------------------------- */}
               <div
                 style={{
@@ -770,35 +710,33 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                 }}
                 className="absolute -top-12 sm:-top-16 left-1/2 -translate-x-1/2 w-48 h-36 pointer-events-none z-20 overflow-visible"
               >
-                {[0, 1, 2].map((wisp) => (
-                  <motion.svg
-                    key={`steam-wisp-${selectedDishIdx}-${wisp}`}
+                {[
+                  { id: "1", cls: "animate-steam-1", left: "25%" },
+                  { id: "2", cls: "animate-steam-2", left: "50%" },
+                  { id: "3", cls: "animate-steam-3", left: "75%" },
+                ].map((wisp) => (
+                  <svg
+                    key={`steam-wisp-${selectedDishIdx}-${wisp.id}`}
                     viewBox="0 0 40 100"
-                    className="absolute top-0 w-8 h-28"
-                    style={{ left: `${25 + wisp * 25}%` }}
-                    initial={{ y: 10, opacity: 0 }}
-                    animate={{
-                      y: [10, -55],
-                      x: [-6, 8, -4],
-                      opacity: [0, 0.45, 0],
-                      scaleX: [0.85, 1.2, 0.9],
-                    }}
-                    transition={{
-                      duration: 3.6,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                      delay: wisp * 1.1,
-                    }}
+                    className={`absolute top-0 w-8 h-28 ${wisp.cls}`}
+                    style={{ left: wisp.left }}
                   >
+                    <defs>
+                      <linearGradient id={`steam-grad-${selectedDishIdx}-${wisp.id}`} x1="0" y1="1" x2="0" y2="0">
+                        <stop offset="0%" stopColor={isEvening ? "#F4F3EE" : "#11261B"} stopOpacity="0" />
+                        <stop offset="30%" stopColor={isEvening ? "#F4F3EE" : "#11261B"} stopOpacity="0.5" />
+                        <stop offset="70%" stopColor={isEvening ? "#F4F3EE" : "#11261B"} stopOpacity="0.3" />
+                        <stop offset="100%" stopColor={isEvening ? "#F4F3EE" : "#11261B"} stopOpacity="0" />
+                      </linearGradient>
+                    </defs>
                     <path
                       d="M 20 100 Q 12 70 24 50 T 16 10"
                       fill="none"
-                      stroke={isEvening ? "rgba(244, 243, 238, 0.7)" : "rgba(17, 38, 27, 0.5)"}
-                      strokeWidth="2"
+                      stroke={`url(#steam-grad-${selectedDishIdx}-${wisp.id})`}
+                      strokeWidth="2.5"
                       strokeLinecap="round"
-                      filter="blur(3px)"
                     />
-                  </motion.svg>
+                  </svg>
                 ))}
               </div>
 
@@ -827,30 +765,21 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                       className="absolute -translate-x-1/2 -translate-y-1/2 pointer-events-auto"
                     >
                       <div className="relative flex items-center justify-center w-10 h-10">
-                        {/* Outer Sonar Ripple Ring */}
-                        <motion.span
-                          animate={
-                            !isActive
-                              ? { scale: [1, 2.2], opacity: [0.65, 0] }
-                              : { opacity: 0 }
-                          }
-                          transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
-                          className={`absolute w-6 h-6 rounded-full border pointer-events-none ${
-                            isEvening ? "border-[#C8A97E]" : "border-[#1B3B2B]"
-                          }`}
-                        />
-                        {/* Inner Sonar Ripple Ring */}
-                        <motion.span
-                          animate={
-                            !isActive
-                              ? { scale: [1, 1.6], opacity: [0.8, 0] }
-                              : { opacity: 0 }
-                          }
-                          transition={{ duration: 2, repeat: Infinity, ease: "easeOut", delay: 0.5 }}
-                          className={`absolute w-6 h-6 rounded-full border pointer-events-none ${
-                            isEvening ? "border-[#C8A97E]/70" : "border-[#1B3B2B]/70"
-                          }`}
-                        />
+                        {/* Outer & Inner Sonar Ripple Rings (Native CSS Keyframes) */}
+                        {!isActive && (
+                          <>
+                            <span
+                              className={`animate-pin-sonar absolute w-6 h-6 rounded-full border pointer-events-none ${
+                                isEvening ? "border-[#C8A97E]" : "border-[#1B3B2B]"
+                              }`}
+                            />
+                            <span
+                              className={`animate-pin-sonar-inner absolute w-6 h-6 rounded-full border pointer-events-none ${
+                                isEvening ? "border-[#C8A97E]/70" : "border-[#1B3B2B]/70"
+                              }`}
+                            />
+                          </>
+                        )}
 
                         <motion.button
                           type="button"
@@ -1006,19 +935,9 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
             </span>
             <div className="flex items-center gap-2">
               <div className="relative w-[1.5px] h-5 bg-current/20 overflow-hidden rounded-full">
-                <motion.div
-                  animate={{ y: ["-100%", "100%"] }}
-                  transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-                  className={`w-full h-full ${isEvening ? "bg-[#C8A97E]" : "bg-[#1B3B2B]"}`}
-                />
+                <div className={`animate-scroll-line w-full h-full ${isEvening ? "bg-[#C8A97E]" : "bg-[#1B3B2B]"}`} />
               </div>
-              <motion.div
-                animate={{ y: [0, 4, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                className="text-xs font-mono"
-              >
-                ↓
-              </motion.div>
+              <span className="text-xs font-mono">↓</span>
             </div>
           </div>
 
