@@ -27,7 +27,7 @@ const LiveConciergeTicker = React.memo(function LiveConciergeTicker({
 
   return (
     <div
-      className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-[10px] font-mono tracking-wider transition-colors duration-500 select-none ${
+      className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-[10px] font-mono tracking-wider transition-colors duration-200 select-none ${
         isEvening
           ? "bg-[#C8A97E]/10 border-[#C8A97E]/25 text-[#C8A97E]"
           : "bg-[#2D5A43]/20 border-[#2D5A43]/35 text-[#88B297]"
@@ -238,7 +238,7 @@ export default function TableFloorplan({
   };
 
   return (
-    <div className={`w-full rounded-3xl sm:rounded-[2rem] p-4 sm:p-7 md:p-9 text-[#F4F3EE] border shadow-2xl relative overflow-hidden select-none transition-colors duration-700 ${
+    <div className={`w-full rounded-3xl sm:rounded-[2rem] p-4 sm:p-7 md:p-9 text-[#F4F3EE] border shadow-2xl relative overflow-hidden select-none transition-colors duration-200 ${
       isEvening
         ? "bg-[#0B1610] border-[#C8A97E]/30 [box-shadow:0_24px_60px_rgba(0,0,0,0.8),0_0_35px_rgba(200,169,126,0.12)]"
         : "bg-[#11261B] border-[#F4F3EE]/15 shadow-2xl"
@@ -309,7 +309,7 @@ export default function TableFloorplan({
       </div>
 
       {/* Main Floorplan Blueprint Canvas Area */}
-      <div className={`relative z-10 my-4 w-full aspect-[16/10] sm:aspect-[16/9.5] max-h-[520px] rounded-2xl border overflow-hidden flex items-center justify-center transition-colors duration-700 ${
+      <div className={`relative z-10 my-4 w-full aspect-[16/10] sm:aspect-[16/9.5] max-h-[520px] rounded-2xl border overflow-hidden flex items-center justify-center transition-colors duration-200 ${
         isEvening ? "bg-[#070F0A] border-[#C8A97E]/20" : "bg-[#0E1F16] border-[#F4F3EE]/10"
       }`}>
         
@@ -808,7 +808,7 @@ export default function TableFloorplan({
                 transform: "translate(-50%, -100%)",
               }}
             >
-              <div className={`p-3 rounded-2xl backdrop-blur-md border shadow-2xl text-left space-y-1 min-w-[200px] transition-colors duration-500 ${
+              <div className={`p-3 rounded-2xl backdrop-blur-md border shadow-2xl text-left space-y-1 min-w-[200px] transition-colors duration-200 ${
                 isEvening
                   ? "bg-[#070F0A]/95 border-[#C8A97E]/30 text-[#F4F3EE]"
                   : "bg-[#11261B]/95 border-[#F4F3EE]/20 text-[#F4F3EE]"
@@ -856,7 +856,7 @@ export default function TableFloorplan({
       {/* Selected Table Architectural Summary & Quick Status Bar */}
       <div className="relative z-10 pt-4 pb-2 sm:pb-1 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-[#F4F3EE]/10">
         <div className="flex items-center gap-3 w-full sm:w-auto text-left">
-          <div className={`w-11 h-11 rounded-2xl flex flex-col items-center justify-center shrink-0 border transition-colors duration-500 ${
+          <div className={`w-11 h-11 rounded-2xl flex flex-col items-center justify-center shrink-0 border transition-colors duration-200 ${
             isEvening
               ? "bg-[#2D5A43] text-[#F4F3EE] border-[#C8A97E]/30"
               : "bg-[#1B3B2B] text-[#F4F3EE] border-[#F4F3EE]/20"

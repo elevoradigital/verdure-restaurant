@@ -2,19 +2,33 @@
 @import "tailwindcss";
 
 @layer base {
-  :root {
+  :root,
+  html[data-ambience="day"],
+  html.ambience-day {
+    --bg-canvas: #F4F3EE;
+    --bg-surface: #EAE8E0;
+    --bg-card: rgba(244, 243, 238, 0.96);
+    --bg-card-hover: rgba(234, 232, 224, 0.90);
+    --text-primary: #141816;
+    --text-secondary: #5C645E;
+    --text-muted: #5C645E;
+    --accent-primary: #2D5A43;
+    --accent-secondary: #1B3B2B;
+    --accent-gold: #C8A97E;
+    --border-hairline: rgba(17, 38, 27, 0.10);
+    --border-subtle: rgba(17, 38, 27, 0.06);
+    --border-active: rgba(17, 38, 27, 0.28);
+    --sheen-light: rgba(255, 255, 255, 0.45);
+    --amber-glow: rgba(200, 169, 126, 0.0);
+    --footer-bg: #EAE8E0;
+
+    /* Legacy mapped tokens */
     --bg-primary: #F4F3EE;
     --surface-card: #EAE8E0;
     --section-dark: #11261B;
-    --text-primary: #141816;
-    --text-muted: #5C645E;
     --accent-pill: #1B3B2B;
     --accent-sage: #2D5A43;
     --border-line: rgba(17, 38, 27, 0.10);
-    --sheen-light: rgba(255, 255, 255, 0.45);
-    --amber-glow: rgba(200, 169, 126, 0.0);
-
-    /* Legacy tokens */
     --bg-alabaster: #F4F3EE;
     --surface-stone: #EAE8E0;
     --forest-dark: #11261B;
@@ -24,42 +38,53 @@
     --charcoal: #141816;
     --ivory: #F4F3EE;
     --olive-stone: #5C645E;
-    --border-subtle: rgba(17, 38, 27, 0.10);
   }
 
+  html[data-ambience="evening"],
   html.ambience-evening {
+    --bg-canvas: #0B1610;
+    --bg-surface: #12241B;
+    --bg-card: rgba(18, 36, 27, 0.96);
+    --bg-card-hover: rgba(24, 46, 35, 0.95);
+    --text-primary: #F4F3EE;
+    --text-secondary: #95A79B;
+    --text-muted: #95A79B;
+    --accent-primary: #C8A97E;
+    --accent-secondary: #D9BA8F;
+    --accent-gold: #C8A97E;
+    --border-hairline: rgba(244, 243, 238, 0.10);
+    --border-subtle: rgba(244, 243, 238, 0.06);
+    --border-active: rgba(200, 169, 126, 0.35);
+    --sheen-light: rgba(200, 169, 126, 0.28);
+    --amber-glow: rgba(200, 169, 126, 0.35);
+    --footer-bg: #070F0A;
+
+    /* Legacy mapped tokens */
     --bg-primary: #0B1610;
     --surface-card: #12241B;
     --section-dark: #070F0A;
-    --text-primary: #F4F3EE;
-    --text-muted: #95A79B;
     --accent-pill: #2D5A43;
     --accent-sage: #C8A97E;
     --border-line: rgba(244, 243, 238, 0.10);
-    --sheen-light: rgba(200, 169, 126, 0.28);
-    --amber-glow: rgba(200, 169, 126, 0.35);
-
-    /* Mapped legacy tokens for evening */
     --bg-alabaster: #0B1610;
     --surface-stone: #12241B;
     --forest-dark: #070F0A;
     --forest-primary: #2D5A43;
     --charcoal: #F4F3EE;
     --olive-stone: #95A79B;
-    --border-subtle: rgba(244, 243, 238, 0.10);
   }
 
   * {
-    border-color: var(--border-line);
+    border-color: var(--border-hairline);
     box-sizing: border-box;
   }
 
   body {
-    background-color: var(--bg-primary);
+    background-color: var(--bg-canvas);
     color: var(--text-primary);
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     overflow-x: hidden;
-    transition: background-color 700ms cubic-bezier(0.22, 1, 0.36, 1), color 700ms cubic-bezier(0.22, 1, 0.36, 1);
+    transition: background-color 300ms cubic-bezier(0.16, 1, 0.3, 1), color 300ms cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   @media (pointer: fine) and (hover: hover) {
@@ -100,6 +125,57 @@
 }
 
 /* Custom subtle noise / texture */
+.bg-canvas {
+  background-color: var(--bg-canvas);
+}
+
+.bg-surface {
+  background-color: var(--bg-surface);
+}
+
+.bg-card-themed {
+  background-color: var(--bg-card);
+}
+
+.text-primary-themed {
+  color: var(--text-primary);
+}
+
+.text-muted-themed {
+  color: var(--text-muted);
+}
+
+.text-accent-themed {
+  color: var(--accent-primary);
+}
+
+.border-themed {
+  border-color: var(--border-hairline);
+}
+
+.border-subtle-themed {
+  border-color: var(--border-subtle);
+}
+
+/* Zero-JS CSS-driven Day/Evening ambient layers */
+html[data-ambience="day"] .ambient-day-only,
+html.ambience-day .ambient-day-only {
+  display: block;
+}
+html[data-ambience="evening"] .ambient-day-only,
+html.ambience-evening .ambient-day-only {
+  display: none !important;
+}
+
+html[data-ambience="day"] .ambient-evening-only,
+html.ambience-day .ambient-evening-only {
+  display: none !important;
+}
+html[data-ambience="evening"] .ambient-evening-only,
+html.ambience-evening .ambient-evening-only {
+  display: block;
+}
+
 .bg-alabaster {
   background-color: #F4F3EE;
 }

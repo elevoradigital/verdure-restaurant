@@ -8,11 +8,9 @@ import GalleryModal from "./GalleryModal";
 import MagneticButton from "./MagneticButton";
 import AmbienceToggle from "./AmbienceToggle";
 import { useIsTouchDevice } from "@/hooks/useIsTouchDevice";
-import { useAmbience } from "@/context/AmbienceContext";
 import { useHydratedReducedMotion } from "@/hooks/useHydratedReducedMotion";
 
 export default function Atmosphere() {
-  const { isEvening } = useAmbience();
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [activeZoneIdx, setActiveZoneIdx] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -47,11 +45,7 @@ export default function Atmosphere() {
       <section
         id="atmosphere"
         ref={containerRef}
-        className={`py-16 sm:py-20 lg:py-28 overflow-hidden scroll-mt-10 transition-colors duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] border-b ${
-          isEvening
-            ? "bg-[#070F0A] border-[#F4F3EE]/10"
-            : "bg-[#11261B] border-[#11261B]"
-        }`}
+        className="py-16 sm:py-20 lg:py-28 overflow-hidden scroll-mt-10 bg-[var(--section-dark)] border-b border-[var(--border-hairline)] transition-colors duration-300 ease-out"
       >
         {/* Anchor alias for #space */}
         <div id="space" className="absolute -top-10 left-0 pointer-events-none" />

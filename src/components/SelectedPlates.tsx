@@ -190,30 +190,24 @@ function MotionPlateCard({
         y: scrollShiftY,
         transformStyle: "preserve-3d",
       }}
-      className={`group relative rounded-lg p-5 cursor-pointer flex flex-col justify-between preserve-3d transition-colors duration-500 border ${
-        isEvening
-          ? isMobileActive
-            ? "bg-[#12241B] border-[#C8A97E]/70"
-            : "bg-[#12241B] border-[#F4F3EE]/10 hover:border-[#C8A97E]/40"
-          : isMobileActive
-            ? "bg-[#F4F3EE] border-[#1B3B2B]/70"
-            : "bg-[#F4F3EE] border-[#11261B]/10 hover:border-[#1B3B2B]/40"
+      className={`group relative rounded-lg p-5 cursor-pointer flex flex-col justify-between preserve-3d transition-colors duration-200 border bg-[var(--bg-card)] ${
+        isMobileActive
+          ? "border-[var(--accent-primary)] shadow-sm"
+          : "border-[var(--border-hairline)] hover:border-[var(--border-active)]"
       }`}
     >
       {/* 1. Top Row: Monospace number on left, price on right */}
       <div className="flex items-center justify-between pb-3 mb-3 border-b border-current/10 text-xs font-mono">
-        <span className={`font-bold ${isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"}`}>
+        <span className="font-bold text-[var(--accent-primary)]">
           0{index + 1}
         </span>
-        <span className={`font-semibold ${isEvening ? "text-[#F4F3EE]" : "text-[#141816]"}`}>
+        <span className="font-semibold text-[var(--text-primary)]">
           {dish.price}
         </span>
       </div>
 
       {/* 2. Center: Crisp, uncluttered food photograph with subtle zoom & tilt on hover */}
-      <div className={`relative w-full aspect-[4/3] rounded-md overflow-hidden mb-4 transition-colors duration-500 ${
-        isEvening ? "bg-[#0B1610]" : "bg-[#EAE8E0]"
-      }`}>
+      <div className="relative w-full aspect-[4/3] rounded-md overflow-hidden mb-4 bg-[var(--bg-surface)]">
         <Image
           src={dish.image}
           alt={dish.name}
@@ -226,23 +220,15 @@ function MotionPlateCard({
       {/* 3. Bottom: Roman Serif Title + clean ingredients + plain italic pairing */}
       <div className="space-y-1.5">
         <div className="flex items-center justify-between">
-          <h3 className={`font-serif text-xl font-normal tracking-tight transition-colors duration-300 ${
-            isEvening
-              ? "text-[#F4F3EE] group-hover:text-[#C8A97E]"
-              : "text-[#141816] group-hover:text-[#1B3B2B]"
-          }`}>
+          <h3 className="font-serif text-xl font-normal tracking-tight text-[var(--text-primary)] group-hover:text-[var(--accent-primary)] transition-colors duration-200">
             {dish.name}
           </h3>
-          <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 shrink-0 ml-2" />
+          <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 shrink-0 ml-2 text-[var(--accent-primary)]" />
         </div>
-        <p className={`text-xs leading-relaxed line-clamp-1 transition-colors duration-500 ${
-          isEvening ? "text-[#95A79B]" : "text-[#5C645E]"
-        }`}>
+        <p className="text-xs leading-relaxed line-clamp-1 text-[var(--text-muted)]">
           {dish.ingredients.join(", ")}
         </p>
-        <p className={`text-[11px] italic pt-1 transition-colors duration-500 ${
-          isEvening ? "text-[#C8A97E]/80" : "text-[#2D5A43]"
-        }`}>
+        <p className="text-[11px] italic pt-1 text-[var(--accent-primary)] opacity-85">
           Paired with: {activePairing}
         </p>
       </div>
@@ -330,53 +316,41 @@ export default function SelectedPlates({
       id="plates"
       ref={sectionRef}
       onMouseMove={handleIndexMouseMove}
-      className={`py-16 sm:py-20 lg:py-28 relative scroll-mt-10 overflow-hidden transition-colors duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] border-b ${
-        isEvening
-          ? "bg-[#0B1610] border-[#F4F3EE]/10"
-          : "bg-[#EAE8E0] border-[#11261B]/10"
-      }`}
+      className="py-16 sm:py-20 lg:py-28 relative scroll-mt-10 overflow-hidden bg-[var(--bg-canvas)] border-b border-[var(--border-hairline)] transition-colors duration-300 ease-out"
     >
       {/* Anchor alias for #menu */}
       <div id="menu" className="absolute -top-10 left-0 pointer-events-none" />
 
       {/* Oversized Background Watermark */}
-      <div className={`absolute -right-4 -top-8 pointer-events-none select-none font-serif text-[18vw] font-bold leading-none tracking-tighter opacity-[0.035] -z-0 ${
-        isEvening ? "text-white" : "text-[#11261B]"
-      }`}>
+      <div className="absolute -right-4 -top-8 pointer-events-none select-none font-serif text-[18vw] font-bold leading-none tracking-tighter opacity-[0.035] -z-0 text-[var(--text-primary)]">
         02
       </div>
 
       {/* Real-Time Sun / Leaf Caustic Shadow Sweep (Zero-CPU Native CSS Keyframe) */}
-      {!isEvening && (
-        <div
-          className="animate-dappled-sweep absolute inset-0 pointer-events-none opacity-[0.06] z-0 overflow-hidden"
-          style={{
-            backgroundImage: `radial-gradient(ellipse 70% 50% at 20% 30%, rgba(17,38,27,0.7) 0%, transparent 70%),
-                              radial-gradient(ellipse 50% 40% at 80% 70%, rgba(17,38,27,0.6) 0%, transparent 60%)`,
-          }}
-        />
-      )}
+      <div
+        className="ambient-day-only animate-dappled-sweep absolute inset-0 pointer-events-none opacity-[0.06] z-0 overflow-hidden"
+        style={{
+          backgroundImage: `radial-gradient(ellipse 70% 50% at 20% 30%, rgba(17,38,27,0.7) 0%, transparent 70%),
+                            radial-gradient(ellipse 50% 40% at 80% 70%, rgba(17,38,27,0.6) 0%, transparent 60%)`,
+        }}
+      />
 
       {/* Real-Time Candlelight / Ember Breathing Glow (Zero-CPU Native CSS Keyframe) */}
-      {isEvening && (
-        <div
-          className="animate-hearth-breathe absolute inset-0 pointer-events-none z-0"
-          style={{
-            background: "radial-gradient(circle 500px at 50% 40%, rgba(200, 169, 126, 0.2) 0%, transparent 70%)",
-          }}
-        />
-      )}
+      <div
+        className="ambient-evening-only animate-hearth-breathe absolute inset-0 pointer-events-none z-0"
+        style={{
+          background: "radial-gradient(circle 500px at 50% 40%, rgba(200, 169, 126, 0.2) 0%, transparent 70%)",
+        }}
+      />
 
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
         
         {/* Architectural Header Bar */}
-        <div className={`flex flex-col md:flex-row md:items-end justify-between gap-5 sm:gap-6 pb-8 sm:pb-10 border-b transition-colors duration-700 ${
-          isEvening ? "border-[#F4F3EE]/10" : "border-[#11261B]/10"
-        }`}>
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 sm:gap-6 pb-8 sm:pb-10 border-b border-[var(--border-hairline)]">
           <div>
             <div className="inline-flex items-center gap-2 mb-2 font-mono text-[10px] sm:text-[11px] tracking-[0.2em] uppercase font-bold">
-              <span className={`w-1.5 h-1.5 rounded-full ${isEvening ? "bg-[#C8A97E]" : "bg-[#2D5A43]"}`} />
-              <span className={isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"}>
+              <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-primary)]" />
+              <span className="text-[var(--accent-primary)]">
                 02 — Autumn / Winter Menu
               </span>
             </div>
@@ -386,9 +360,7 @@ export default function SelectedPlates({
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-              className={`font-serif text-3xl sm:text-4xl lg:text-5xl font-normal tracking-tight transition-colors duration-700 ${
-                isEvening ? "text-[#F4F3EE]" : "text-[#141816]"
-              }`}
+              className="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal tracking-tight text-[var(--text-primary)]"
             >
               Selected Plates
             </motion.h2>
@@ -415,18 +387,14 @@ export default function SelectedPlates({
                     data-cursor="magnetic"
                     className={`relative px-3.5 py-1.5 rounded-full text-xs font-medium tracking-wide transition-colors shrink-0 cursor-pointer ${
                       isActive
-                        ? "text-[#F4F3EE]"
-                        : isEvening
-                        ? "text-[#95A79B] hover:text-[#F4F3EE] bg-[#12241B] border border-[#F4F3EE]/10"
-                        : "text-[#5C645E] hover:text-[#141816] bg-[#F4F3EE] border border-[#11261B]/10"
+                        ? "text-[var(--bg-canvas)]"
+                        : "text-[var(--text-muted)] hover:text-[var(--text-primary)] bg-[var(--bg-card)] border border-[var(--border-hairline)]"
                     }`}
                   >
                     {isActive && (
                       <motion.div
                         layoutId="activeFilterPill"
-                        className={`absolute inset-0 rounded-full shadow-sm -z-10 ${
-                          isEvening ? "bg-[#2D5A43] border border-[#C8A97E]/30" : "bg-[#1B3B2B]"
-                        }`}
+                        className="absolute inset-0 rounded-full shadow-sm -z-10 bg-[var(--accent-primary)]"
                         transition={{ type: "spring", stiffness: 300, damping: 28 }}
                       />
                     )}
@@ -437,19 +405,13 @@ export default function SelectedPlates({
             </div>
 
             {/* View Mode Toggle: Grid | Index */}
-            <div className={`hidden md:inline-flex items-center p-1 rounded-full border text-xs font-mono transition-colors ${
-              isEvening
-                ? "bg-[#12241B] border-[#F4F3EE]/15 text-[#95A79B]"
-                : "bg-[#F4F3EE] border-[#11261B]/15 text-[#5C645E]"
-            }`}>
+            <div className="hidden md:inline-flex items-center p-1 rounded-full border border-[var(--border-hairline)] text-xs font-mono bg-[var(--bg-surface)] text-[var(--text-muted)]">
               <button
                 type="button"
                 onClick={() => setViewMode("grid")}
                 className={`flex items-center gap-1.5 px-3 py-1 rounded-full transition-colors duration-200 cursor-pointer ${
                   viewMode === "grid"
-                    ? isEvening
-                      ? "bg-[#C8A97E] text-[#0B1610] font-bold shadow-sm"
-                      : "bg-[#1B3B2B] text-[#F4F3EE] font-bold shadow-sm"
+                    ? "bg-[var(--accent-primary)] text-[var(--bg-canvas)] font-bold shadow-sm"
                     : "hover:text-current"
                 }`}
               >
@@ -462,9 +424,7 @@ export default function SelectedPlates({
                 onClick={() => setViewMode("index")}
                 className={`flex items-center gap-1.5 px-3 py-1 rounded-full transition-colors duration-200 cursor-pointer ${
                   viewMode === "index"
-                    ? isEvening
-                      ? "bg-[#C8A97E] text-[#0B1610] font-bold shadow-sm"
-                      : "bg-[#1B3B2B] text-[#F4F3EE] font-bold shadow-sm"
+                    ? "bg-[var(--accent-primary)] text-[var(--bg-canvas)] font-bold shadow-sm"
                     : "hover:text-current"
                 }`}
               >
@@ -497,9 +457,7 @@ export default function SelectedPlates({
           /* MODE B: AWWWARDS EDITORIAL INDEX LIST (DESKTOP)      */
           /* ---------------------------------------------------- */
           <div className="hidden md:block pt-8 relative">
-            <div className={`divide-y transition-colors duration-700 ${
-              isEvening ? "divide-[#F4F3EE]/10" : "divide-[#11261B]/10"
-            }`}>
+            <div className="divide-y divide-[var(--border-hairline)]">
               {filteredDishes.map((dish, idx) => {
                 const isHovered = hoveredIndexDish?.id === dish.id;
 
@@ -509,15 +467,11 @@ export default function SelectedPlates({
                     onMouseEnter={() => setHoveredIndexDish(dish)}
                     onMouseLeave={() => setHoveredIndexDish(null)}
                     onClick={() => onSelectDish(dish)}
-                    className={`group relative py-6 px-4 flex items-center justify-between cursor-pointer transition-colors duration-300 ${
-                      isEvening ? "hover:bg-[#12241B]/40" : "hover:bg-[#F4F3EE]/60"
-                    }`}
+                    className="group relative py-6 px-4 flex items-center justify-between cursor-pointer transition-colors duration-200 hover:bg-[var(--bg-card-hover)]/60"
                   >
                     {/* Left: Index + Title with 16px hover shift */}
                     <div className="flex items-center gap-8">
-                      <span className={`font-mono text-xs font-bold w-8 ${
-                        isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"
-                      }`}>
+                      <span className="font-mono text-xs font-bold w-8 text-[var(--accent-primary)]">
                         0{idx + 1}
                       </span>
 
@@ -525,17 +479,13 @@ export default function SelectedPlates({
                         <motion.h3
                           animate={{ x: isHovered ? 16 : 0 }}
                           transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                          className={`font-serif text-2xl font-normal transition-colors duration-300 ${
-                            isHovered
-                              ? isEvening ? "italic text-[#C8A97E]" : "italic text-[#2D5A43]"
-                              : isEvening ? "text-[#F4F3EE]" : "text-[#141816]"
+                          className={`font-serif text-2xl font-normal transition-colors duration-200 ${
+                            isHovered ? "italic text-[var(--accent-primary)]" : "text-[var(--text-primary)]"
                           }`}
                         >
                           {dish.name}
                         </motion.h3>
-                        <p className={`text-xs font-mono opacity-60 ${
-                          isEvening ? "text-[#95A79B]" : "text-[#5C645E]"
-                        }`}>
+                        <p className="text-xs font-mono opacity-60 text-[var(--text-muted)]">
                           {dish.ingredients.join(", ")}
                         </p>
                       </div>
@@ -543,17 +493,13 @@ export default function SelectedPlates({
 
                     {/* Right: Category + Sommelier Pairing + Price */}
                     <div className="flex items-center gap-8 text-right">
-                      <div className="hidden lg:block text-xs font-mono opacity-60">
+                      <div className="hidden lg:block text-xs font-mono opacity-60 text-[var(--text-muted)]">
                         {dishPairings[dish.id] ? (isEvening ? dishPairings[dish.id].evening : dishPairings[dish.id].day) : "Cellar Select"}
                       </div>
-                      <span className={`px-2.5 py-1 rounded-full text-[10px] font-mono uppercase font-semibold border ${
-                        isEvening ? "border-white/10 text-[#95A79B]" : "border-black/10 text-[#5C645E]"
-                      }`}>
+                      <span className="px-2.5 py-1 rounded-full text-[10px] font-mono uppercase font-semibold border border-[var(--border-hairline)] text-[var(--text-muted)]">
                         {dish.category}
                       </span>
-                      <span className={`font-mono text-base font-bold w-20 text-right ${
-                        isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"
-                      }`}>
+                      <span className="font-mono text-base font-bold w-20 text-right text-[var(--accent-primary)]">
                         {dish.price}
                       </span>
                       <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-[transform,opacity] duration-300" />
@@ -577,13 +523,9 @@ export default function SelectedPlates({
                     pointerEvents: "none",
                     willChange: "transform",
                   }}
-                  className="absolute z-50 w-72 rounded-3xl p-3 border shadow-xl overflow-hidden will-change-transform"
+                  className="absolute z-50 w-72 rounded-3xl p-3 border border-[var(--border-hairline)] shadow-xl overflow-hidden will-change-transform bg-[var(--bg-card)]"
                 >
-                  <div className={`p-3 rounded-2xl ${
-                    isEvening
-                      ? "bg-[#12241B]/[0.98] border border-[#C8A97E]/30 text-[#F4F3EE] shadow-[0_16px_36px_rgba(0,0,0,0.8)]"
-                      : "bg-[#F4F3EE]/[0.98] border border-[#11261B]/15 text-[#141816] shadow-[0_16px_36px_rgba(17,38,27,0.2)]"
-                  }`}>
+                  <div className="p-3 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-hairline)] text-[var(--text-primary)] shadow-md">
                     <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden mb-2.5">
                       <Image
                         src={hoveredIndexDish.image}
@@ -595,7 +537,7 @@ export default function SelectedPlates({
                     </div>
                     <div className="flex items-center justify-between text-xs font-mono font-bold">
                       <span className="truncate pr-2">{hoveredIndexDish.name}</span>
-                      <span className={isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"}>
+                      <span className="text-[var(--accent-primary)]">
                         {hoveredIndexDish.price}
                       </span>
                     </div>
@@ -644,8 +586,8 @@ export default function SelectedPlates({
                 aria-label={`Go to slide ${idx + 1}`}
                 className={`h-1.5 rounded-full transition-[width,background-color] duration-300 cursor-pointer ${
                   activeMobileIndex === idx
-                    ? isEvening ? "w-6 bg-[#C8A97E]" : "w-6 bg-[#1B3B2B]"
-                    : isEvening ? "w-1.5 bg-white/20" : "w-1.5 bg-black/20"
+                    ? "w-6 bg-[var(--accent-primary)]"
+                    : "w-1.5 bg-current/20"
                 }`}
               />
             ))}
@@ -653,21 +595,15 @@ export default function SelectedPlates({
         </div>
 
         {/* Tasting Menu Banner Card */}
-        <div className={`mt-14 sm:mt-18 p-8 sm:p-10 rounded-3xl border transition-colors duration-700 flex flex-col md:flex-row items-center justify-between gap-6 ${
-          isEvening
-            ? "bg-[#12241B] border-[#C8A97E]/30 text-[#F4F3EE]"
-            : "bg-[#F4F3EE] border-[#11261B]/15 text-[#141816]"
-        }`}>
+        <div className="mt-14 sm:mt-18 p-8 sm:p-10 rounded-3xl border border-[var(--border-hairline)] bg-[var(--bg-card)] text-[var(--text-primary)] transition-colors duration-200 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
           <div className="space-y-1.5 text-center md:text-left">
-            <span className={`text-[10px] font-mono tracking-widest uppercase font-bold ${
-              isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"
-            }`}>
+            <span className="text-[10px] font-mono tracking-widest uppercase font-bold text-[var(--accent-primary)]">
               CURATED TASTING FLIGHT
             </span>
             <h4 className="font-serif text-2xl sm:text-3xl font-medium">
               Eight-Course Autumn Symphony
             </h4>
-            <p className={`text-xs sm:text-sm max-w-lg ${isEvening ? "text-[#95A79B]" : "text-[#5C645E]"}`}>
+            <p className="text-xs sm:text-sm max-w-lg text-[var(--text-muted)]">
               Available nightly at the Hearth Counter. Vegetarian, vegan, and bespoke allergic accommodation upon reservation.
             </p>
           </div>
@@ -675,11 +611,7 @@ export default function SelectedPlates({
           <MagneticButton
             onClick={onOpenReservation}
             data-cursor="magnetic"
-            className={`px-8 py-3.5 rounded-full text-xs font-semibold uppercase tracking-wider shrink-0 shadow-lg ${
-              isEvening
-                ? "bg-[#C8A97E] text-[#0B1610] hover:bg-[#D9BA8F]"
-                : "bg-[#1B3B2B] text-[#F4F3EE] hover:bg-[#142E21]"
-            }`}
+            className="px-8 py-3.5 rounded-full text-xs font-semibold uppercase tracking-wider shrink-0 shadow-lg bg-[var(--accent-secondary)] hover:bg-[var(--accent-primary)] text-[var(--bg-canvas)] transition-colors duration-200"
           >
             <span>Reserve Tasting Menu</span>
             <ArrowRight className="w-4 h-4 ml-2" />

@@ -96,7 +96,7 @@ export default function CustomCursor() {
         className="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
       >
         <div
-          className={`w-2 h-2 rounded-full shadow-sm transition-colors duration-500 ${
+          className={`w-2 h-2 rounded-full shadow-sm transition-colors duration-200 ${
             isEvening
               ? "bg-[#C8A97E] shadow-[0_0_8px_rgba(200,169,126,0.6)]"
               : "bg-[#1B3B2B] shadow-[0_0_8px_rgba(27,59,43,0.3)]"
@@ -129,7 +129,7 @@ export default function CustomCursor() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
               transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-              className={`w-8 h-8 rounded-full border transition-colors duration-500 ${
+              className={`w-8 h-8 rounded-full border transition-colors duration-200 ${
                 isEvening
                   ? "border-[rgba(244,243,238,0.3)] shadow-[0_0_12px_rgba(200,169,126,0.15)]"
                   : "border-[rgba(27,59,43,0.35)] shadow-[0_0_10px_rgba(27,59,43,0.08)]"
@@ -145,7 +145,7 @@ export default function CustomCursor() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.7, opacity: 0 }}
               transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-              className={`w-12 h-12 rounded-full border backdrop-blur-[2px] transition-colors duration-500 ${
+              className={`w-12 h-12 rounded-full border backdrop-blur-[2px] transition-colors duration-200 ${
                 isEvening
                   ? "bg-[#C8A97E]/15 border-[#C8A97E]/40 shadow-[0_0_16px_rgba(200,169,126,0.25)]"
                   : "bg-[#2D5A43]/15 border-[#2D5A43]/30 shadow-[0_0_14px_rgba(45,90,67,0.15)]"

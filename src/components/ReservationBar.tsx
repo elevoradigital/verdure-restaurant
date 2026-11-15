@@ -57,14 +57,10 @@ export default function ReservationBar() {
   return (
     <section
       id="reserve"
-      className={`pt-28 sm:pt-32 lg:pt-36 pb-16 sm:pb-20 lg:pb-28 relative scroll-mt-24 overflow-hidden transition-colors duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] border-b ${
-        isEvening ? "bg-[#0B1610] border-[#F4F3EE]/10" : "bg-[#F4F3EE] border-[#11261B]/10"
-      }`}
+      className="pt-28 sm:pt-32 lg:pt-36 pb-16 sm:pb-20 lg:pb-28 relative scroll-mt-24 overflow-hidden bg-[var(--bg-canvas)] border-b border-[var(--border-hairline)] transition-colors duration-300 ease-out"
     >
       {/* Oversized Background Watermark */}
-      <div className={`absolute -right-4 -top-8 pointer-events-none select-none font-serif text-[18vw] font-bold leading-none tracking-tighter opacity-[0.035] -z-0 ${
-        isEvening ? "text-white" : "text-[#11261B]"
-      }`}>
+      <div className="absolute -right-4 -top-8 pointer-events-none select-none font-serif text-[18vw] font-bold leading-none tracking-tighter opacity-[0.035] -z-0 text-[var(--text-primary)]">
         04
       </div>
 
@@ -73,20 +69,16 @@ export default function ReservationBar() {
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
           <div className="inline-flex items-center gap-2 mb-2 font-mono text-[10px] sm:text-[11px] tracking-[0.25em] uppercase font-bold">
-            <span className={`w-1.5 h-1.5 rounded-full ${isEvening ? "bg-[#C8A97E]" : "bg-[#1B3B2B]"}`} />
-            <span className={isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"}>
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-primary)]" />
+            <span className="text-[var(--accent-primary)]">
               04 — Reservations
             </span>
           </div>
 
-          <h2 className={`font-serif text-3xl sm:text-4xl lg:text-5xl font-normal tracking-tight transition-colors duration-700 ${
-            isEvening ? "text-[#F4F3EE]" : "text-[#141816]"
-          }`}>
+          <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal tracking-tight text-[var(--text-primary)]">
             Reservations
           </h2>
-          <p className={`mt-2.5 text-xs sm:text-sm font-normal max-w-md mx-auto transition-colors duration-700 ${
-            isEvening ? "text-[#95A79B]" : "text-[#5C645E]"
-          }`}>
+          <p className="mt-2.5 text-xs sm:text-sm font-normal max-w-md mx-auto text-[var(--text-muted)]">
             Lunch and dinner seatings released thirty days in advance.
           </p>
         </div>
@@ -94,11 +86,7 @@ export default function ReservationBar() {
         {/* ======================================================== */}
         {/* UNIFIED 2-COLUMN ARCHITECTURAL CONCIERGE CONSOLE         */}
         {/* ======================================================== */}
-        <div className={`rounded-xl border overflow-hidden grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x transition-colors duration-700 ${
-          isEvening
-            ? "bg-[#12241B] border-[#F4F3EE]/12 divide-[#F4F3EE]/10 text-[#F4F3EE]"
-            : "bg-[#EAE8E0] border-[#11261B]/12 divide-[#11261B]/10 text-[#141816]"
-        }`}>
+        <div className="rounded-xl border border-[var(--border-hairline)] overflow-hidden grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-[var(--border-hairline)] bg-[var(--bg-surface)] text-[var(--text-primary)] transition-colors duration-200">
           
           {/* LEFT COLUMN: INTERACTIVE SVG FLOORPLAN (COLS 1-7) */}
           <div className="lg:col-span-7 p-4 sm:p-6 lg:p-8 flex flex-col justify-between">
@@ -228,11 +216,7 @@ export default function ReservationBar() {
               <MagneticButton
                 onClick={() => setIsModalOpen(true)}
                 data-cursor="magnetic"
-                className={`w-full py-3.5 rounded-full text-xs font-semibold uppercase tracking-[0.14em] transition-colors duration-300 shadow-md flex items-center justify-center gap-2 cursor-pointer ${
-                  isEvening
-                    ? "bg-[#C8A97E] hover:bg-[#D9BA8F] text-[#0B1610]"
-                    : "bg-[#1B3B2B] hover:bg-[#142E21] text-[#F4F3EE]"
-                }`}
+                className="w-full py-3.5 rounded-full text-xs font-semibold uppercase tracking-[0.14em] transition-colors duration-200 shadow-md flex items-center justify-center gap-2 cursor-pointer bg-[var(--accent-secondary)] hover:bg-[var(--accent-primary)] text-[var(--bg-canvas)]"
               >
                 <span>Reserve Table {selectedTable.id}</span>
                 <ArrowRight className="w-4 h-4 ml-1" />

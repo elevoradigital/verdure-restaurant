@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { useAmbience } from "@/context/AmbienceContext";
 import Preloader from "@/components/Preloader";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
@@ -17,7 +16,6 @@ import ReservationModal from "@/components/ReservationModal";
 import { useHydratedReducedMotion } from "@/hooks/useHydratedReducedMotion";
 
 export default function Home() {
-  const { isEvening } = useAmbience();
   const [isPreloaderDone, setIsPreloaderDone] = useState(false);
   const [selectedDish, setSelectedDish] = useState<DishItem | null>(null);
   const [isReservationOpen, setIsReservationOpen] = useState(false);
@@ -45,9 +43,7 @@ export default function Home() {
             : { opacity: 0.9, scale: 1.03 }
         }
         transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-        className={`relative min-h-screen transition-colors duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] overflow-x-hidden ${
-          isEvening ? "bg-[#0B1610] text-[#F4F3EE]" : "bg-[#F4F3EE] text-[#141816]"
-        }`}
+        className="relative min-h-screen bg-[var(--bg-canvas)] text-[var(--text-primary)] transition-colors duration-300 ease-out overflow-x-hidden"
       >
         {/* 2. Top Scroll Progress Line & Smart Architectural Navbar */}
         <Header onOpenReservation={() => handleOpenReservation()} />

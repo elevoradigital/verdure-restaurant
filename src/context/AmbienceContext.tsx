@@ -6,7 +6,6 @@ import React, {
   useEffect,
   useSyncExternalStore,
   useCallback,
-  useState,
 } from "react";
 
 export type AmbienceMode = "day" | "evening";
@@ -59,14 +58,25 @@ function getServerSnapshot(): AmbienceMode {
 const AmbienceContext = createContext<AmbienceContextType | undefined>(undefined);
 
 export function AmbienceProvider({ children }: { children: React.ReactNode }) {
-  const [isTransitioning, setIsTransitioning] = useState(false);
-
   // Sync with sessionStorage on client mount
   useEffect(() => {
     const stored = getStoredMode();
     if (stored !== currentMode) {
       currentMode = stored;
       emitChange();
+    }
+    // Ensure initial DOM attributes match
+    if (typeof document !== "undefined") {
+      const root = document.documentElement;
+      if (currentMode === "evening") {
+        root.classList.add("ambience-evening");
+        root.classList.remove("ambience-day");
+        root.setAttribute("data-ambience", "evening");
+      } else {
+        root.classList.add("ambience-day");
+        root.classList.remove("ambience-evening");
+        root.setAttribute("data-ambience", "day");
+      }
     }
   }, []);
 
@@ -80,19 +90,28 @@ export function AmbienceProvider({ children }: { children: React.ReactNode }) {
       sessionStorage.setItem(STORAGE_KEY, newMode);
     } catch {}
 
-    setIsTransitioning(true);
-    emitChange();
+    // Synchronously update root DOM classes and attributes for 0ms CSS cascade
+    if (typeof document !== "undefined") {
+      const root = document.documentElement;
+      if (newMode === "evening") {
+        root.classList.add("ambience-evening");
+        root.classList.remove("ambience-day");
+        root.setAttribute("data-ambience", "evening");
+      } else {
+        root.classList.add("ambience-day");
+        root.classList.remove("ambience-evening");
+        root.setAttribute("data-ambience", "day");
+      }
+    }
 
-    setTimeout(() => {
-      setIsTransitioning(false);
-    }, 700);
+    emitChange();
   }, []);
 
   const toggleAmbience = useCallback(() => {
     setAmbience(currentMode === "day" ? "evening" : "day");
   }, [setAmbience]);
 
-  // Update root html class and data-ambience attribute
+  // Keep root attributes synced with external store
   useEffect(() => {
     if (typeof document !== "undefined") {
       const root = document.documentElement;
@@ -115,7 +134,7 @@ export function AmbienceProvider({ children }: { children: React.ReactNode }) {
         isEvening,
         toggleAmbience,
         setAmbience,
-        isTransitioning,
+        isTransitioning: false,
       }}
     >
       {children}

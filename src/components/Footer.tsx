@@ -74,9 +74,7 @@ export default function Footer() {
   return (
     <footer
       ref={footerRef}
-      className={`relative pt-12 pb-8 overflow-hidden transition-colors duration-700 ${
-        isEvening ? "bg-[#070F0A] text-[#F4F3EE]" : "bg-[#EAE8E0] text-[#141816]"
-      }`}
+      className="relative pt-12 pb-8 overflow-hidden bg-[var(--footer-bg)] text-[var(--text-primary)] transition-colors duration-300 ease-out"
     >
       {/* Top Self-Drawing 1px Architectural Border with Crosshairs */}
       <div className="relative w-full">
@@ -84,22 +82,12 @@ export default function Footer() {
           initial={{ scaleX: 0 }}
           animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
           transition={{ duration: 0.95, ease: easeCurve }}
-          className={`w-full h-[1px] origin-left transition-colors duration-700 ${
-            isEvening ? "bg-white/10" : "bg-[#11261B]/15"
-          }`}
+          className="w-full h-[1px] origin-left bg-[var(--border-hairline)]"
         />
-        <span
-          className={`absolute left-4 -top-2.5 font-mono text-[10px] select-none pointer-events-none transition-colors duration-700 ${
-            isEvening ? "text-white/30" : "text-[#11261B]/30"
-          }`}
-        >
+        <span className="absolute left-4 -top-2.5 font-mono text-[10px] select-none pointer-events-none text-[var(--text-muted)] opacity-50">
           +
         </span>
-        <span
-          className={`absolute right-4 -top-2.5 font-mono text-[10px] select-none pointer-events-none transition-colors duration-700 ${
-            isEvening ? "text-white/30" : "text-[#11261B]/30"
-          }`}
-        >
+        <span className="absolute right-4 -top-2.5 font-mono text-[10px] select-none pointer-events-none text-[var(--text-muted)] opacity-50">
           +
         </span>
       </div>
@@ -108,29 +96,17 @@ export default function Footer() {
         {/* Section Header Tag */}
         <div className="flex items-center justify-between pb-6">
           <div className="flex items-center gap-2">
-            <span
-              className={`font-mono text-[10px] uppercase tracking-widest font-semibold transition-colors duration-700 ${
-                isEvening ? "text-[#C8A97E]" : "text-[#2D5A43]"
-              }`}
-            >
+            <span className="font-mono text-[10px] uppercase tracking-widest font-semibold text-[var(--accent-primary)]">
               Archive
             </span>
           </div>
-          <span
-            className={`hidden sm:inline font-mono text-[10px] tracking-wider transition-colors duration-700 ${
-              isEvening ? "text-white/40" : "text-[#11261B]/40"
-            }`}
-          >
+          <span className="hidden sm:inline font-mono text-[10px] tracking-wider text-[var(--text-muted)] opacity-60">
             LAT 12.9716° N — LON 77.5946° E
           </span>
         </div>
 
         {/* Main 4-Column Architectural Grid */}
-        <div
-          className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10 pb-12 border-b transition-colors duration-700 ${
-            isEvening ? "border-white/10" : "border-[#11261B]/10"
-          }`}
-        >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10 pb-12 border-b border-[var(--border-hairline)]">
           {/* Column 1: Identity & Ethos & Gazette */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
@@ -139,43 +115,23 @@ export default function Footer() {
             className="lg:col-span-4 space-y-4"
           >
             <div className="flex items-center gap-2">
-              <span
-                className={`font-serif text-3xl sm:text-4xl font-bold tracking-[0.14em] transition-colors duration-700 ${
-                  isEvening ? "text-[#F4F3EE]" : "text-[#141816]"
-                }`}
-              >
+              <span className="font-serif text-3xl sm:text-4xl font-bold tracking-[0.14em] text-[var(--text-primary)]">
                 VERDURE
               </span>
-              <span
-                className={`w-2 h-2 rounded-full transition-colors duration-700 ${
-                  isEvening ? "bg-[#C8A97E]" : "bg-[#1B3B2B]"
-                }`}
-              />
+              <span className="w-2 h-2 rounded-full bg-[var(--accent-primary)]" />
             </div>
 
-            <p
-              className={`text-xs sm:text-sm leading-relaxed max-w-sm transition-colors duration-700 ${
-                isEvening ? "text-[#95A79B]" : "text-[#5C645E]"
-              }`}
-            >
+            <p className="text-xs sm:text-sm leading-relaxed max-w-sm text-[var(--text-muted)]">
               A contemporary botanical kitchen celebrating wood fire, wild harvests, and natural wines in the heart of Bengaluru.
             </p>
 
             {/* Newsletter Subscription */}
             <div className="pt-2">
-              <span
-                className={`block text-[10px] font-mono uppercase tracking-widest font-semibold mb-2 transition-colors duration-700 ${
-                  isEvening ? "text-[#F4F3EE]" : "text-[#141816]"
-                }`}
-              >
+              <span className="block text-[10px] font-mono uppercase tracking-widest font-semibold mb-2 text-[var(--text-primary)]">
                 Seasonal Botanical Gazette
               </span>
               {subscribed ? (
-                <div
-                  className={`flex items-center gap-2 text-xs font-mono p-3 rounded-full transition-colors ${
-                    isEvening ? "text-[#C8A97E] bg-[#C8A97E]/10" : "text-[#1B3B2B] bg-[#1B3B2B]/10"
-                  }`}
-                >
+                <div className="flex items-center gap-2 text-xs font-mono p-3 rounded-full text-[var(--accent-primary)] bg-[var(--accent-primary)]/10">
                   <Check className="w-4 h-4 shrink-0" />
                   <span>Welcome to the seasonal circle. Confirmation sent.</span>
                 </div>
@@ -189,20 +145,12 @@ export default function Footer() {
                       setEmail(e.target.value);
                     }}
                     placeholder="Enter your email for private cellar tastings"
-                    className={`flex-1 px-4 py-2.5 text-xs rounded-l-full border focus:outline-none transition-colors ${
-                      isEvening
-                        ? "bg-[#12241B] border-white/15 text-[#F4F3EE] placeholder-[#95A79B]/60 focus:ring-1 focus:ring-[#C8A97E]"
-                        : "bg-[#F4F3EE] border-[#11261B]/15 text-[#141816] placeholder-[#5C645E]/60 focus:ring-1 focus:ring-[#1B3B2B]"
-                    }`}
+                    className="flex-1 px-4 py-2.5 text-xs rounded-l-full border border-[var(--border-hairline)] bg-[var(--bg-canvas)] text-[var(--text-primary)] placeholder-[var(--text-muted)]/60 focus:outline-none focus:ring-1 focus:ring-[var(--accent-primary)] transition-colors"
                   />
                   <button
                     type="submit"
                     data-cursor="magnetic"
-                    className={`px-4 py-2.5 rounded-r-full text-xs font-medium transition-colors flex items-center justify-center cursor-pointer ${
-                      isEvening
-                        ? "bg-[#C8A97E] hover:bg-[#D8BE96] text-[#0B1610]"
-                        : "bg-[#1B3B2B] hover:bg-[#142E21] text-[#F4F3EE]"
-                    }`}
+                    className="px-4 py-2.5 rounded-r-full text-xs font-medium bg-[var(--accent-secondary)] hover:bg-[var(--accent-primary)] text-[var(--bg-canvas)] transition-colors flex items-center justify-center cursor-pointer"
                     aria-label="Subscribe to Gazette"
                   >
                     <Send className="w-3.5 h-3.5" />
@@ -220,58 +168,30 @@ export default function Footer() {
             className="lg:col-span-3 space-y-3"
           >
             <div className="flex items-center gap-2">
-              <span
-                className={`font-mono text-[10px] uppercase tracking-widest font-bold transition-colors duration-700 ${
-                  isEvening ? "text-[#C8A97E]" : "text-[#2D5A43]"
-                }`}
-              >
+              <span className="font-mono text-[10px] uppercase tracking-widest font-bold text-[var(--accent-primary)]">
                 Hours
               </span>
             </div>
-            <div
-              className={`space-y-3 text-xs font-mono transition-colors duration-700 ${
-                isEvening ? "text-[#95A79B]" : "text-[#5C645E]"
-              }`}
-            >
-              <div className="p-3 rounded-lg border transition-colors duration-700 bg-white/5 border-white/5">
-                <span
-                  className={`block font-semibold transition-colors duration-700 ${
-                    isEvening ? "text-[#F4F3EE]" : "text-[#141816]"
-                  }`}
-                >
+            <div className="space-y-3 text-xs font-mono text-[var(--text-muted)]">
+              <div className="p-3 rounded-lg border bg-white/5 border-[var(--border-subtle)]">
+                <span className="block font-semibold text-[var(--text-primary)]">
                   Lunch Tasting Menu
                 </span>
                 <span className="text-[11px]">Thursday – Sunday</span>
-                <span
-                  className={`block pt-0.5 font-bold transition-colors duration-700 ${
-                    isEvening ? "text-[#C8A97E]" : "text-[#2D5A43]"
-                  }`}
-                >
+                <span className="block pt-0.5 font-bold text-[var(--accent-primary)]">
                   12:30 PM — 3:30 PM
                 </span>
               </div>
-              <div className="p-3 rounded-lg border transition-colors duration-700 bg-white/5 border-white/5">
-                <span
-                  className={`block font-semibold transition-colors duration-700 ${
-                    isEvening ? "text-[#F4F3EE]" : "text-[#141816]"
-                  }`}
-                >
+              <div className="p-3 rounded-lg border bg-white/5 border-[var(--border-subtle)]">
+                <span className="block font-semibold text-[var(--text-primary)]">
                   Evening Hearth & Embers
                 </span>
                 <span className="text-[11px]">Tuesday – Sunday</span>
-                <span
-                  className={`block pt-0.5 font-bold transition-colors duration-700 ${
-                    isEvening ? "text-[#C8A97E]" : "text-[#2D5A43]"
-                  }`}
-                >
+                <span className="block pt-0.5 font-bold text-[var(--accent-primary)]">
                   7:00 PM — 11:30 PM
                 </span>
               </div>
-              <div
-                className={`text-[11px] leading-relaxed transition-colors duration-700 ${
-                  isEvening ? "text-[#95A79B]/80" : "text-[#5C645E]/80"
-                }`}
-              >
+              <div className="text-[11px] leading-relaxed opacity-80 text-[var(--text-muted)]">
                 * Monday: Kitchen and grounds closed for bio-dynamic soil feeding & wild yeast fermentation.
               </div>
             </div>
@@ -285,66 +205,38 @@ export default function Footer() {
             className="lg:col-span-3 space-y-3"
           >
             <div className="flex items-center gap-2">
-              <span
-                className={`font-mono text-[10px] uppercase tracking-widest font-bold transition-colors duration-700 ${
-                  isEvening ? "text-[#C8A97E]" : "text-[#2D5A43]"
-                }`}
-              >
+              <span className="font-mono text-[10px] uppercase tracking-widest font-bold text-[var(--accent-primary)]">
                 Location
               </span>
             </div>
-            <div
-              className={`space-y-3 text-xs transition-colors duration-700 ${
-                isEvening ? "text-[#95A79B]" : "text-[#5C645E]"
-              }`}
-            >
+            <div className="space-y-3 text-xs text-[var(--text-muted)]">
               <div className="flex items-start gap-2.5">
-                <MapPin
-                  className={`w-4 h-4 shrink-0 mt-0.5 transition-colors duration-700 ${
-                    isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"
-                  }`}
-                />
+                <MapPin className="w-4 h-4 shrink-0 mt-0.5 text-[var(--accent-primary)]" />
                 <span className="leading-snug">
                   14 Olive Lane, Sanctuary Enclave,<br />
                   Bengaluru, Karnataka 560001
                 </span>
               </div>
               <div className="flex items-center gap-2.5">
-                <Phone
-                  className={`w-4 h-4 shrink-0 transition-colors duration-700 ${
-                    isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"
-                  }`}
-                />
+                <Phone className="w-4 h-4 shrink-0 text-[var(--accent-primary)]" />
                 <a
                   href="tel:+919845012844"
-                  className={`font-mono transition-colors ${
-                    isEvening ? "hover:text-[#C8A97E]" : "hover:text-[#1B3B2B]"
-                  }`}
+                  className="font-mono hover:text-[var(--accent-primary)] transition-colors"
                 >
                   +91 98450 12844
                 </a>
               </div>
               <div className="flex items-center gap-2.5">
-                <Mail
-                  className={`w-4 h-4 shrink-0 transition-colors duration-700 ${
-                    isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"
-                  }`}
-                />
+                <Mail className="w-4 h-4 shrink-0 text-[var(--accent-primary)]" />
                 <a
                   href="mailto:reservations@verdure.in"
-                  className={`font-mono transition-colors ${
-                    isEvening ? "hover:text-[#C8A97E]" : "hover:text-[#1B3B2B]"
-                  }`}
+                  className="font-mono hover:text-[var(--accent-primary)] transition-colors"
                 >
                   reservations@verdure.in
                 </a>
               </div>
               <div className="flex items-center gap-2.5 pt-1 text-[11px] font-mono">
-                <Car
-                  className={`w-3.5 h-3.5 shrink-0 ${
-                    isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"
-                  }`}
-                />
+                <Car className="w-3.5 h-3.5 shrink-0 text-[var(--accent-primary)]" />
                 <span>EV Valet Concierge at North Gate</span>
               </div>
             </div>
@@ -358,62 +250,36 @@ export default function Footer() {
             className="lg:col-span-2 space-y-3"
           >
             <div className="flex items-center gap-2">
-              <span
-                className={`font-mono text-[10px] uppercase tracking-widest font-bold transition-colors duration-700 ${
-                  isEvening ? "text-[#C8A97E]" : "text-[#2D5A43]"
-                }`}
-              >
+              <span className="font-mono text-[10px] uppercase tracking-widest font-bold text-[var(--accent-primary)]">
                 Inquiries
               </span>
             </div>
-            <ul
-              className={`space-y-2.5 text-xs transition-colors duration-700 ${
-                isEvening ? "text-[#95A79B]" : "text-[#5C645E]"
-              }`}
-            >
+            <ul className="space-y-2.5 text-xs text-[var(--text-muted)]">
               <li>
                 <a
                   href="#reserve"
-                  className={`flex items-center justify-between group transition-colors ${
-                    isEvening ? "hover:text-[#F4F3EE]" : "hover:text-[#141816]"
-                  }`}
+                  className="flex items-center justify-between group hover:text-[var(--text-primary)] transition-colors"
                 >
                   <span>Private Events</span>
-                  <ArrowUpRight
-                    className={`w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300 ${
-                      isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"
-                    }`}
-                  />
+                  <ArrowUpRight className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 text-[var(--accent-primary)] transition-transform duration-300" />
                 </a>
               </li>
               <li>
                 <a
                   href="#reserve"
-                  className={`flex items-center justify-between group transition-colors ${
-                    isEvening ? "hover:text-[#F4F3EE]" : "hover:text-[#141816]"
-                  }`}
+                  className="flex items-center justify-between group hover:text-[var(--text-primary)] transition-colors"
                 >
                   <span>Gift Experiences</span>
-                  <ArrowUpRight
-                    className={`w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300 ${
-                      isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"
-                    }`}
-                  />
+                  <ArrowUpRight className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 text-[var(--accent-primary)] transition-transform duration-300" />
                 </a>
               </li>
               <li>
                 <a
                   href="mailto:press@verdure.in"
-                  className={`flex items-center justify-between group transition-colors ${
-                    isEvening ? "hover:text-[#F4F3EE]" : "hover:text-[#141816]"
-                  }`}
+                  className="flex items-center justify-between group hover:text-[var(--text-primary)] transition-colors"
                 >
                   <span>Press Enquiries</span>
-                  <ArrowUpRight
-                    className={`w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300 ${
-                      isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"
-                    }`}
-                  />
+                  <ArrowUpRight className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 text-[var(--accent-primary)] transition-transform duration-300" />
                 </a>
               </li>
               <li className="pt-2">
@@ -421,14 +287,10 @@ export default function Footer() {
                   href="https://instagram.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`inline-flex items-center gap-1.5 transition-colors font-mono text-[11px] ${
-                    isEvening ? "hover:text-[#F4F3EE]" : "hover:text-[#141816]"
-                  }`}
+                  className="inline-flex items-center gap-1.5 font-mono text-[11px] hover:text-[var(--text-primary)] transition-colors"
                 >
                   <svg
-                    className={`w-3.5 h-3.5 ${
-                      isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"
-                    }`}
+                    className="w-3.5 h-3.5 text-[var(--accent-primary)]"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="2"
@@ -448,13 +310,7 @@ export default function Footer() {
         </div>
 
         {/* Center Interactive Bar: Live Clock, Ambience Switcher & Back to Top */}
-        <div
-          className={`py-5 border-b flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-mono transition-colors duration-700 ${
-            isEvening
-              ? "border-white/10 text-[#95A79B]"
-              : "border-[#11261B]/10 text-[#5C645E]"
-          }`}
-        >
+        <div className="py-5 border-b border-[var(--border-hairline)] flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-mono text-[var(--text-muted)]">
           {/* Live IST Restaurant Clock & Status */}
           <div className="flex items-center gap-2.5">
             <span className="relative flex h-2 w-2">
@@ -467,11 +323,7 @@ export default function Footer() {
                 <LiveClock />
               </span>
               <span className="opacity-40">|</span>
-              <span
-                className={`font-semibold tracking-wide ${
-                  isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"
-                }`}
-              >
+              <span className="font-semibold tracking-wide text-[var(--accent-primary)]">
                 SERVICE STATUS: OPEN
               </span>
             </div>
@@ -485,7 +337,7 @@ export default function Footer() {
               onClick={toggleAmbience}
               data-cursor="pointer"
               aria-label="Toggle Lighting Ambience"
-              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-[11px] font-mono tracking-wider transition-colors duration-300 ${
+              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-[11px] font-mono tracking-wider transition-colors duration-200 cursor-pointer ${
                 isEvening
                   ? "bg-[#12241B] border-[#C8A97E]/30 text-[#C8A97E] hover:border-[#C8A97E]"
                   : "bg-[#F4F3EE] border-[#11261B]/20 text-[#1B3B2B] hover:border-[#11261B]"
@@ -498,7 +350,7 @@ export default function Footer() {
                 </>
               ) : (
                 <>
-                  <Sun className="w-3 h-3 text-[#D97706]" />
+                  <Sun className="w-3 h-3 text-[#2D5A43]" />
                   <span>DAYLIGHT BOTANICAL (ACTIVE)</span>
                 </>
               )}
@@ -512,11 +364,7 @@ export default function Footer() {
             data-cursor="magnetic"
             onMouseEnter={() => setIsArrowHovered(true)}
             onMouseLeave={() => setIsArrowHovered(false)}
-            className={`group inline-flex items-center gap-2 px-4 py-2 rounded-full border transition-colors duration-300 shadow-sm active:scale-95 cursor-pointer ${
-              isEvening
-                ? "bg-[#12241B] hover:bg-[#C8A97E] text-[#F4F3EE] hover:text-[#0B1610] border-white/15"
-                : "bg-[#F4F3EE] hover:bg-[#1B3B2B] text-[#141816] hover:text-[#F4F3EE] border-[#11261B]/15"
-            }`}
+            className="group inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--border-hairline)] bg-[var(--bg-card)] hover:bg-[var(--accent-primary)] text-[var(--text-primary)] hover:text-[var(--bg-canvas)] transition-colors duration-200 shadow-sm active:scale-95 cursor-pointer"
           >
             <span>Back to Top</span>
             <div className="relative w-3.5 h-3.5 overflow-hidden">
@@ -536,39 +384,21 @@ export default function Footer() {
 
         {/* Monumental Edge-to-Edge VERDURE Watermark */}
         <div className="relative w-full pt-6 pb-2 overflow-hidden flex justify-center items-center pointer-events-none select-none">
-          <span
-            className={`font-serif text-[16vw] leading-[0.75] font-light tracking-[-0.04em] uppercase transition-colors duration-700 ${
-              isEvening ? "text-white/[0.04]" : "text-[#11261B]/[0.05]"
-            }`}
-          >
+          <span className="font-serif text-[16vw] leading-[0.75] font-light tracking-[-0.04em] uppercase text-[var(--text-primary)] opacity-[0.04]">
             VERDURE
           </span>
         </div>
 
         {/* Bottom Studio Credit Bar & Legal Links */}
-        <div
-          className={`pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono border-t transition-colors duration-700 ${
-            isEvening
-              ? "border-white/10 text-[#95A79B]"
-              : "border-[#11261B]/10 text-[#5C645E]"
-          }`}
-        >
+        <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono border-t border-[var(--border-hairline)] text-[var(--text-muted)]">
           <div>
             © 2026 VERDURE Botanical Kitchen — Concept Portfolio Project
           </div>
 
           {/* Mandatory Attribution (PRESERVED ACCURATELY) */}
-          <div
-            className={`flex items-center gap-1.5 font-medium transition-colors duration-700 ${
-              isEvening ? "text-[#F4F3EE]" : "text-[#141816]"
-            }`}
-          >
+          <div className="flex items-center gap-1.5 font-medium text-[var(--text-primary)]">
             <span className="opacity-70">Designed & Developed by</span>
-            <span
-              className={`font-bold tracking-widest uppercase transition-colors duration-700 ${
-                isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"
-              }`}
-            >
+            <span className="font-bold tracking-widest uppercase text-[var(--accent-primary)]">
               ELEVORA
             </span>
           </div>
@@ -576,27 +406,21 @@ export default function Footer() {
           <div className="flex items-center gap-4 text-[11px]">
             <a
               href="#"
-              className={`transition-colors ${
-                isEvening ? "hover:text-[#F4F3EE]" : "hover:text-[#141816]"
-              }`}
+              className="hover:text-[var(--text-primary)] transition-colors"
             >
               Privacy Policy
             </a>
             <span className="opacity-40">·</span>
             <a
               href="#"
-              className={`transition-colors ${
-                isEvening ? "hover:text-[#F4F3EE]" : "hover:text-[#141816]"
-              }`}
+              className="hover:text-[var(--text-primary)] transition-colors"
             >
               Allergen Protocol
             </a>
             <span className="opacity-40">·</span>
             <a
               href="#"
-              className={`transition-colors ${
-                isEvening ? "hover:text-[#F4F3EE]" : "hover:text-[#141816]"
-              }`}
+              className="hover:text-[var(--text-primary)] transition-colors"
             >
               Terms of Table
             </a>

@@ -229,9 +229,7 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
   // Direct Hardware-accelerated Sheen coordinates (Zero React Re-Renders)
   const sheenX = useMotionValue(50);
   const sheenY = useMotionValue(50);
-  const sheenBackground = useMotionTemplate`radial-gradient(circle 350px at ${sheenX}% ${sheenY}%, ${
-    isEvening ? "rgba(200,169,126,0.32)" : "rgba(255,255,255,0.45)"
-  }, transparent ${isEvening ? "65%" : "60%"})`;
+  const sheenBackground = useMotionTemplate`radial-gradient(circle 350px at ${sheenX}% ${sheenY}%, var(--sheen-light), transparent 60%)`;
 
   // Scroll-Linked Hero Parallax
   const { scrollYProgress } = useScroll({
@@ -277,34 +275,20 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
   return (
     <section
       ref={sectionRef}
-      className={`relative pt-20 sm:pt-24 lg:pt-28 pb-0 overflow-hidden transition-colors duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] border-b ${
-        isEvening
-          ? "bg-[#0B1610] border-[#F4F3EE]/10"
-          : "bg-[#F4F3EE] border-[#11261B]/10"
-      }`}
+      className="relative pt-20 sm:pt-24 lg:pt-28 pb-0 overflow-hidden bg-[var(--bg-canvas)] border-b border-[var(--border-hairline)] transition-colors duration-300 ease-out"
     >
       {/* ======================================================== */}
       {/* 1. EXPOSED 1PX ARCHITECTURAL BLUEPRINT GRID & CROSSHAIRS */}
       {/* ======================================================== */}
       <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
         {/* Subtle Vertical Blueprint Hairlines */}
-        <div className={`absolute top-0 bottom-0 left-8 sm:left-12 lg:left-16 w-[1px] border-l ${
-          isEvening ? "border-[#F4F3EE]/[0.07]" : "border-[#11261B]/[0.07]"
-        }`} />
-        <div className={`absolute top-0 bottom-0 right-8 sm:right-12 lg:right-16 w-[1px] border-r ${
-          isEvening ? "border-[#F4F3EE]/[0.07]" : "border-[#11261B]/[0.07]"
-        }`} />
-        <div className={`hidden lg:block absolute top-0 bottom-0 left-1/2 w-[1px] border-l ${
-          isEvening ? "border-[#F4F3EE]/[0.05]" : "border-[#11261B]/[0.05]"
-        }`} />
+        <div className="absolute top-0 bottom-0 left-8 sm:left-12 lg:left-16 w-[1px] border-l border-[var(--border-hairline)] opacity-70" />
+        <div className="absolute top-0 bottom-0 right-8 sm:right-12 lg:right-16 w-[1px] border-r border-[var(--border-hairline)] opacity-70" />
+        <div className="hidden lg:block absolute top-0 bottom-0 left-1/2 w-[1px] border-l border-[var(--border-hairline)] opacity-50" />
 
         {/* Subtle Horizontal Grid Hairlines */}
-        <div className={`absolute top-28 left-0 right-0 h-[1px] border-t ${
-          isEvening ? "border-[#F4F3EE]/[0.07]" : "border-[#11261B]/[0.07]"
-        }`} />
-        <div className={`absolute bottom-13 left-0 right-0 h-[1px] border-t ${
-          isEvening ? "border-[#F4F3EE]/[0.07]" : "border-[#11261B]/[0.07]"
-        }`} />
+        <div className="absolute top-28 left-0 right-0 h-[1px] border-t border-[var(--border-hairline)] opacity-70" />
+        <div className="absolute bottom-13 left-0 right-0 h-[1px] border-t border-[var(--border-hairline)] opacity-70" />
 
         {/* Specular Light Pulse Gliding along Hairlines (Native CSS GPU Keyframe) */}
         <div className="absolute top-28 left-0 right-0 h-[1px] pointer-events-none overflow-hidden z-20">
@@ -312,49 +296,35 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
         </div>
 
         {/* Real-Time Sun / Leaf Caustic Shadow Sweep (Zero-CPU Native CSS GPU Keyframe) */}
-        {!isEvening && (
-          <div
-            className="animate-dappled-sweep absolute inset-0 pointer-events-none opacity-[0.08] z-0 overflow-hidden"
-            style={{
-              backgroundImage: `radial-gradient(ellipse 60% 40% at 30% 20%, rgba(17,38,27,0.85) 0%, transparent 70%),
-                                radial-gradient(ellipse 45% 35% at 75% 65%, rgba(17,38,27,0.75) 0%, transparent 60%),
-                                radial-gradient(circle 260px at 50% 50%, rgba(17,38,27,0.65) 0%, transparent 70%)`,
-            }}
-          />
-        )}
+        <div
+          className="ambient-day-only animate-dappled-sweep absolute inset-0 pointer-events-none opacity-[0.08] z-0 overflow-hidden"
+          style={{
+            backgroundImage: `radial-gradient(ellipse 60% 40% at 30% 20%, rgba(17,38,27,0.85) 0%, transparent 70%),
+                              radial-gradient(ellipse 45% 35% at 75% 65%, rgba(17,38,27,0.75) 0%, transparent 60%),
+                              radial-gradient(circle 260px at 50% 50%, rgba(17,38,27,0.65) 0%, transparent 70%)`,
+          }}
+        />
 
         {/* Real-Time Candlelight / Ember Breathing Glow (Zero-CPU Native CSS GPU Keyframe) */}
-        {isEvening && (
-          <div
-            className="animate-hearth-breathe absolute inset-0 pointer-events-none z-0"
-            style={{
-              background: "radial-gradient(circle 500px at 65% 45%, rgba(200, 169, 126, 0.35) 0%, transparent 70%)",
-            }}
-          />
-        )}
+        <div
+          className="ambient-evening-only animate-hearth-breathe absolute inset-0 pointer-events-none z-0"
+          style={{
+            background: "radial-gradient(circle 500px at 65% 45%, rgba(200, 169, 126, 0.35) 0%, transparent 70%)",
+          }}
+        />
 
         {/* Architectural Crosshair (+) Intersections */}
-        <span className={`absolute top-26 left-6 sm:left-10 lg:left-14 font-mono text-xs ${
-          isEvening ? "text-[#C8A97E]/40" : "text-[#1B3B2B]/40"
-        }`}>+</span>
-        <span className={`absolute top-26 right-6 sm:right-10 lg:right-14 font-mono text-xs ${
-          isEvening ? "text-[#C8A97E]/40" : "text-[#1B3B2B]/40"
-        }`}>+</span>
-        <span className={`absolute bottom-15 left-6 sm:left-10 lg:left-14 font-mono text-xs ${
-          isEvening ? "text-[#C8A97E]/40" : "text-[#1B3B2B]/40"
-        }`}>+</span>
-        <span className={`absolute bottom-15 right-6 sm:right-10 lg:right-14 font-mono text-xs ${
-          isEvening ? "text-[#C8A97E]/40" : "text-[#1B3B2B]/40"
-        }`}>+</span>
+        <span className="absolute top-26 left-6 sm:left-10 lg:left-14 font-mono text-xs text-[var(--accent-primary)] opacity-40">+</span>
+        <span className="absolute top-26 right-6 sm:right-10 lg:right-14 font-mono text-xs text-[var(--accent-primary)] opacity-40">+</span>
+        <span className="absolute bottom-15 left-6 sm:left-10 lg:left-14 font-mono text-xs text-[var(--accent-primary)] opacity-40">+</span>
+        <span className="absolute bottom-15 right-6 sm:right-10 lg:right-14 font-mono text-xs text-[var(--accent-primary)] opacity-40">+</span>
 
         {/* Far-Left Rotated Monospace Coordinate Label */}
         <div className="hidden xl:flex absolute left-4 top-1/2 -translate-y-1/2 items-center gap-3 [writing-mode:vertical-lr] rotate-180">
-          <span className={`font-mono text-[9px] tracking-[0.28em] uppercase ${
-            isEvening ? "text-[#C8A97E]/50" : "text-[#1B3B2B]/50"
-          }`}>
+          <span className="font-mono text-[9px] tracking-[0.28em] uppercase text-[var(--accent-primary)] opacity-50">
             VERDURE ARCHIVE — 12.9716° N, 77.5946° E
           </span>
-          <span className={`w-8 h-[1px] ${isEvening ? "bg-[#C8A97E]/30" : "bg-[#1B3B2B]/30"}`} />
+          <span className="w-8 h-[1px] bg-[var(--accent-primary)] opacity-30" />
         </div>
       </div>
 
@@ -379,14 +349,8 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
               transition={{ duration: 0.6, delay: 0.08, ease: easeCurve }}
               className="inline-flex items-center justify-center lg:justify-start mb-4 sm:mb-6"
             >
-              <div className={`inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border text-[10px] sm:text-xs font-mono tracking-widest uppercase font-semibold transition-colors ${
-                isEvening
-                  ? "bg-[#12241B] border-[#C8A97E]/30 text-[#C8A97E]"
-                  : "bg-[#EAE8E0] border-[#11261B]/15 text-[#1B3B2B]"
-              }`}>
-                <span className={`w-1.5 h-1.5 rounded-full ${
-                  isEvening ? "bg-[#C8A97E]" : "bg-[#1B3B2B]"
-                }`} />
+              <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-[var(--border-hairline)] text-[10px] sm:text-xs font-mono tracking-widest uppercase font-semibold bg-[var(--bg-surface)] text-[var(--accent-primary)]">
+                <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-primary)]" />
                 <span>No. 01 — Modern Botanical Kitchen</span>
               </div>
             </motion.div>
@@ -398,9 +362,7 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                   initial={{ y: "105%", rotateZ: 1.5 }}
                   animate={isReady ? { y: "0%", rotateZ: 0 } : {}}
                   transition={{ duration: 0.85, delay: 0.16, ease: easeCurve }}
-                  className={`block transition-colors duration-700 ${
-                    isEvening ? "text-[#F4F3EE]" : "text-[#141816]"
-                  }`}
+                  className="block text-[var(--text-primary)]"
                 >
                   Taste in
                 </motion.span>
@@ -412,14 +374,10 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                   transition={{ duration: 0.85, delay: 0.28, ease: easeCurve }}
                   className="block"
                 >
-                  <em className={`font-serif italic font-normal transition-colors duration-700 pr-2 ${
-                    isEvening ? "text-[#C8A97E]" : "text-[#2D5A43]"
-                  }`}>
+                  <em className="font-serif italic font-normal text-[var(--accent-primary)] pr-2">
                     Pure
                   </em>
-                  <span className={`transition-colors duration-700 ${
-                    isEvening ? "text-[#F4F3EE]" : "text-[#141816]"
-                  }`}>
+                  <span className="text-[var(--text-primary)]">
                     Form.
                   </span>
                 </motion.span>
@@ -431,9 +389,7 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
               initial={{ scaleX: 0 }}
               animate={isReady ? { scaleX: 1 } : {}}
               transition={{ duration: 0.8, delay: 0.4, ease: easeCurve }}
-              className={`w-full max-w-xl h-[1px] my-5 sm:my-6 origin-left ${
-                isEvening ? "bg-[#F4F3EE]/15" : "bg-[#11261B]/15"
-              }`}
+              className="w-full max-w-xl h-[1px] my-5 sm:my-6 origin-left bg-[var(--border-hairline)]"
             />
 
             <motion.div
@@ -442,9 +398,7 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
               transition={{ duration: 0.7, delay: 0.45, ease: easeCurve }}
               className="flex flex-col sm:flex-row items-center justify-between gap-4 max-w-xl"
             >
-              <p className={`text-sm sm:text-base leading-relaxed text-center sm:text-left max-w-sm transition-colors duration-700 ${
-                isEvening ? "text-[#95A79B]" : "text-[#5C645E]"
-              }`}>
+              <p className="text-sm sm:text-base leading-relaxed text-center sm:text-left max-w-sm text-[var(--text-muted)]">
                 Leaves, roots, and wild mushrooms cooked over applewood embers.
               </p>
 
@@ -453,11 +407,7 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                 <MagneticButton
                   onClick={onOpenReservation}
                   data-cursor="magnetic"
-                  className={`group px-6 py-3 rounded-full text-xs font-semibold uppercase tracking-wider transition-colors duration-300 shadow-md ${
-                    isEvening
-                      ? "bg-[#C8A97E] hover:bg-[#D9BA8F] text-[#0B1610]"
-                      : "bg-[#1B3B2B] hover:bg-[#142E21] text-[#F4F3EE]"
-                  }`}
+                  className="group px-6 py-3 rounded-full text-xs font-semibold uppercase tracking-wider transition-colors duration-200 shadow-md bg-[var(--accent-secondary)] hover:bg-[var(--accent-primary)] text-[var(--bg-canvas)]"
                 >
                   <span>Reserve Table</span>
                   <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
@@ -466,11 +416,7 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                 <a
                   href="#plates"
                   data-cursor="magnetic"
-                  className={`group inline-flex items-center gap-2 px-5 py-3 rounded-full border text-xs font-semibold uppercase tracking-wider transition-colors duration-200 cursor-pointer ${
-                    isEvening
-                      ? "border-[#F4F3EE]/20 hover:border-[#C8A97E] text-[#F4F3EE] hover:text-[#C8A97E] bg-[#12241B]"
-                      : "border-[#11261B]/15 hover:border-[#1B3B2B] text-[#141816] hover:text-[#1B3B2B] bg-[#EAE8E0]"
-                  }`}
+                  className="group inline-flex items-center gap-2 px-5 py-3 rounded-full border border-[var(--border-hairline)] hover:border-[var(--accent-primary)] text-[var(--text-primary)] hover:text-[var(--accent-primary)] bg-[var(--bg-surface)] text-xs font-semibold uppercase tracking-wider transition-colors duration-200 cursor-pointer"
                   aria-label="Explore menu"
                 >
                   <span>Explore Menu</span>
@@ -484,18 +430,14 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
               initial={{ opacity: 0, y: 16 }}
               animate={isReady ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.7, delay: 0.55, ease: easeCurve }}
-              className={`mt-8 sm:mt-10 pt-5 sm:pt-6 border-t max-w-xl transition-colors duration-700 ${
-                isEvening ? "border-[#F4F3EE]/10" : "border-[#11261B]/10"
-              }`}
+              className="mt-8 sm:mt-10 pt-5 sm:pt-6 border-t border-[var(--border-hairline)] max-w-xl"
             >
               <div className="flex items-center justify-between mb-3 text-left">
-                <span className={`text-[10px] font-mono tracking-[0.2em] uppercase font-bold flex items-center gap-1.5 ${
-                  isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"
-                }`}>
-                  <span className={`w-1.5 h-1.5 rounded-full ${isEvening ? "bg-[#C8A97E]" : "bg-[#1B3B2B]"}`} />
+                <span className="text-[10px] font-mono tracking-[0.2em] uppercase font-bold flex items-center gap-1.5 text-[var(--accent-primary)]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-primary)]" />
                   Signature Courses
                 </span>
-                <span className={`text-[10px] font-mono ${isEvening ? "text-[#95A79B]" : "text-[#5C645E]"}`}>
+                <span className="text-[10px] font-mono text-[var(--text-muted)]">
                   Wood-Fired Tasting
                 </span>
               </div>
@@ -513,14 +455,10 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                         setSelectedDishIdx(idx);
                         setActiveHotspot(dish.hotspots[0].id);
                       }}
-                      className={`relative p-2.5 rounded-lg border text-left transition-colors duration-300 cursor-pointer overflow-hidden ${
+                      className={`relative p-2.5 rounded-lg border text-left transition-colors duration-200 cursor-pointer overflow-hidden ${
                         isSelected
-                          ? isEvening
-                            ? "bg-[#12241B] border-[#C8A97E] shadow-sm"
-                            : "bg-[#EAE8E0] border-[#1B3B2B] shadow-sm"
-                          : isEvening
-                          ? "bg-[#070F0A]/60 border-white/5 hover:border-white/20 text-[#95A79B]"
-                          : "bg-white/60 border-black/5 hover:border-black/20 text-[#5C645E]"
+                          ? "bg-[var(--bg-surface)] border-[var(--accent-primary)] shadow-sm"
+                          : "bg-[var(--bg-card)] border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[var(--border-hairline)]"
                       }`}
                     >
                       <div className="flex items-center gap-2">
@@ -535,15 +473,13 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                         </div>
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center justify-between text-[10px] font-mono leading-none mb-1">
-                            <span className={`font-bold ${isSelected ? (isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]") : "opacity-60"}`}>
+                            <span className={`font-bold ${isSelected ? "text-[var(--accent-primary)]" : "opacity-60"}`}>
                               {dish.num}
                             </span>
                             <span className="font-semibold">{dish.price}</span>
                           </div>
                           <div className={`font-serif text-[12px] sm:text-[13px] leading-tight font-medium truncate ${
-                            isSelected
-                              ? isEvening ? "text-[#F4F3EE]" : "text-[#141816]"
-                              : isEvening ? "text-[#95A79B]" : "text-[#5C645E]"
+                            isSelected ? "text-[var(--text-primary)]" : "text-[var(--text-muted)]"
                           }`}>
                             {dish.name}
                           </div>
@@ -554,9 +490,7 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                       {isSelected && (
                         <motion.div
                           layoutId="activeDockPillBorder"
-                          className={`absolute inset-0 rounded-lg border-2 pointer-events-none ${
-                            isEvening ? "border-[#C8A97E]" : "border-[#1B3B2B]"
-                          }`}
+                          className="absolute inset-0 rounded-lg border-2 pointer-events-none border-[var(--accent-primary)]"
                           transition={{ type: "spring", stiffness: 300, damping: 28 }}
                         />
                       )}
@@ -605,9 +539,7 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
               >
                 {/* Outer Ring: Rotating Clockwise (Native CSS Keyframe) */}
                 <div
-                  className={`animate-ring-cw absolute w-[118%] h-[118%] rounded-full border transition-colors duration-700 pointer-events-none flex items-center justify-center ${
-                    isEvening ? "border-[#C8A97E]/30 text-[#C8A97E]/50" : "border-[#11261B]/25 text-[#11261B]/40"
-                  }`}
+                  className="animate-ring-cw absolute w-[118%] h-[118%] rounded-full border border-[var(--border-hairline)] text-[var(--accent-primary)] opacity-50 pointer-events-none flex items-center justify-center"
                 >
                   <span className="absolute -top-3 left-1/2 -translate-x-1/2 font-mono text-[9px] font-bold">0°</span>
                   <span className="absolute top-1/2 -right-4 -translate-y-1/2 font-mono text-[9px] font-bold">90°</span>
@@ -621,15 +553,11 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
 
                 {/* Inner Dashed Ring: Rotating Counter-Clockwise (Native CSS Keyframe) */}
                 <div
-                  className={`animate-ring-ccw absolute w-[105%] h-[105%] rounded-full border border-dashed transition-colors duration-700 pointer-events-none ${
-                    isEvening ? "border-[#C8A97E]/25" : "border-[#11261B]/20"
-                  }`}
+                  className="animate-ring-ccw absolute w-[105%] h-[105%] rounded-full border border-dashed border-[var(--border-hairline)] opacity-40 pointer-events-none"
                 />
 
                 {/* Deep Offset Architectural Backdrop Slab */}
-                <div className={`absolute -right-3 -bottom-3 w-full h-full rounded-t-[140px] rounded-b-[28px] -z-20 transition-colors duration-700 ${
-                  isEvening ? "bg-[#070F0A]/70" : "bg-[#11261B]/10"
-                }`} />
+                <div className="absolute -right-3 -bottom-3 w-full h-full rounded-t-[140px] rounded-b-[28px] -z-20 bg-[var(--bg-surface)] opacity-80" />
               </div>
 
               {/* ---------------------------------------------------- */}
@@ -639,15 +567,11 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                 style={{
                   transformStyle: "preserve-3d",
                   transform: "translateZ(0px)",
-                  boxShadow: isEvening
-                    ? "0 28px 56px -12px rgba(0, 0, 0, 0.75)"
-                    : "0 24px 48px -15px rgba(17, 38, 27, 0.25)",
+                  boxShadow: "0 28px 56px -12px rgba(0, 0, 0, 0.45)",
                   backfaceVisibility: "hidden",
                   WebkitBackfaceVisibility: "hidden",
                 }}
-                className={`animate-bowl-float relative w-full h-full rounded-t-[140px] rounded-b-[28px] overflow-hidden border p-1.5 transition-colors duration-700 ${
-                  isEvening ? "bg-[#12241B] border-[#C8A97E]/30" : "bg-[#EAE8E0] border-[#11261B]/20"
-                }`}
+                className="animate-bowl-float relative w-full h-full rounded-t-[140px] rounded-b-[28px] overflow-hidden border border-[var(--border-hairline)] p-1.5 bg-[var(--bg-surface)]"
               >
                 {/* Inner Inset Beveled Frame */}
                 <div className="relative w-full h-full rounded-t-[132px] rounded-b-[22px] overflow-hidden bg-black/5">
@@ -682,11 +606,7 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                   />
 
                   {/* Soft Vignette */}
-                  <div className={`absolute inset-0 pointer-events-none ${
-                    isEvening
-                      ? "bg-gradient-to-t from-[#0B1610]/70 via-transparent to-transparent"
-                      : "bg-gradient-to-t from-[#11261B]/40 via-transparent to-transparent"
-                  }`} />
+                  <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/50 via-transparent to-transparent" />
                 </div>
               </div>
 
@@ -694,9 +614,7 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
               <div
                 className="animate-shadow-breathe absolute -bottom-5 left-1/2 w-4/5 h-8 rounded-full pointer-events-none -z-10"
                 style={{
-                  background: isEvening
-                    ? "radial-gradient(ellipse at center, rgba(0, 0, 0, 0.8) 0%, transparent 70%)"
-                    : "radial-gradient(ellipse at center, rgba(17, 38, 27, 0.45) 0%, transparent 70%)",
+                  background: "radial-gradient(ellipse at center, rgba(0, 0, 0, 0.55) 0%, transparent 70%)",
                 }}
               />
 
@@ -769,14 +687,10 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                         {!isActive && (
                           <>
                             <span
-                              className={`animate-pin-sonar absolute w-6 h-6 rounded-full border pointer-events-none ${
-                                isEvening ? "border-[#C8A97E]" : "border-[#1B3B2B]"
-                              }`}
+                              className="animate-pin-sonar absolute w-6 h-6 rounded-full border border-[var(--accent-primary)] pointer-events-none"
                             />
                             <span
-                              className={`animate-pin-sonar-inner absolute w-6 h-6 rounded-full border pointer-events-none ${
-                                isEvening ? "border-[#C8A97E]/70" : "border-[#1B3B2B]/70"
-                              }`}
+                              className="animate-pin-sonar-inner absolute w-6 h-6 rounded-full border border-[var(--accent-primary)] opacity-70 pointer-events-none"
                             />
                           </>
                         )}
@@ -790,13 +704,9 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                             opacity: isDimmed ? 0.4 : 1,
                           }}
                           className={`relative w-6 h-6 rounded-full flex items-center justify-center border shadow-md cursor-pointer transition-colors ${
-                            isEvening
-                              ? isActive
-                                ? "bg-[#C8A97E] text-[#0B1610] border-white"
-                                : "bg-[#12241B] text-[#C8A97E] border-[#C8A97E]/50"
-                              : isActive
-                              ? "bg-[#1B3B2B] text-[#F4F3EE] border-white"
-                              : "bg-[#F4F3EE] text-[#1B3B2B] border-[#1B3B2B]/40"
+                            isActive
+                              ? "bg-[var(--accent-primary)] text-[var(--bg-canvas)] border-white"
+                              : "bg-[var(--bg-surface)] text-[var(--accent-primary)] border-[var(--border-hairline)]"
                           }`}
                         >
                           <motion.span
@@ -833,7 +743,7 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                           >
                             {/* SVG Leader Line connecting pin to card */}
                             <svg
-                              className={`absolute pointer-events-none ${
+                              className={`absolute pointer-events-none text-[var(--accent-primary)] opacity-40 ${
                                 spot.cardPlacement === "bottom-right"
                                   ? "-top-8 -left-8 w-8 h-8"
                                   : spot.cardPlacement === "top-left"
@@ -848,21 +758,15 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                                 y1={spot.cardPlacement.includes("bottom") ? "0" : "32"}
                                 x2={spot.cardPlacement.includes("right") ? "32" : "0"}
                                 y2={spot.cardPlacement.includes("bottom") ? "32" : "0"}
-                                stroke={isEvening ? "rgba(200, 169, 126, 0.4)" : "rgba(27, 59, 43, 0.4)"}
+                                stroke="currentColor"
                                 strokeWidth="1"
                                 strokeDasharray="3 3"
                               />
                             </svg>
 
-                            <div className={`w-[200px] p-3 rounded-lg border shadow-md text-left ${
-                              isEvening
-                                ? "bg-[#12241B]/[0.98] text-[#F4F3EE] border-[#C8A97E]/30"
-                                : "bg-[#F4F3EE]/[0.98] text-[#141816] border-[#11261B]/15"
-                            }`}>
+                            <div className="w-[200px] p-3 rounded-lg border border-[var(--border-hairline)] shadow-md text-left bg-[var(--bg-card)] text-[var(--text-primary)]">
                               <div className="flex items-center justify-between pb-1 border-b border-current/10">
-                                <span className={`text-[9px] font-mono tracking-widest uppercase font-bold ${
-                                  isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"
-                                }`}>
+                                <span className="text-[9px] font-mono tracking-widest uppercase font-bold text-[var(--accent-primary)]">
                                   {spot.tag}
                                 </span>
                                 <button
@@ -876,15 +780,11 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                               <div className="font-serif text-xs font-semibold mt-1">
                                 {spot.title}
                               </div>
-                              <div className={`text-[11px] mt-0.5 leading-snug ${
-                                isEvening ? "text-[#95A79B]" : "text-[#5C645E]"
-                              }`}>
+                              <div className="text-[11px] mt-0.5 leading-snug text-[var(--text-muted)]">
                                 {spot.subline}
                               </div>
                               <div className="mt-2 pt-1.5 border-t border-current/10 flex items-center justify-between text-[9px] font-mono">
-                                <span className={`px-1.5 py-0.5 rounded ${
-                                  isEvening ? "bg-[#C8A97E]/15 text-[#C8A97E]" : "bg-[#1B3B2B]/10 text-[#1B3B2B]"
-                                }`}>
+                                <span className="px-1.5 py-0.5 rounded bg-[var(--accent-primary)]/15 text-[var(--accent-primary)]">
                                   {spot.metric}
                                 </span>
                                 <a href="#plates" className="font-semibold underline">Menu →</a>
@@ -901,12 +801,10 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
             </motion.div>
 
             {/* Museum-style Caption Strip tucked neatly below the frame */}
-            <div className={`w-full mt-3.5 pt-2.5 border-t flex items-center justify-between text-xs font-mono tracking-wide transition-colors ${
-              isEvening ? "border-[#F4F3EE]/10 text-[#95A79B]" : "border-[#11261B]/10 text-[#5C645E]"
-            }`}>
+            <div className="w-full mt-3.5 pt-2.5 border-t border-[var(--border-hairline)] flex items-center justify-between text-xs font-mono tracking-wide text-[var(--text-muted)]">
               <div className="flex items-center gap-2">
-                <span className={`w-1.5 h-1.5 rounded-full ${isEvening ? "bg-[#C8A97E]" : "bg-[#2D5A43]"}`} />
-                <span className="font-medium">
+                <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-primary)]" />
+                <span className="font-medium text-[var(--text-primary)]">
                   Plate {currentDish.num} — {currentDish.name}, {currentDish.prep} ({currentDish.price})
                 </span>
               </div>
@@ -921,12 +819,8 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
       {/* ======================================================== */}
       {/* 4. FULL-WIDTH 52PX BOTTOM ARCHITECTURAL MARQUEE BAR       */}
       {/* ======================================================== */}
-      <div className={`w-full h-[52px] border-t border-b transition-colors duration-700 select-none ${
-        isEvening
-          ? "border-[#F4F3EE]/10 bg-[#070F0A]/90 text-[#F4F3EE]"
-          : "border-[#11261B]/10 bg-[#EAE8E0]/90 text-[#141816]"
-      }`}>
-        <div className="w-full grid grid-cols-1 md:grid-cols-12 h-full items-center divide-y md:divide-y-0 md:divide-x divide-current/10">
+      <div className="w-full h-[52px] border-t border-b border-[var(--border-hairline)] bg-[var(--bg-surface)]/90 text-[var(--text-primary)] select-none transition-colors duration-200">
+        <div className="w-full grid grid-cols-1 md:grid-cols-12 h-full items-center divide-y md:divide-y-0 md:divide-x divide-[var(--border-hairline)]">
           
           {/* Left Cell: Scroll To Explore Indicator with sliding 1px line (Cols 1-3) */}
           <div className="md:col-span-3 flex items-center justify-between px-6 h-full">
@@ -935,7 +829,7 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
             </span>
             <div className="flex items-center gap-2">
               <div className="relative w-[1.5px] h-5 bg-current/20 overflow-hidden rounded-full">
-                <div className={`animate-scroll-line w-full h-full ${isEvening ? "bg-[#C8A97E]" : "bg-[#1B3B2B]"}`} />
+                <div className="animate-scroll-line w-full h-full bg-[var(--accent-primary)]" />
               </div>
               <span className="text-xs font-mono">↓</span>
             </div>
@@ -954,9 +848,7 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
               className="w-full flex items-center justify-between group cursor-pointer"
             >
               <div className="flex items-center gap-2">
-                <span className={`w-2 h-2 rounded-full ${
-                  isEvening ? "bg-[#C8A97E] animate-pulse" : "bg-[#2D5A43] animate-pulse"
-                }`} />
+                <span className="w-2 h-2 rounded-full bg-[var(--accent-primary)] animate-pulse" />
                 <span className="font-mono text-[10px] sm:text-[11px] font-semibold tracking-wider uppercase">
                   {isEvening ? "TONIGHT: 3 TABLES REMAINING" : "LUNCH: 5 TABLES REMAINING"}
                 </span>

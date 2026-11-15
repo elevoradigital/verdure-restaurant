@@ -50,7 +50,7 @@ export default function MobileStickyBar({
           }}
           className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-4 right-4 z-40 md:hidden pointer-events-auto"
         >
-          <div className={`flex items-center justify-between p-2 pl-4 rounded-full backdrop-blur-md transition-colors duration-700 ${
+          <div className={`flex items-center justify-between p-2 pl-4 rounded-full backdrop-blur-md transition-colors duration-200 ${
             isEvening
               ? "bg-[#070F0A]/95 border border-[#C8A97E]/30 shadow-[0_12px_32px_rgba(0,0,0,0.65)]"
               : "bg-[#11261B]/95 border border-[#F4F3EE]/20 shadow-[0_12px_32px_rgba(17,38,27,0.45)]"
@@ -68,7 +68,7 @@ export default function MobileStickyBar({
                 <span className="font-serif text-xs font-semibold text-[#F4F3EE] tracking-wider">
                   VERDURE
                 </span>
-                <span className={`text-[10px] font-mono transition-colors duration-700 ${
+                <span className={`text-[10px] font-mono transition-colors duration-200 ${
                   isEvening ? "text-[#C8A97E]" : "text-[#A2ADA5]"
                 }`}>
                   {isEvening ? "Tonight — 4 Tables Left" : "Daylight Service — 6 Tables Left"}

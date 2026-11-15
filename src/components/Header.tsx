@@ -167,14 +167,8 @@ export default function Header({ onOpenReservation }: HeaderProps) {
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className={`fixed top-0 left-0 right-0 z-40 transition-colors duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] border-b ${
-          isEvening
-            ? isScrolled
-              ? "border-[#F4F3EE]/15 bg-[#0B1610]/95 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.6)]"
-              : "border-[#F4F3EE]/10 bg-[#0B1610]/85 backdrop-blur-sm"
-            : isScrolled
-            ? "border-[#11261B]/15 bg-[#F4F3EE]/95 backdrop-blur-md shadow-[0_8px_30px_rgba(17,38,27,0.06)]"
-            : "border-[#11261B]/10 bg-[#F4F3EE]/85 backdrop-blur-sm"
+        className={`fixed top-0 left-0 right-0 z-40 border-b border-[var(--border-hairline)] bg-[var(--bg-canvas)]/90 backdrop-blur-md transition-colors duration-200 ${
+          isScrolled ? "shadow-[0_8px_30px_rgba(0,0,0,0.12)]" : ""
         }`}
       >
         <div className="w-full">
@@ -182,46 +176,30 @@ export default function Header({ onOpenReservation }: HeaderProps) {
           <div className="hidden md:grid md:grid-cols-12 items-stretch h-16">
             
             {/* Cell 1: Wordmark + Live Status Dot (Cols 1-4) */}
-            <div className={`col-span-3 xl:col-span-4 flex items-center justify-between px-4 lg:px-6 xl:px-8 border-r transition-colors duration-700 ${
-              isEvening ? "border-[#F4F3EE]/12" : "border-[#11261B]/12"
-            }`}>
+            <div className="col-span-3 xl:col-span-4 flex items-center justify-between px-4 lg:px-6 xl:px-8 border-r border-[var(--border-hairline)]">
               <Link
                 href="#"
                 data-cursor="magnetic"
-                className="group flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1B3B2B] rounded-sm shrink-0"
+                className="group flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-secondary)] rounded-sm shrink-0"
               >
-                <span className={`font-serif text-2xl lg:text-3xl font-bold tracking-[0.18em] transition-colors duration-300 ${
-                  isEvening ? "text-[#F4F3EE] group-hover:text-[#C8A97E]" : "text-[#141816] group-hover:text-[#1B3B2B]"
-                }`}>
+                <span className="font-serif text-2xl lg:text-3xl font-bold tracking-[0.18em] text-[var(--text-primary)] group-hover:text-[var(--accent-primary)] transition-colors duration-200">
                   VERDURE
                 </span>
-                <span className={`inline-block w-1.5 h-1.5 rounded-full self-baseline mt-1 ml-0.5 opacity-80 ${
-                  isEvening ? "bg-[#C8A97E]" : "bg-[#2D5A43]"
-                }`} />
+                <span className="inline-block w-1.5 h-1.5 rounded-full self-baseline mt-1 ml-0.5 opacity-80 bg-[var(--accent-primary)]" />
               </Link>
 
               {/* Monospace Live Status Pill */}
-              <div className={`hidden xl:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono tracking-wider uppercase border transition-colors ${
-                isEvening
-                  ? "bg-[#12241B] border-[#C8A97E]/30 text-[#C8A97E]"
-                  : "bg-[#EAE8E0] border-[#11261B]/15 text-[#1B3B2B]"
-              }`}>
+              <div className="hidden xl:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono tracking-wider uppercase border border-[var(--border-hairline)] bg-[var(--bg-surface)] text-[var(--accent-primary)]">
                 <span className="relative flex h-1.5 w-1.5">
-                  <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
-                    isEvening ? "bg-[#C8A97E]" : "bg-[#2D5A43]"
-                  }`} />
-                  <span className={`relative inline-flex rounded-full h-1.5 w-1.5 ${
-                    isEvening ? "bg-[#C8A97E]" : "bg-[#1B3B2B]"
-                  }`} />
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 bg-[var(--accent-primary)]" />
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[var(--accent-primary)]" />
                 </span>
                 <span>OPEN TODAY — 12 PM – 11 PM</span>
               </div>
             </div>
 
             {/* Cell 2: Architectural Navigation Links with 01, 02, 03 */}
-            <div className={`col-span-4 xl:col-span-3 flex items-center justify-center gap-4 lg:gap-6 xl:gap-8 px-2 lg:px-4 border-r transition-colors duration-700 ${
-              isEvening ? "border-[#F4F3EE]/12" : "border-[#11261B]/12"
-            }`}>
+            <div className="col-span-4 xl:col-span-3 flex items-center justify-center gap-4 lg:gap-6 xl:gap-8 px-2 lg:px-4 border-r border-[var(--border-hairline)]">
               <nav className="flex items-center gap-4 lg:gap-6 xl:gap-8 h-full">
                 {navLinks.map((link) => {
                   const isActive = activeSection === link.id;
@@ -232,22 +210,18 @@ export default function Header({ onOpenReservation }: HeaderProps) {
                       data-cursor="magnetic"
                       className="relative h-full flex items-center gap-1.5 px-1.5 lg:px-2 group cursor-pointer"
                     >
-                      <span className={`font-mono text-[10px] opacity-50 group-hover:opacity-100 transition-opacity ${
-                        isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"
-                      }`}>
+                      <span className="font-mono text-[10px] opacity-50 group-hover:opacity-100 transition-opacity text-[var(--accent-primary)]">
                         {link.index}
                       </span>
                       <span className={`text-xs lg:text-sm font-medium tracking-wide relative inline-block overflow-hidden h-[1.3em] leading-none ${
                         isActive
-                          ? isEvening ? "text-[#F4F3EE] font-semibold" : "text-[#141816] font-semibold"
-                          : isEvening ? "text-[#95A79B]" : "text-[#5C645E]"
+                          ? "text-[var(--text-primary)] font-semibold"
+                          : "text-[var(--text-muted)]"
                       }`}>
                         <span className="block transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full">
                           {link.label}
                         </span>
-                        <span className={`absolute top-full left-0 block transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full font-medium ${
-                          isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"
-                        }`}>
+                        <span className="absolute top-full left-0 block transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full font-medium text-[var(--accent-primary)]">
                           {link.label}
                         </span>
                       </span>
@@ -256,9 +230,7 @@ export default function Header({ onOpenReservation }: HeaderProps) {
                       {isActive && (
                         <motion.div
                           layoutId="activeSectionNav"
-                          className={`absolute bottom-0 left-0 right-0 h-[2px] ${
-                            isEvening ? "bg-[#C8A97E]" : "bg-[#1B3B2B]"
-                          }`}
+                          className="absolute bottom-0 left-0 right-0 h-[2px] bg-[var(--accent-primary)]"
                           transition={{
                             type: "spring",
                             stiffness: 300,
@@ -273,9 +245,7 @@ export default function Header({ onOpenReservation }: HeaderProps) {
             </div>
 
             {/* Cell 3: Ambience Mode Toggle + Live Audio Equalizer (Cols 8-10) */}
-            <div className={`col-span-3 xl:col-span-3 flex items-center justify-center gap-2 lg:gap-3 px-2 lg:px-4 border-r transition-colors duration-700 ${
-              isEvening ? "border-[#F4F3EE]/12" : "border-[#11261B]/12"
-            }`}>
+            <div className="col-span-3 xl:col-span-3 flex items-center justify-center gap-2 lg:gap-3 px-2 lg:px-4 border-r border-[var(--border-hairline)]">
               <AmbienceToggle variant="navbar" className="shrink-0" />
 
               <AudioEqualizerPill
@@ -290,11 +260,7 @@ export default function Header({ onOpenReservation }: HeaderProps) {
               <MagneticButton
                 onClick={onOpenReservation}
                 data-cursor="magnetic"
-                className={`group w-full max-w-[155px] py-2 px-4 rounded-full text-xs font-semibold uppercase tracking-wider transition-colors duration-300 shadow-sm cursor-pointer flex items-center justify-center gap-1.5 ${
-                  isEvening
-                    ? "bg-[#C8A97E] hover:bg-[#D9BA8F] text-[#0B1610]"
-                    : "bg-[#1B3B2B] hover:bg-[#142E21] text-[#F4F3EE]"
-                }`}
+                className="group w-full max-w-[155px] py-2 px-4 rounded-full text-xs font-semibold uppercase tracking-wider transition-colors duration-200 shadow-sm cursor-pointer flex items-center justify-center gap-1.5 bg-[var(--accent-secondary)] hover:bg-[var(--accent-primary)] text-[var(--bg-canvas)]"
               >
                 <span>Book a Table</span>
                 <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 text-current" />
@@ -310,14 +276,10 @@ export default function Header({ onOpenReservation }: HeaderProps) {
               data-cursor="magnetic"
               className="flex items-center gap-2"
             >
-              <span className={`font-serif text-xl font-bold tracking-[0.16em] ${
-                isEvening ? "text-[#F4F3EE]" : "text-[#141816]"
-              }`}>
+              <span className="font-serif text-xl font-bold tracking-[0.16em] text-[var(--text-primary)]">
                 VERDURE
               </span>
-              <span className={`inline-block w-1.5 h-1.5 rounded-full ${
-                isEvening ? "bg-[#C8A97E]" : "bg-[#2D5A43]"
-              }`} />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[var(--accent-primary)]" />
             </Link>
 
             <div className="flex items-center gap-2">
@@ -326,9 +288,7 @@ export default function Header({ onOpenReservation }: HeaderProps) {
               <button
                 onClick={onOpenReservation}
                 type="button"
-                className={`text-xs font-semibold px-3 py-1.5 rounded-full text-[#F4F3EE] tracking-wide active:scale-95 transition-colors shadow-sm ${
-                  isEvening ? "bg-[#2D5A43]" : "bg-[#1B3B2B]"
-                }`}
+                className="text-xs font-semibold px-3 py-1.5 rounded-full text-[var(--bg-canvas)] bg-[var(--accent-secondary)] tracking-wide active:scale-95 transition-colors shadow-sm cursor-pointer"
               >
                 Reserve
               </button>
@@ -336,11 +296,7 @@ export default function Header({ onOpenReservation }: HeaderProps) {
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 type="button"
-                className={`p-2 rounded-full border active:scale-90 transition-transform ${
-                  isEvening
-                    ? "bg-[#12241B] text-[#F4F3EE] border-[#F4F3EE]/15"
-                    : "bg-[#EAE8E0] text-[#141816] border-[#11261B]/10"
-                }`}
+                className="p-2 rounded-full border border-[var(--border-hairline)] bg-[var(--bg-surface)] text-[var(--text-primary)] active:scale-90 transition-transform cursor-pointer"
                 aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
               >
                 {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -359,9 +315,7 @@ export default function Header({ onOpenReservation }: HeaderProps) {
             animate={{ clipPath: "inset(0 0 0% 0)" }}
             exit={{ clipPath: "inset(0 0 100% 0)" }}
             transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
-            className={`fixed inset-0 z-50 md:hidden flex flex-col justify-between p-6 h-[100dvh] pt-[max(1.5rem,env(safe-area-inset-top))] pb-[max(1.5rem,env(safe-area-inset-bottom))] transition-colors duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-              isEvening ? "bg-[#070F0A] text-[#F4F3EE]" : "bg-[#11261B] text-[#F4F3EE]"
-            }`}
+            className="fixed inset-0 z-50 md:hidden flex flex-col justify-between p-6 h-[100dvh] pt-[max(1.5rem,env(safe-area-inset-top))] pb-[max(1.5rem,env(safe-area-inset-bottom))] bg-[#0B1610] text-[#F4F3EE] transition-colors duration-200"
           >
             {/* Drawer Header */}
             <div className="flex items-center justify-between pb-6 border-b border-[#F4F3EE]/15">

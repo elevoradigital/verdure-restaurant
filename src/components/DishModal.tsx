@@ -54,7 +54,7 @@ export default function DishModal({ dish, onClose, onBookDish }: DishModalProps)
             damping: 26,
             stiffness: 240,
           }}
-          className={`relative w-full max-w-2xl rounded-t-[2rem] sm:rounded-3xl overflow-hidden shadow-2xl border-t sm:border max-h-[92dvh] sm:max-h-none overflow-y-auto transition-colors duration-500 ${
+          className={`relative w-full max-w-2xl rounded-t-[2rem] sm:rounded-3xl overflow-hidden shadow-2xl border-t sm:border max-h-[92dvh] sm:max-h-none overflow-y-auto transition-colors duration-200 ${
             isEvening
               ? "bg-[#12241B] text-[#F4F3EE] border-[#F4F3EE]/15"
               : "bg-[#F4F3EE] text-[#141816] border-[#11261B]/15"
