@@ -66,14 +66,14 @@ export default function DishModal({ dish, onClose, onBookDish }: DishModalProps)
             <div className={`w-12 h-1.5 rounded-full ${isEvening ? "bg-[#F4F3EE]/20" : "bg-[#11261B]/20"}`} />
           </div>
 
-          {/* Close Button */}
+          {/* Close Button with High-Z and Hover Contrast */}
           <button
             onClick={onClose}
             data-cursor="magnetic"
-            className={`absolute top-4 right-4 z-20 p-2 sm:p-2.5 rounded-full backdrop-blur-md transition-colors active:scale-90 cursor-pointer ${
+            className={`absolute top-4 right-4 z-30 p-2 sm:p-2.5 rounded-full transition-colors duration-200 active:scale-90 cursor-pointer shadow-md border ${
               isEvening
-                ? "bg-[#070F0A]/80 text-[#F4F3EE] hover:bg-[#070F0A]"
-                : "bg-[#11261B]/70 text-[#F4F3EE] hover:bg-[#11261B]"
+                ? "bg-[#070F0A]/90 text-[#F4F3EE] border-[#F4F3EE]/20 hover:bg-[#F4F3EE] hover:text-[#070F0A]"
+                : "bg-white/95 text-[#141816] border-[#11261B]/15 hover:bg-[#11261B] hover:text-[#F4F3EE]"
             }`}
             aria-label="Close dish preview"
           >
@@ -104,20 +104,55 @@ export default function DishModal({ dish, onClose, onBookDish }: DishModalProps)
             {/* Details Column */}
             <div className="p-5 sm:p-6 md:p-8 flex flex-col justify-between space-y-4">
               <div>
-                <div className="flex items-start justify-between gap-2">
-                  <h3 className={`font-serif text-xl sm:text-2xl font-semibold ${
+                {/* Header with Title and Clearance from Close Button */}
+                <div className="pr-12 sm:pr-14">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <span className={`text-[10px] sm:text-[11px] font-mono tracking-widest uppercase font-semibold ${
+                      isEvening ? "text-[#C8A97E]" : "text-[#2D5A43]"
+                    }`}>
+                      {dish.category}
+                    </span>
+                    <span className={`text-[10px] font-mono ${isEvening ? "text-[#F4F3EE]/30" : "text-[#11261B]/25"}`}>•</span>
+                    <span className={`text-[10px] font-mono tracking-wider uppercase ${
+                      isEvening ? "text-[#95A79B]" : "text-[#5C645E]"
+                    }`}>
+                      Botanical Craft
+                    </span>
+                  </div>
+
+                  <h3 className={`font-serif text-2xl sm:text-3xl font-semibold leading-tight tracking-tight ${
                     isEvening ? "text-[#F4F3EE]" : "text-[#141816]"
                   }`}>
                     {dish.name}
                   </h3>
-                  <span className={`font-mono text-lg sm:text-xl font-bold shrink-0 ${
-                    isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"
-                  }`}>
-                    {dish.price}
-                  </span>
                 </div>
 
-                <p className={`mt-2 text-xs sm:text-sm leading-relaxed ${
+                {/* Dedicated Architectural Rate / Price Ribbon */}
+                <div className={`mt-3 py-2 px-3.5 rounded-xl border flex items-center justify-between transition-colors ${
+                  isEvening
+                    ? "bg-[#070F0A]/60 border-[#F4F3EE]/10"
+                    : "bg-[#EAE8E0]/70 border-[#11261B]/10"
+                }`}>
+                  <span className={`text-[11px] font-mono uppercase tracking-wider font-medium ${
+                    isEvening ? "text-[#95A79B]" : "text-[#5C645E]"
+                  }`}>
+                    A La Carte Selection
+                  </span>
+                  <div className="flex items-baseline gap-1.5">
+                    <span className={`font-mono text-xl sm:text-2xl font-bold tracking-tight ${
+                      isEvening ? "text-[#C8A97E]" : "text-[#1B3B2B]"
+                    }`}>
+                      {dish.price}
+                    </span>
+                    <span className={`text-[10px] font-mono uppercase ${
+                      isEvening ? "text-[#95A79B]" : "text-[#5C645E]"
+                    }`}>
+                      / plate
+                    </span>
+                  </div>
+                </div>
+
+                <p className={`mt-3 text-xs sm:text-sm leading-relaxed ${
                   isEvening ? "text-[#95A79B]" : "text-[#5C645E]"
                 }`}>
                   {dish.description}
@@ -164,13 +199,17 @@ export default function DishModal({ dish, onClose, onBookDish }: DishModalProps)
                     onBookDish(dish.name);
                   }}
                   data-cursor="magnetic"
-                  className={`w-full py-3.5 px-4 rounded-full text-[#F4F3EE] text-xs font-semibold tracking-wider uppercase transition-colors duration-200 shadow-sm text-center active:scale-[0.98] cursor-pointer ${
+                  className={`w-full py-3.5 px-4 rounded-full text-[#F4F3EE] text-xs font-semibold tracking-wider uppercase transition-colors duration-200 shadow-sm text-center active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2 ${
                     isEvening
                       ? "bg-[#2D5A43] hover:bg-[#234C37]"
                       : "bg-[#1B3B2B] hover:bg-[#142E21]"
                   }`}
                 >
-                  Reserve Table for this Dish
+                  <span>Reserve Table for this Dish</span>
+                  <span className="opacity-40">•</span>
+                  <span className="font-mono text-xs font-bold tracking-normal text-[#F4F3EE]">
+                    {dish.price}
+                  </span>
                 </button>
               </div>
             </div>
