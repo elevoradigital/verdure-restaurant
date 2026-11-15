@@ -128,7 +128,7 @@ export default function ReservationModal({
             damping: 26,
             stiffness: 240,
           }}
-          className="relative w-full max-w-lg bg-[#F4F3EE] rounded-t-[2rem] sm:rounded-3xl overflow-hidden shadow-2xl border-t sm:border border-[#11261B]/15 max-h-[95dvh] overflow-y-auto pb-[max(1rem,env(safe-area-inset-bottom))]"
+          className="relative w-full max-w-lg bg-[#F4F3EE] rounded-t-[2rem] sm:rounded-3xl overflow-hidden shadow-2xl border-t sm:border border-[#11261B]/15 max-h-[90svh] overflow-y-auto pb-[max(1rem,env(safe-area-inset-bottom))]"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Mobile Swipe Down Drag Handle */}

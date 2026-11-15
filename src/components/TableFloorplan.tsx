@@ -335,14 +335,14 @@ function TableFloorplan({
       </div>
 
       {/* Main Floorplan Blueprint Canvas Area */}
-      <div className={`relative z-10 my-4 w-full aspect-[16/10] sm:aspect-[16/9.5] max-h-[520px] rounded-2xl border overflow-hidden flex items-center justify-center transition-colors duration-200 ${
+      <div className={`relative z-10 my-4 w-full aspect-[4/3] sm:aspect-[16/9.5] max-h-[520px] rounded-2xl border overflow-hidden flex items-center justify-center transition-colors duration-200 ${
         isEvening ? "bg-[#070F0A] border-[#C8A97E]/20" : "bg-[#0E1F16] border-[#F4F3EE]/10"
       }`}>
         
         {/* Scalable SVG Floorplan Vector Graphic */}
         <svg
           viewBox="0 0 740 470"
-          className="w-full h-full object-contain p-2 sm:p-4"
+          className="w-full h-full object-contain p-2 sm:p-4 touch-manipulation"
           xmlns="http://www.w3.org/2000/svg"
         >
           <defs>

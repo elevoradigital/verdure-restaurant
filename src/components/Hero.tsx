@@ -289,7 +289,7 @@ function Hero({ onOpenReservation, isReady = true }: HeroProps) {
   return (
     <section
       ref={sectionRef}
-      className="relative pt-20 sm:pt-24 lg:pt-28 pb-0 overflow-hidden bg-[var(--bg-canvas)] border-b border-[var(--border-hairline)] transition-colors duration-300 ease-out"
+      className="relative min-h-[100svh] pt-16 sm:pt-24 lg:pt-28 pb-0 overflow-hidden bg-[var(--bg-canvas)] border-b border-[var(--border-hairline)] transition-colors duration-300 ease-out flex flex-col justify-between"
     >
       {/* ======================================================== */}
       {/* 1. EXPOSED 1PX ARCHITECTURAL BLUEPRINT GRID & CROSSHAIRS */}
@@ -354,7 +354,7 @@ function Hero({ onOpenReservation, isReady = true }: HeroProps) {
               y: textColY,
               opacity: textColOpacity,
             }}
-            className="lg:col-span-7 flex flex-col justify-center text-center lg:text-left order-1 p-6 sm:p-8 lg:p-12 xl:p-14"
+            className="lg:col-span-7 flex flex-col justify-center text-center lg:text-left order-1 p-4 sm:p-8 lg:p-12 xl:p-14"
           >
             {/* 1. Architectural Index Pill */}
             <motion.div
@@ -370,7 +370,7 @@ function Hero({ onOpenReservation, isReady = true }: HeroProps) {
             </motion.div>
 
             {/* 2. Oversized Mixed-Serif Display Headline */}
-            <h1 className="font-serif text-[clamp(3.75rem,7vw,7rem)] leading-[0.92] tracking-[-0.03em] font-normal">
+            <h1 className="font-serif text-[clamp(2.75rem,11vw,4rem)] sm:text-[clamp(3.5rem,6.5vw,6rem)] lg:text-[clamp(3.75rem,7vw,7rem)] leading-[0.94] tracking-[-0.03em] font-normal">
               <span className="block overflow-hidden py-1">
                 <motion.span
                   initial={{ y: "105%", rotateZ: 1.5 }}
@@ -403,7 +403,7 @@ function Hero({ onOpenReservation, isReady = true }: HeroProps) {
               initial={{ scaleX: 0 }}
               animate={isReady ? { scaleX: 1 } : {}}
               transition={{ duration: 0.8, delay: 0.4, ease: easeCurve }}
-              className="w-full max-w-xl h-[1px] my-5 sm:my-6 origin-left bg-[var(--border-hairline)]"
+              className="w-full max-w-xl h-[1px] my-4 sm:my-6 origin-left bg-[var(--border-hairline)]"
             />
 
             <motion.div
@@ -412,16 +412,16 @@ function Hero({ onOpenReservation, isReady = true }: HeroProps) {
               transition={{ duration: 0.7, delay: 0.45, ease: easeCurve }}
               className="flex flex-col sm:flex-row items-center justify-between gap-4 max-w-xl"
             >
-              <p className="text-sm sm:text-base leading-relaxed text-center sm:text-left max-w-sm text-[var(--text-muted)]">
+              <p className="text-xs sm:text-base leading-relaxed text-center sm:text-left max-w-sm text-[var(--text-muted)]">
                 Leaves, roots, and wild mushrooms cooked over applewood embers.
               </p>
 
               {/* Action Buttons: Primary Magnetic + Secondary with Rotating Arrow */}
-              <div className="flex items-center gap-3 shrink-0">
+              <div className="flex items-center justify-center sm:justify-start gap-2.5 sm:gap-3 w-full sm:w-auto shrink-0">
                 <MagneticButton
                   onClick={onOpenReservation}
                   data-cursor="magnetic"
-                  className="group px-6 py-3 rounded-full text-xs font-semibold uppercase tracking-wider transition-colors duration-200 shadow-md bg-[var(--accent-secondary)] hover:bg-[var(--accent-primary)] text-[var(--bg-canvas)]"
+                  className="group flex-1 sm:flex-initial min-h-[48px] px-5 sm:px-6 py-3 rounded-full text-xs font-semibold uppercase tracking-wider transition-colors duration-200 shadow-md bg-[var(--accent-secondary)] hover:bg-[var(--accent-primary)] text-[var(--bg-canvas)] flex items-center justify-center gap-1.5 touch-manipulation"
                 >
                   <span>Reserve Table</span>
                   <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
@@ -430,10 +430,10 @@ function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                 <a
                   href="#plates"
                   data-cursor="magnetic"
-                  className="group inline-flex items-center gap-2 px-5 py-3 rounded-full border border-[var(--border-hairline)] hover:border-[var(--accent-primary)] text-[var(--text-primary)] hover:text-[var(--accent-primary)] bg-[var(--bg-surface)] text-xs font-semibold uppercase tracking-wider transition-colors duration-200 cursor-pointer"
+                  className="group inline-flex items-center justify-center min-h-[48px] gap-2 px-4 sm:px-5 py-3 rounded-full border border-[var(--border-hairline)] hover:border-[var(--accent-primary)] text-[var(--text-primary)] hover:text-[var(--accent-primary)] bg-[var(--bg-surface)] text-xs font-semibold uppercase tracking-wider transition-colors duration-200 cursor-pointer touch-manipulation"
                   aria-label="Explore menu"
                 >
-                  <span>Explore Menu</span>
+                  <span><span className="hidden sm:inline">Explore </span>Menu</span>
                   <ArrowUpRight className="w-3.5 h-3.5 group-hover:rotate-45 transition-transform duration-300" />
                 </a>
               </div>
@@ -456,8 +456,8 @@ function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                 </span>
               </div>
 
-              {/* 3-Plate Horizontal Switcher Cards */}
-              <div className="grid grid-cols-3 gap-2 sm:gap-2.5">
+              {/* 3-Plate Switcher Cards (Horizontal Snap Strip on Mobile, 3-Col Grid on Desktop) */}
+              <div className="flex sm:grid sm:grid-cols-3 gap-2 sm:gap-2.5 overflow-x-auto snap-x snap-mandatory no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 pb-1">
                 {heroDishObjects.map((dish, idx) => {
                   const isSelected = selectedDishIdx === idx;
                   return (
@@ -469,7 +469,7 @@ function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                         setSelectedDishIdx(idx);
                         setActiveHotspot(dish.hotspots[0].id);
                       }}
-                      className={`relative p-2.5 rounded-lg border text-left transition-colors duration-200 cursor-pointer overflow-hidden ${
+                      className={`min-w-[210px] sm:min-w-0 snap-center relative p-3 sm:p-2.5 rounded-lg border text-left transition-colors duration-200 cursor-pointer overflow-hidden shrink-0 sm:shrink touch-manipulation ${
                         isSelected
                           ? "bg-[var(--bg-surface)] border-[var(--accent-primary)] shadow-sm"
                           : "bg-[var(--bg-card)] border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[var(--border-hairline)]"
@@ -492,7 +492,7 @@ function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                             </span>
                             <span className="font-semibold">{dish.price}</span>
                           </div>
-                          <div className={`font-serif text-[12px] sm:text-[13px] leading-tight font-medium truncate ${
+                          <div className={`font-serif text-[12px] sm:text-[13px] leading-tight font-medium ${
                             isSelected ? "text-[var(--text-primary)]" : "text-[var(--text-muted)]"
                           }`}>
                             {dish.name}
@@ -519,7 +519,7 @@ function Hero({ onOpenReservation, isReady = true }: HeroProps) {
           {/* ======================================================== */}
           {/* RIGHT COLUMN (COLS 8–12): MULTI-PLANE 3D SPATIAL STAGE   */}
           {/* ======================================================== */}
-          <div className="lg:col-span-5 flex flex-col items-center justify-center perspective-[1200px] order-2 my-4 sm:my-0">
+          <div className="lg:col-span-5 flex flex-col items-center justify-center perspective-[900px] md:perspective-[1200px] order-2 my-2 sm:my-0 w-full">
             <motion.div
               ref={cardRef}
               data-cursor="hero3d"
@@ -540,7 +540,7 @@ function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                 backfaceVisibility: "hidden",
                 WebkitBackfaceVisibility: "hidden",
               }}
-              className="relative w-full max-w-md sm:max-w-lg lg:max-w-none aspect-[4/4.2] sm:aspect-[4/3.8] select-none preserve-3d"
+              className="relative w-full max-w-[340px] sm:max-w-lg lg:max-w-none aspect-[4/4.3] sm:aspect-[4/3.8] select-none preserve-3d mx-auto"
             >
               {/* Inner Continuous Idle Ambient Stage (Decoupled from Framer Motion transform) */}
               <div className={`relative w-full h-full preserve-3d ${!isHovered ? "animate-stage-idle" : ""}`}>
@@ -699,15 +699,15 @@ function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                       }}
                       className="absolute -translate-x-1/2 -translate-y-1/2 pointer-events-auto"
                     >
-                      <div className="relative flex items-center justify-center w-10 h-10">
+                      <div className="relative flex items-center justify-center w-11 h-11">
                         {/* Outer & Inner Sonar Ripple Rings (Native CSS Keyframes) */}
                         {!isActive && (
                           <>
                             <span
-                              className="animate-pin-sonar absolute w-6 h-6 rounded-full border border-[var(--accent-primary)] pointer-events-none"
+                              className="animate-pin-sonar absolute w-7 h-7 rounded-full border border-[var(--accent-primary)] pointer-events-none"
                             />
                             <span
-                              className="animate-pin-sonar-inner absolute w-6 h-6 rounded-full border border-[var(--accent-primary)] opacity-70 pointer-events-none"
+                              className="animate-pin-sonar-inner absolute w-7 h-7 rounded-full border border-[var(--accent-primary)] opacity-70 pointer-events-none"
                             />
                           </>
                         )}
@@ -720,7 +720,7 @@ function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                             scale: isActive ? 1.15 : isDimmed ? 0.85 : 1,
                             opacity: isDimmed ? 0.4 : 1,
                           }}
-                          className={`relative w-6 h-6 rounded-full flex items-center justify-center border shadow-md cursor-pointer transition-colors ${
+                          className={`relative w-7 h-7 rounded-full flex items-center justify-center border shadow-md cursor-pointer transition-colors touch-manipulation ${
                             isActive
                               ? "bg-[var(--accent-primary)] text-[var(--bg-canvas)] border-white"
                               : "bg-[var(--bg-surface)] text-[var(--accent-primary)] border-[var(--border-hairline)]"
@@ -813,6 +813,49 @@ function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                     </div>
                   );
                 })}
+                {/* Mobile Centered Bottom Callout Card (sm:hidden) */}
+                <AnimatePresence>
+                  {activeHotspot && (() => {
+                    const activeSpotObj = currentDish.hotspots.find((s) => s.id === activeHotspot);
+                    if (!activeSpotObj) return null;
+                    return (
+                      <motion.div
+                        key={`mobile-callout-${activeSpotObj.id}`}
+                        initial={{ opacity: 0, y: 10, scale: 0.96 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 10, scale: 0.96 }}
+                        transition={{ duration: 0.2 }}
+                        className="sm:hidden absolute left-3 right-3 bottom-3 z-30 p-3 rounded-xl border border-[var(--border-hairline)] bg-[var(--bg-card)]/95 shadow-xl text-left pointer-events-auto select-none"
+                      >
+                        <div className="flex items-center justify-between pb-1 border-b border-current/10">
+                          <span className="text-[9px] font-mono tracking-widest uppercase font-bold text-[var(--accent-primary)]">
+                            {activeSpotObj.tag}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => setActiveHotspot(null)}
+                            className="p-1 -mr-1 opacity-60 hover:opacity-100 cursor-pointer touch-manipulation"
+                            aria-label="Close ingredient info"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                        <div className="font-serif text-xs font-semibold mt-1 text-[var(--text-primary)]">
+                          {activeSpotObj.title}
+                        </div>
+                        <div className="text-[11px] mt-0.5 leading-snug text-[var(--text-muted)]">
+                          {activeSpotObj.subline}
+                        </div>
+                        <div className="mt-2 pt-1.5 border-t border-current/10 flex items-center justify-between text-[9px] font-mono">
+                          <span className="px-1.5 py-0.5 rounded bg-[var(--accent-primary)]/15 text-[var(--accent-primary)] font-semibold">
+                            {activeSpotObj.metric}
+                          </span>
+                          <a href="#plates" className="font-semibold underline text-[var(--text-primary)]">Menu →</a>
+                        </div>
+                      </motion.div>
+                    );
+                  })()}
+                </AnimatePresence>
               </div>
 
               </div>

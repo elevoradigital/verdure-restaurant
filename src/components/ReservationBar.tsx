@@ -186,7 +186,7 @@ function ReservationBar() {
                       key={opt}
                       type="button"
                       onClick={() => setGuests(opt)}
-                      className={`py-2 px-2.5 rounded-lg text-xs font-mono transition-colors duration-200 cursor-pointer border ${
+                      className={`min-h-[44px] py-2 px-2.5 rounded-lg text-xs font-mono transition-colors duration-200 cursor-pointer border touch-manipulation flex items-center justify-center ${
                         isSelected
                           ? isEvening
                             ? "bg-[#C8A97E] text-[#0B1610] font-bold border-[#C8A97E] shadow-sm"
@@ -216,7 +216,7 @@ function ReservationBar() {
                       key={time}
                       type="button"
                       onClick={() => setDateTime(time)}
-                      className={`py-2 px-2.5 rounded-lg text-xs font-mono transition-colors duration-200 cursor-pointer border truncate ${
+                      className={`min-h-[44px] py-2 px-2.5 rounded-lg text-xs font-mono transition-colors duration-200 cursor-pointer border truncate touch-manipulation flex items-center justify-center ${
                         isSelected
                           ? isEvening
                             ? "bg-[#C8A97E] text-[#0B1610] font-bold border-[#C8A97E] shadow-sm"
@@ -238,7 +238,7 @@ function ReservationBar() {
               <MagneticButton
                 onClick={() => setIsModalOpen(true)}
                 data-cursor="magnetic"
-                className="w-full py-3.5 rounded-full text-xs font-semibold uppercase tracking-[0.14em] transition-colors duration-200 shadow-md flex items-center justify-center gap-2 cursor-pointer bg-[var(--accent-secondary)] hover:bg-[var(--accent-primary)] text-[var(--bg-canvas)]"
+                className="w-full min-h-[52px] py-3.5 rounded-full text-xs font-semibold uppercase tracking-[0.14em] transition-colors duration-200 shadow-md flex items-center justify-center gap-2 cursor-pointer bg-[var(--accent-secondary)] hover:bg-[var(--accent-primary)] text-[var(--bg-canvas)] touch-manipulation"
               >
                 <span>Reserve Table {selectedTable.id}</span>
                 <ArrowRight className="w-4 h-4 ml-1" />

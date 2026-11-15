@@ -170,7 +170,7 @@ export default function Header({ onOpenReservation }: HeaderProps) {
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className={`fixed top-0 left-0 right-0 z-40 border-b border-[var(--border-hairline)] bg-[var(--bg-canvas)]/90 backdrop-blur-md transition-colors duration-200 ${
+        className={`fixed top-0 left-0 right-0 z-40 border-b border-[var(--border-hairline)] bg-[var(--bg-canvas)]/95 md:bg-[var(--bg-canvas)]/80 md:backdrop-blur-md transition-colors duration-200 ${
           isScrolled ? "shadow-[0_8px_30px_rgba(0,0,0,0.12)]" : ""
         }`}
       >
@@ -273,11 +273,11 @@ export default function Header({ onOpenReservation }: HeaderProps) {
           </div>
 
           {/* Mobile Structural Header (<md) */}
-          <div className="flex md:hidden items-center justify-between px-4 sm:px-6 h-14">
+          <div className="flex md:hidden items-center justify-between px-4 h-14">
             <Link
               href="#"
               data-cursor="magnetic"
-              className="flex items-center gap-2"
+              className="flex items-center gap-1.5 shrink-0"
             >
               <span className="font-serif text-xl font-bold tracking-[0.16em] text-[var(--text-primary)]">
                 VERDURE
@@ -285,24 +285,32 @@ export default function Header({ onOpenReservation }: HeaderProps) {
               <span className="inline-block w-1.5 h-1.5 rounded-full bg-[var(--accent-primary)]" />
             </Link>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2">
               <AmbienceToggle variant="compact" />
 
-              <button
-                onClick={onOpenReservation}
-                type="button"
-                className="text-xs font-semibold px-3 py-1.5 rounded-full text-[var(--bg-canvas)] bg-[var(--accent-secondary)] tracking-wide active:scale-95 transition-colors shadow-sm cursor-pointer"
-              >
-                Reserve
-              </button>
-              
+              <AudioEqualizerPill
+                isPlaying={isAmbientPlaying}
+                isEvening={isEvening}
+                onToggle={toggleAmbience}
+              />
+
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 type="button"
-                className="p-2 rounded-full border border-[var(--border-hairline)] bg-[var(--bg-surface)] text-[var(--text-primary)] active:scale-90 transition-transform cursor-pointer"
+                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full border border-[var(--border-hairline)] bg-[var(--bg-surface)] text-[var(--text-primary)] active:scale-95 transition-all text-xs font-mono tracking-wider cursor-pointer min-h-[38px] touch-manipulation select-none"
                 aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
               >
-                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                {mobileMenuOpen ? (
+                  <>
+                    <X className="w-3.5 h-3.5" />
+                    <span>Close</span>
+                  </>
+                ) : (
+                  <>
+                    <Menu className="w-3.5 h-3.5" />
+                    <span>Menu</span>
+                  </>
+                )}
               </button>
             </div>
           </div>

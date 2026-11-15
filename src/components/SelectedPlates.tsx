@@ -423,11 +423,11 @@ function SelectedPlates({
           </div>
 
           {/* Right Header Controls: Category Filter Pills + View Mode Toggle */}
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="w-full md:w-auto flex items-center justify-between gap-2.5 overflow-x-auto no-scrollbar py-1">
             {/* Category Filter Pills */}
             <div
               ref={filterBarRef}
-              className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1"
+              className="flex items-center gap-1.5 shrink-0"
             >
               {categories.map((cat, idx) => {
                 const isActive = activeCategory === cat;
@@ -441,7 +441,7 @@ function SelectedPlates({
                     onClick={() => handleCategorySelect(cat)}
                     type="button"
                     data-cursor="magnetic"
-                    className={`relative px-3.5 py-1.5 rounded-full text-xs font-medium tracking-wide transition-colors shrink-0 cursor-pointer ${
+                    className={`relative px-3.5 py-2 min-h-[40px] rounded-full text-xs font-medium tracking-wide transition-colors shrink-0 cursor-pointer touch-manipulation flex items-center justify-center ${
                       isActive
                         ? "text-[var(--bg-canvas)]"
                         : "text-[var(--text-muted)] hover:text-[var(--text-primary)] bg-[var(--bg-card)] border border-[var(--border-hairline)]"
@@ -460,32 +460,32 @@ function SelectedPlates({
               })}
             </div>
 
-            {/* View Mode Toggle: Grid | Index */}
-            <div className="hidden md:inline-flex items-center p-1 rounded-full border border-[var(--border-hairline)] text-xs font-mono bg-[var(--bg-surface)] text-[var(--text-muted)]">
+            {/* View Mode Toggle: Grid | Index (Enabled on Mobile & Desktop) */}
+            <div className="inline-flex items-center p-1 min-h-[40px] rounded-full border border-[var(--border-hairline)] text-xs font-mono bg-[var(--bg-surface)] text-[var(--text-muted)] shrink-0">
               <button
                 type="button"
                 onClick={() => setViewMode("grid")}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-full transition-colors duration-200 cursor-pointer ${
+                className={`flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-full transition-colors duration-200 cursor-pointer touch-manipulation min-h-[32px] ${
                   viewMode === "grid"
                     ? "bg-[var(--accent-primary)] text-[var(--bg-canvas)] font-bold shadow-sm"
                     : "hover:text-current"
                 }`}
               >
                 <LayoutGrid className="w-3.5 h-3.5" />
-                <span>Grid</span>
+                <span className="text-[11px] sm:text-xs">Grid</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setViewMode("index")}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-full transition-colors duration-200 cursor-pointer ${
+                className={`flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-full transition-colors duration-200 cursor-pointer touch-manipulation min-h-[32px] ${
                   viewMode === "index"
                     ? "bg-[var(--accent-primary)] text-[var(--bg-canvas)] font-bold shadow-sm"
                     : "hover:text-current"
                 }`}
               >
                 <List className="w-3.5 h-3.5" />
-                <span>Index</span>
+                <span className="text-[11px] sm:text-xs">Index</span>
               </button>
             </div>
           </div>
@@ -612,49 +612,101 @@ function SelectedPlates({
         )}
 
         {/* ---------------------------------------------------- */}
-        {/* MOBILE VIEW: HORIZONTAL SNAP CAROUSEL                */}
+        {/* MOBILE VIEW (CAROUSEL FOR GRID / LIST FOR INDEX)     */}
         {/* ---------------------------------------------------- */}
         <div className="block md:hidden pt-8">
-          <div
-            ref={carouselRef}
-            onScroll={handleCarouselScroll}
-            className="flex gap-4 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory -mx-4 px-4 pb-4"
-          >
-            {filteredDishes.map((dish, idx) => (
+          {viewMode === "grid" ? (
+            <>
               <div
-                key={dish.id}
-                className="w-[82vw] shrink-0 snap-center"
+                ref={carouselRef}
+                onScroll={handleCarouselScroll}
+                className="flex gap-4 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory -mx-4 px-4 pb-4"
               >
-                <MotionPlateCard
-                  dish={dish}
-                  index={idx}
-                  onSelectDish={onSelectDish}
-                  isMobileActive={activeMobileIndex === idx}
-                  scrollShiftY={colScrollYs[0]}
-                  cardSkewY={cardSkewY}
-                  cardScaleY={cardScaleY}
-                  imageShiftY={imageShiftY}
-                />
+                {filteredDishes.map((dish, idx) => (
+                  <div
+                    key={dish.id}
+                    className="w-[82vw] shrink-0 snap-center"
+                  >
+                    <MotionPlateCard
+                      dish={dish}
+                      index={idx}
+                      onSelectDish={onSelectDish}
+                      isMobileActive={activeMobileIndex === idx}
+                      scrollShiftY={colScrollYs[0]}
+                      cardSkewY={cardSkewY}
+                      cardScaleY={cardScaleY}
+                      imageShiftY={imageShiftY}
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
 
-          {/* Carousel Pagination Dots */}
-          <div className="flex items-center justify-center gap-2 mt-4">
-            {filteredDishes.map((_, idx) => (
-              <button
-                key={idx}
-                type="button"
-                onClick={() => scrollToCard(idx)}
-                aria-label={`Go to slide ${idx + 1}`}
-                className={`h-1.5 rounded-full transition-[width,background-color] duration-300 cursor-pointer ${
-                  activeMobileIndex === idx
-                    ? "w-6 bg-[var(--accent-primary)]"
-                    : "w-1.5 bg-current/20"
-                }`}
-              />
-            ))}
-          </div>
+              {/* Carousel Pagination Dots */}
+              <div className="flex items-center justify-center gap-2 mt-4">
+                {filteredDishes.map((_, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => scrollToCard(idx)}
+                    aria-label={`Go to slide ${idx + 1}`}
+                    className={`h-1.5 rounded-full transition-[width,background-color] duration-300 cursor-pointer ${
+                      activeMobileIndex === idx
+                        ? "w-6 bg-[var(--accent-primary)]"
+                        : "w-1.5 bg-current/20"
+                    }`}
+                  />
+                ))}
+              </div>
+            </>
+          ) : (
+            /* Mobile Editorial Index List with Inline Miniature 3D Thumbnails */
+            <div className="divide-y divide-[var(--border-hairline)] border-y border-[var(--border-hairline)]">
+              {filteredDishes.map((dish, idx) => (
+                <div
+                  key={dish.id}
+                  onClick={() => onSelectDish(dish)}
+                  className="py-3.5 flex items-center justify-between gap-3 active:bg-[var(--bg-card-hover)] transition-colors cursor-pointer touch-manipulation"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="relative w-12 h-12 rounded-lg overflow-hidden shrink-0 border border-[var(--border-hairline)] shadow-sm">
+                      <Image
+                        src={dish.image}
+                        alt={dish.name}
+                        fill
+                        className="object-cover"
+                        sizes="48px"
+                      />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2 mb-0.5">
+                        <span className="font-mono text-[10px] font-bold text-[var(--accent-primary)]">
+                          0{idx + 1}
+                        </span>
+                        <span className="px-1.5 py-0.5 rounded text-[9px] font-mono uppercase bg-[var(--bg-surface)] text-[var(--text-muted)] border border-[var(--border-hairline)]">
+                          {dish.category}
+                        </span>
+                      </div>
+                      <div className="font-serif text-sm font-normal text-[var(--text-primary)] truncate">
+                        {dish.name}
+                      </div>
+                      <p className="text-[10px] font-mono text-[var(--text-muted)] truncate">
+                        {dish.ingredients.join(", ")}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="text-right shrink-0">
+                    <span className="font-mono text-xs font-bold text-[var(--accent-primary)] block">
+                      {dish.price}
+                    </span>
+                    <span className="text-[9px] font-mono text-[var(--text-muted)] opacity-70">
+                      Details →
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Tasting Menu Banner Card */}
