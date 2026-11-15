@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useAmbience } from "@/context/AmbienceContext";
+import { useHydratedReducedMotion } from "@/hooks/useHydratedReducedMotion";
 import { ArrowRight, X } from "lucide-react";
 
 export interface HotspotData {
@@ -81,7 +82,7 @@ export default function HeroHotspots({
   onSelectHotspot: controlledOnSelectHotspot,
 }: HeroHotspotsProps) {
   const { isEvening } = useAmbience();
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useHydratedReducedMotion();
   const [internalActiveHotspot, setInternalActiveHotspot] = useState<string | null>(null);
   const userInteractedRef = useRef(false);
 
@@ -258,7 +259,7 @@ export default function HeroHotspots({
                     transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
                     style={{
                       transformStyle: "preserve-3d",
-                      transform: prefersReducedMotion ? undefined : "translateZ(48px)",
+                      transform: "translateZ(48px)",
                     }}
                     className={`hidden md:block absolute z-50 pointer-events-auto select-none ${
                       spot.cardPlacement === "bottom-right"

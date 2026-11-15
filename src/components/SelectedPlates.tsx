@@ -2,12 +2,13 @@
 
 import React, { useState, useRef, MouseEvent, UIEvent } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence, useSpring, useScroll, useTransform, useReducedMotion, MotionValue } from "framer-motion";
+import { motion, AnimatePresence, useSpring, useScroll, useTransform, MotionValue } from "framer-motion";
 import { DishItem } from "./DishModal";
 import { Eye, ArrowRight, LayoutGrid, List } from "lucide-react";
 import MagneticButton from "./MagneticButton";
 import { useIsTouchDevice } from "@/hooks/useIsTouchDevice";
 import { useAmbience } from "@/context/AmbienceContext";
+import { useHydratedReducedMotion } from "@/hooks/useHydratedReducedMotion";
 
 interface SelectedPlatesProps {
   onSelectDish: (dish: DishItem) => void;
@@ -134,7 +135,7 @@ function MotionPlateCard({
   const cardRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
   const isTouchDevice = useIsTouchDevice();
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useHydratedReducedMotion();
 
   const pairingData = dishPairings[dish.id] || { day: "Garden Infusion", evening: "Cellar Pour" };
   const activePairing = isEvening ? pairingData.evening : pairingData.day;

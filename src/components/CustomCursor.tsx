@@ -5,17 +5,17 @@ import {
   motion,
   useMotionValue,
   useSpring,
-  useReducedMotion,
   AnimatePresence,
 } from "framer-motion";
 import { useCursor } from "@/context/CursorContext";
 import { useAmbience } from "@/context/AmbienceContext";
+import { useHydratedReducedMotion } from "@/hooks/useHydratedReducedMotion";
 import { Sparkles, ArrowRight, Plus } from "lucide-react";
 
 export default function CustomCursor() {
   const { variant, label, isVisible, isMouseDown } = useCursor();
   const { isEvening } = useAmbience();
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useHydratedReducedMotion();
   const [isTouchDevice, setIsTouchDevice] = useState(true);
 
   // Raw hardware-accelerated coordinate motion values (no React state re-renders)

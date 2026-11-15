@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useAmbience } from "@/context/AmbienceContext";
 import Preloader from "@/components/Preloader";
 import Header from "@/components/Header";
@@ -14,6 +14,7 @@ import Footer from "@/components/Footer";
 import MobileStickyBar from "@/components/MobileStickyBar";
 import DishModal, { DishItem } from "@/components/DishModal";
 import ReservationModal from "@/components/ReservationModal";
+import { useHydratedReducedMotion } from "@/hooks/useHydratedReducedMotion";
 
 export default function Home() {
   const { isEvening } = useAmbience();
@@ -21,7 +22,9 @@ export default function Home() {
   const [selectedDish, setSelectedDish] = useState<DishItem | null>(null);
   const [isReservationOpen, setIsReservationOpen] = useState(false);
   const [preferredDishNote, setPreferredDishNote] = useState<string | undefined>(undefined);
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useHydratedReducedMotion();
+
+  const isReady = isPreloaderDone || prefersReducedMotion;
 
   const handleOpenReservation = (dishName?: string) => {
     setPreferredDishNote(dishName);
@@ -35,13 +38,9 @@ export default function Home() {
 
       {/* Main Application Container with Curtain Scale Entrance */}
       <motion.main
-        initial={
-          prefersReducedMotion
-            ? { opacity: 1 }
-            : { opacity: 0.9, scale: 1.03 }
-        }
+        initial={{ opacity: 0.9, scale: 1.03 }}
         animate={
-          isPreloaderDone || prefersReducedMotion
+          isReady
             ? { opacity: 1, scale: 1 }
             : { opacity: 0.9, scale: 1.03 }
         }
@@ -56,7 +55,7 @@ export default function Home() {
         {/* 3. Hero Section Choreography & 3D Floating Levitation */}
         <Hero
           onOpenReservation={() => handleOpenReservation()}
-          isReady={isPreloaderDone || !!prefersReducedMotion}
+          isReady={isReady}
         />
 
         {/* 4. Self-Drawing Hairline Grid & Counter Reveal */}

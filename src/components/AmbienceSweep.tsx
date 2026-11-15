@@ -1,12 +1,13 @@
 "use client";
 
 import React from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useAmbience } from "@/context/AmbienceContext";
+import { useHydratedReducedMotion } from "@/hooks/useHydratedReducedMotion";
 
 export default function AmbienceSweep() {
   const { mode, isEvening, isTransitioning } = useAmbience();
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useHydratedReducedMotion();
 
   if (prefersReducedMotion) return null;
 

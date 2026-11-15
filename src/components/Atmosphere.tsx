@@ -2,13 +2,14 @@
 
 import React, { useState, useRef } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { Eye, ArrowUpRight } from "lucide-react";
 import GalleryModal from "./GalleryModal";
 import MagneticButton from "./MagneticButton";
 import AmbienceToggle from "./AmbienceToggle";
 import { useIsTouchDevice } from "@/hooks/useIsTouchDevice";
 import { useAmbience } from "@/context/AmbienceContext";
+import { useHydratedReducedMotion } from "@/hooks/useHydratedReducedMotion";
 
 export default function Atmosphere() {
   const { isEvening } = useAmbience();
@@ -16,7 +17,7 @@ export default function Atmosphere() {
   const [activeZoneIdx, setActiveZoneIdx] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const isTouchDevice = useIsTouchDevice();
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useHydratedReducedMotion();
 
   const zones = [
     { id: "dining", num: "01", label: "Main Dining", image: "/images/atmosphere-dining.jpg", caption: "Main Dining • Hand-cut limestone" },

@@ -7,7 +7,6 @@ import {
   useSpring,
   useScroll,
   useTransform,
-  useReducedMotion,
   AnimatePresence,
   useInView,
   useMotionValue,
@@ -17,6 +16,7 @@ import { ArrowRight, Flame, X, ArrowUpRight } from "lucide-react";
 import MagneticButton from "./MagneticButton";
 import { useIsTouchDevice } from "@/hooks/useIsTouchDevice";
 import { useAmbience } from "@/context/AmbienceContext";
+import { useHydratedReducedMotion } from "@/hooks/useHydratedReducedMotion";
 
 export interface HeroDishObject {
   id: string;
@@ -190,7 +190,7 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
   const [selectedDishIdx, setSelectedDishIdx] = useState(0);
   const [activeHotspot, setActiveHotspot] = useState<string | null>("01");
   const isTouchDevice = useIsTouchDevice();
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useHydratedReducedMotion();
 
   const currentDish = heroDishObjects[selectedDishIdx];
 
@@ -676,7 +676,7 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
               <div
                 style={{
                   transformStyle: "preserve-3d",
-                  transform: prefersReducedMotion ? undefined : "translateZ(35px)",
+                  transform: "translateZ(35px)",
                 }}
                 className="absolute inset-0 pointer-events-none z-20"
               >
@@ -835,7 +835,7 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
               <motion.div
                 style={{
                   transformStyle: "preserve-3d",
-                  transform: prefersReducedMotion ? undefined : "translateZ(55px)",
+                  transform: "translateZ(55px)",
                 }}
                 className={`absolute -top-4 -left-3 sm:-left-6 z-20 max-w-[230px] pointer-events-auto transition-[opacity,transform] duration-300 ${
                   activeHotspot !== null
@@ -866,7 +866,7 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
               <motion.div
                 style={{
                   transformStyle: "preserve-3d",
-                  transform: prefersReducedMotion ? undefined : "translateZ(50px)",
+                  transform: "translateZ(50px)",
                 }}
                 className="absolute -left-2 sm:-left-6 bottom-10 sm:bottom-12 z-30 pointer-events-auto"
               >
@@ -889,7 +889,7 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
               <motion.div
                 style={{
                   transformStyle: "preserve-3d",
-                  transform: prefersReducedMotion ? undefined : "translateZ(45px)",
+                  transform: "translateZ(45px)",
                 }}
                 className="absolute right-2 sm:right-4 bottom-2 sm:bottom-4 z-30 pointer-events-auto"
               >

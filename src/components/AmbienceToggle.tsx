@@ -1,9 +1,10 @@
 "use client";
 
 import React from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import { Sun, Moon } from "lucide-react";
 import { useAmbience } from "@/context/AmbienceContext";
+import { useHydratedReducedMotion } from "@/hooks/useHydratedReducedMotion";
 
 interface AmbienceToggleProps {
   variant?: "navbar" | "compact" | "drawer" | "atmosphere";
@@ -17,7 +18,7 @@ export default function AmbienceToggle({
   onToggleComplete,
 }: AmbienceToggleProps) {
   const { isEvening, setAmbience, toggleAmbience } = useAmbience();
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useHydratedReducedMotion();
 
   // Secondary Button for the "Designed for Slow Evenings" section
   if (variant === "atmosphere") {

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { motion, useInView, useReducedMotion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import {
   ArrowUpRight,
   Check,
@@ -16,6 +16,7 @@ import {
   Car,
 } from "lucide-react";
 import { useAmbience } from "@/context/AmbienceContext";
+import { useHydratedReducedMotion } from "@/hooks/useHydratedReducedMotion";
 
 // Isolated Memoized Live Clock: Prevents re-rendering the 580-line Footer on every second tick
 const LiveClock = React.memo(function LiveClock() {
@@ -53,7 +54,7 @@ export default function Footer() {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
   const [isArrowHovered, setIsArrowHovered] = useState(false);
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useHydratedReducedMotion();
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();

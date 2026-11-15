@@ -1,21 +1,25 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useHydratedReducedMotion } from "@/hooks/useHydratedReducedMotion";
 
 interface PreloaderProps {
   onComplete: () => void;
 }
 
 export default function Preloader({ onComplete }: PreloaderProps) {
-  const prefersReducedMotion = useReducedMotion();
-  const [isDone, setIsDone] = useState(() => Boolean(prefersReducedMotion));
+  const prefersReducedMotion = useHydratedReducedMotion();
+  const [isDone, setIsDone] = useState(false);
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     if (prefersReducedMotion) {
-      onComplete();
-      return;
+      const skipTimer = setTimeout(() => {
+        setIsDone(true);
+        onComplete();
+      }, 0);
+      return () => clearTimeout(skipTimer);
     }
 
     // Lock body scroll during preloader

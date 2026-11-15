@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useRef, ReactNode, MouseEvent } from "react";
-import { motion, useSpring, useReducedMotion } from "framer-motion";
+import { motion, useSpring } from "framer-motion";
 import { useIsTouchDevice } from "@/hooks/useIsTouchDevice";
+import { useHydratedReducedMotion } from "@/hooks/useHydratedReducedMotion";
 
 interface MagneticButtonProps {
   children: ReactNode;
@@ -25,7 +26,7 @@ export default function MagneticButton({
 }: MagneticButtonProps) {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const isTouchDevice = useIsTouchDevice();
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useHydratedReducedMotion();
 
   // Damped spring physics: stiffness 180, damping 22
   const springConfig = { stiffness: 180, damping: 22, mass: 0.5 };

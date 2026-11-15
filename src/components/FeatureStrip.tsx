@@ -1,15 +1,16 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import { motion, useInView, useReducedMotion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { useAmbience } from "@/context/AmbienceContext";
+import { useHydratedReducedMotion } from "@/hooks/useHydratedReducedMotion";
 
 export default function FeatureStrip() {
   const { isEvening } = useAmbience();
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-10% 0px" });
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useHydratedReducedMotion();
 
   const features = [
     {
