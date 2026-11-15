@@ -36,7 +36,7 @@ export default function Atmosphere() {
   const imageY = useTransform(
     scrollYProgress,
     [0, 1],
-    isTouchDevice ? ["-3%", "3%"] : ["-7%", "7%"]
+    isTouchDevice ? ["-5%", "5%"] : ["-10%", "10%"]
   );
   const imageScale = useTransform(scrollYProgress, [0, 1], [1.08, 1.0]);
 
@@ -68,7 +68,13 @@ export default function Atmosphere() {
               {/* ======================================================== */}
               {/* LEFT COLUMN: ARCHITECTURAL SPEC SHEET + STORY (COLS 1-5) */}
               {/* ======================================================== */}
-              <div className="lg:col-span-5 flex flex-col justify-center text-center lg:text-left space-y-6">
+              <motion.div
+                initial={{ opacity: 0, y: 36 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false, amount: 0.2 }}
+                transition={{ duration: 0.8, ease: easeCurve }}
+                className="lg:col-span-5 flex flex-col justify-center text-center lg:text-left space-y-6"
+              >
                 
                 {/* Index Pill */}
                 <div className="inline-flex items-center justify-center lg:justify-start gap-2">
@@ -142,12 +148,18 @@ export default function Atmosphere() {
 
                   <AmbienceToggle variant="atmosphere" className="w-full sm:w-auto" />
                 </div>
-              </div>
+              </motion.div>
 
               {/* ======================================================== */}
               {/* RIGHT COLUMN: MULTI-ANGLE VIEWPORT (COLS 6-12)           */}
               {/* ======================================================== */}
-              <div className="lg:col-span-7 flex justify-center">
+              <motion.div
+                initial={{ opacity: 0, y: 36 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false, amount: 0.2 }}
+                transition={{ duration: 0.8, delay: 0.15, ease: easeCurve }}
+                className="lg:col-span-7 flex justify-center"
+              >
                 <div
                   className="group relative w-full aspect-[4/3] sm:aspect-[16/11] rounded-xl overflow-hidden border border-[#F4F3EE]/15 transition-colors duration-500 hover:border-[#C8A97E]/50 select-none"
                 >
@@ -219,7 +231,7 @@ export default function Atmosphere() {
                   </div>
 
                 </div>
-              </div>
+              </motion.div>
 
             </div>
           </div>

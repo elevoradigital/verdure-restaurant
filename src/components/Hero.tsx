@@ -8,93 +8,46 @@ import {
   useScroll,
   useTransform,
   AnimatePresence,
-  useInView,
   useMotionValue,
   useMotionTemplate,
-  useVelocity,
-  useAnimationFrame,
 } from "framer-motion";
 import { ArrowRight, X, ArrowUpRight } from "lucide-react";
 import MagneticButton from "./MagneticButton";
-import { useIsTouchDevice } from "@/hooks/useIsTouchDevice";
 import { useAmbience } from "@/context/AmbienceContext";
-import { useHydratedReducedMotion } from "@/hooks/useHydratedReducedMotion";
 
-function wrap(min: number, max: number, v: number) {
-  const rangeSize = max - min;
-  return ((((v - min) % rangeSize) + rangeSize) % rangeSize) + min;
-}
+// Non-Stop Infinite Scrolling Marquee Bar (Rock-solid GPU loop, zero gaps)
+function ContinuousMarquee() {
+  const items = [
+    "ORGANIC SOURCING",
+    "OPEN-FIRE HEARTH",
+    "BOTANICAL CELLAR",
+    "PRIVATE CHEF COUNTER",
+    "SOIL-HEALTH GASTRONOMY",
+    "ZERO-WASTE HARVEST",
+  ];
 
-// Scroll-Velocity Reactive Marquee Ticker
-function VelocityMarquee({
-  isHeroInView,
-  prefersReducedMotion,
-}: {
-  isHeroInView: boolean;
-  prefersReducedMotion: boolean;
-}) {
-  const baseX = useMotionValue(0);
-  const { scrollY } = useScroll();
-  const scrollVelocity = useVelocity(scrollY);
-  const smoothVelocity = useSpring(scrollVelocity, {
-    damping: 50,
-    stiffness: 400,
-  });
-  const velocityFactor = useTransform(smoothVelocity, [0, 1000], [0, 5], {
-    clamp: false,
-  });
-
-  const x = useTransform(baseX, (v) => `${wrap(-50, 0, v)}%`);
-  const directionFactor = useRef<number>(1);
-
-  useAnimationFrame((_, delta) => {
-    if (!isHeroInView || prefersReducedMotion) return;
-
-    let moveBy = directionFactor.current * -0.015 * (delta / 16);
-
-    const vFactor = velocityFactor.get();
-    if (vFactor < -0.1) {
-      directionFactor.current = 1;
-    } else if (vFactor > 0.1) {
-      directionFactor.current = 1;
-    }
-
-    if (Math.abs(vFactor) > 0.05) {
-      moveBy += -1 * Math.abs(vFactor) * 0.035 * (delta / 16);
-    }
-
-    baseX.set(baseX.get() + moveBy);
-  });
+  const renderTrack = () => (
+    <div className="flex items-center gap-8 shrink-0 pr-8">
+      {items.map((item, i) => (
+        <React.Fragment key={i}>
+          <span>{item}</span>
+          <span className="opacity-40">•</span>
+        </React.Fragment>
+      ))}
+    </div>
+  );
 
   return (
-    <motion.div
-      style={{ x }}
-      className="flex items-center gap-8 whitespace-nowrap text-xs font-mono font-medium tracking-wider uppercase opacity-85 will-change-transform"
-    >
-      <span>ORGANIC SOURCING</span>
-      <span className="opacity-40">—</span>
-      <span>OPEN-FIRE HEARTH</span>
-      <span className="opacity-40">—</span>
-      <span>BOTANICAL CELLAR</span>
-      <span className="opacity-40">—</span>
-      <span>PRIVATE CHEF COUNTER</span>
-      <span className="opacity-40">—</span>
-      <span>SOIL-HEALTH GASTRONOMY</span>
-      <span className="opacity-40">—</span>
-      <span>ZERO-WASTE HARVEST</span>
-      <span className="opacity-40">—</span>
-      <span>ORGANIC SOURCING</span>
-      <span className="opacity-40">—</span>
-      <span>OPEN-FIRE HEARTH</span>
-      <span className="opacity-40">—</span>
-      <span>BOTANICAL CELLAR</span>
-      <span className="opacity-40">—</span>
-      <span>PRIVATE CHEF COUNTER</span>
-      <span className="opacity-40">—</span>
-      <span>SOIL-HEALTH GASTRONOMY</span>
-      <span className="opacity-40">—</span>
-      <span>ZERO-WASTE HARVEST</span>
-    </motion.div>
+    <div className="overflow-hidden flex w-full">
+      <motion.div
+        animate={{ x: ["0%", "-50%"] }}
+        transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+        className="flex shrink-0 items-center whitespace-nowrap text-xs font-mono font-medium tracking-wider uppercase opacity-85 will-change-transform"
+      >
+        {renderTrack()}
+        {renderTrack()}
+      </motion.div>
+    </div>
   );
 }
 
@@ -262,22 +215,17 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
   const { isEvening } = useAmbience();
   const sectionRef = useRef<HTMLElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
-  const isHeroInView = useInView(sectionRef, { margin: "100px" });
   const [isHovered, setIsHovered] = useState(false);
   const [selectedDishIdx, setSelectedDishIdx] = useState(0);
   const [activeHotspot, setActiveHotspot] = useState<string | null>("01");
-  const isTouchDevice = useIsTouchDevice();
-  const prefersReducedMotion = useHydratedReducedMotion();
 
   const currentDish = heroDishObjects[selectedDishIdx];
 
-  // Desktop Mouse Tilt: Damped spring physics tuned for 60-120fps (instant settle, zero dragging)
+  // Desktop Mouse Tilt: spring physics (stiffness: 150, damping: 20)
   const springConfig = {
-    stiffness: 220,
-    damping: 28,
+    stiffness: 150,
+    damping: 20,
     mass: 0.5,
-    restDelta: 0.005,
-    restSpeed: 0.005,
   };
   const mouseRotateX = useSpring(0, springConfig);
   const mouseRotateY = useSpring(0, springConfig);
@@ -297,23 +245,17 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
 
   const textColY = useTransform(scrollYProgress, [0, 1], [0, -40]);
   const textColOpacity = useTransform(scrollYProgress, [0, 0.85], [1, 0.25]);
-  const bowlScale = useTransform(scrollYProgress, [0, 1], [1, 1.05]);
-  const bowlParallaxY = useTransform(scrollYProgress, [0, 1], [0, 30]);
-
-  // Mobile scroll-linked 3D perspective tilt
-  const mobileRotateX = useTransform(scrollYProgress, [0, 1], [4, -4]);
-  const mobileRotateY = useTransform(scrollYProgress, [0, 1], [-3, 3]);
 
   const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
-    if (isTouchDevice || prefersReducedMotion || !cardRef.current) return;
+    if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
-    const rX = ((y - centerY) / centerY) * -9;
-    const rY = ((x - centerX) / centerX) * 9;
+    const rX = ((y - centerY) / centerY) * -10;
+    const rY = ((x - centerX) / centerX) * 12;
 
     mouseRotateX.set(rX);
     mouseRotateY.set(rY);
@@ -323,7 +265,7 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
   };
 
   const handleMouseEnter = () => {
-    if (!isTouchDevice && !prefersReducedMotion) setIsHovered(true);
+    setIsHovered(true);
   };
 
   const handleMouseLeave = () => {
@@ -369,61 +311,59 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
         }`} />
 
         {/* Specular Light Pulse Gliding along Hairlines (Every 6s) */}
-        {isHeroInView && !prefersReducedMotion && (
-          <div className="absolute top-28 left-0 right-0 h-[1px] pointer-events-none overflow-hidden z-20">
-            <motion.div
-              initial={{ x: "-100%" }}
-              animate={{ x: "250%" }}
-              transition={{
-                duration: 2.2,
-                repeat: Infinity,
-                repeatDelay: 3.8,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              className="w-72 h-full bg-gradient-to-r from-transparent via-[#C8A97E] to-transparent opacity-60 will-change-transform"
-            />
-          </div>
-        )}
+        <div className="absolute top-28 left-0 right-0 h-[1px] pointer-events-none overflow-hidden z-20">
+          <motion.div
+            initial={{ x: "-100%" }}
+            animate={{ x: "250%" }}
+            transition={{
+              duration: 2.2,
+              repeat: Infinity,
+              repeatDelay: 3.8,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            className="w-72 h-full bg-gradient-to-r from-transparent via-[#C8A97E] to-transparent opacity-60 will-change-transform"
+          />
+        </div>
 
         {/* Real-Time Sun / Leaf Caustic Shadow Sweep (Daylight: Swaying Olive Canopy) */}
-        {!isEvening && isHeroInView && !prefersReducedMotion && (
+        {!isEvening && (
           <motion.div
             animate={{
-              x: ["-2%", "2%", "-2%"],
-              y: ["1%", "-1%", "1%"],
-              rotate: [0, 0.5, 0],
+              x: ["-4%", "4%", "-4%"],
+              y: ["-2%", "3%", "-2%"],
+              rotate: [-2, 2, -2],
             }}
             transition={{
-              duration: 9,
+              duration: 8,
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            className="absolute inset-0 pointer-events-none mix-blend-multiply opacity-[0.07] z-0 will-change-transform overflow-hidden"
+            className="absolute inset-0 pointer-events-none mix-blend-multiply opacity-[0.09] z-0 will-change-transform overflow-hidden"
             style={{
-              backgroundImage: `radial-gradient(ellipse 60% 40% at 30% 20%, rgba(17,38,27,0.8), transparent 70%),
-                                radial-gradient(ellipse 45% 35% at 75% 65%, rgba(17,38,27,0.7), transparent 60%),
-                                radial-gradient(circle 250px at 50% 50%, rgba(17,38,27,0.6), transparent 70%)`,
+              backgroundImage: `radial-gradient(ellipse 60% 40% at 30% 20%, rgba(17,38,27,0.85), transparent 70%),
+                                radial-gradient(ellipse 45% 35% at 75% 65%, rgba(17,38,27,0.75), transparent 60%),
+                                radial-gradient(circle 260px at 50% 50%, rgba(17,38,27,0.65), transparent 70%)`,
               filter: "blur(28px)",
             }}
           />
         )}
 
         {/* Real-Time Candlelight / Ember Breathing Glow (Evening: Beeswax Candlelight Halo) */}
-        {isEvening && isHeroInView && !prefersReducedMotion && (
+        {isEvening && (
           <motion.div
             animate={{
-              scale: [0.96, 1.05, 0.98],
-              opacity: [0.12, 0.22, 0.14],
+              scale: [0.92, 1.08, 0.92],
+              opacity: [0.18, 0.35, 0.18],
             }}
             transition={{
-              duration: 4.5,
+              duration: 4,
               repeat: Infinity,
               ease: "easeInOut",
             }}
             className="absolute inset-0 pointer-events-none z-0 will-change-transform"
             style={{
-              background: "radial-gradient(circle 460px at 65% 45%, rgba(200, 169, 126, 0.25), transparent 70%)",
-              filter: "blur(40px)",
+              background: "radial-gradient(circle 500px at 65% 45%, rgba(200, 169, 126, 0.35), transparent 70%)",
+              filter: "blur(36px)",
             }}
           />
         )}
@@ -461,14 +401,10 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
           {/* LEFT COLUMN (COLS 1–7): OVERSIZED EDITORIAL TYPOGRAPHY   */}
           {/* ======================================================== */}
           <motion.div
-            style={
-              prefersReducedMotion
-                ? undefined
-                : {
-                    y: textColY,
-                    opacity: textColOpacity,
-                  }
-            }
+            style={{
+              y: textColY,
+              opacity: textColOpacity,
+            }}
             className="lg:col-span-7 flex flex-col justify-center text-center lg:text-left order-1 p-6 sm:p-8 lg:p-12 xl:p-14"
           >
             {/* 1. Architectural Index Pill */}
@@ -682,18 +618,8 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
               animate={isReady ? { opacity: 1, scale: 1, y: 0 } : {}}
               transition={{ duration: 0.85, delay: 0.25, ease: easeCurve }}
               style={{
-                rotateX: prefersReducedMotion
-                  ? 0
-                  : isTouchDevice
-                  ? mobileRotateX
-                  : mouseRotateX,
-                rotateY: prefersReducedMotion
-                  ? 0
-                  : isTouchDevice
-                  ? mobileRotateY
-                  : mouseRotateY,
-                scale: prefersReducedMotion ? 1 : bowlScale,
-                y: prefersReducedMotion ? 0 : bowlParallaxY,
+                rotateX: mouseRotateX,
+                rotateY: mouseRotateY,
                 transformStyle: "preserve-3d",
                 willChange: "transform",
                 backfaceVisibility: "hidden",
@@ -701,7 +627,7 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
               className="relative w-full max-w-md sm:max-w-lg lg:max-w-none aspect-[4/4.2] sm:aspect-[4/3.8] select-none preserve-3d"
             >
               {/* ---------------------------------------------------- */}
-              {/* LAYER 0: ROTATING BOTANICAL COMPASS RING (translateZ: -25px) */}
+              {/* LAYER 0: ROTATING ARCHITECTURAL COMPASS & ORBITAL RINGS */}
               {/* ---------------------------------------------------- */}
               <div
                 style={{
@@ -710,48 +636,63 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                 }}
                 className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10"
               >
-                {/* Slow Rotating Astronomical Ring (360deg over 45s) - Paused off-screen */}
+                {/* Outer Ring: Rotating Clockwise (360deg over 32s) */}
                 <motion.div
-                  animate={isHeroInView && !prefersReducedMotion ? { rotate: 360 } : { rotate: 0 }}
-                  transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
-                  className={`w-[122%] h-[122%] rounded-full border border-dashed transition-colors duration-700 ${
-                    isEvening ? "border-[#C8A97E]/20" : "border-[#1B3B2B]/20"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 32, repeat: Infinity, ease: "linear" }}
+                  className={`absolute w-[118%] h-[118%] rounded-full border transition-colors duration-700 pointer-events-none flex items-center justify-center ${
+                    isEvening ? "border-[#C8A97E]/30 text-[#C8A97E]/50" : "border-[#11261B]/25 text-[#11261B]/40"
                   }`}
                 >
-                  {/* Cardinal Degree Ticks (0°, 90°, 180°, 270°) */}
-                  <span className={`absolute -top-3 left-1/2 -translate-x-1/2 font-mono text-[9px] font-bold ${
-                    isEvening ? "text-[#C8A97E]/60" : "text-[#1B3B2B]/60"
-                  }`}>0°</span>
-                  <span className={`absolute top-1/2 -right-4 -translate-y-1/2 font-mono text-[9px] font-bold ${
-                    isEvening ? "text-[#C8A97E]/60" : "text-[#1B3B2B]/60"
-                  }`}>90°</span>
-                  <span className={`absolute -bottom-3 left-1/2 -translate-x-1/2 font-mono text-[9px] font-bold ${
-                    isEvening ? "text-[#C8A97E]/60" : "text-[#1B3B2B]/60"
-                  }`}>180°</span>
-                  <span className={`absolute top-1/2 -left-4 -translate-y-1/2 font-mono text-[9px] font-bold ${
-                    isEvening ? "text-[#C8A97E]/60" : "text-[#1B3B2B]/60"
-                  }`}>270°</span>
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 font-mono text-[9px] font-bold">0°</span>
+                  <span className="absolute top-1/2 -right-4 -translate-y-1/2 font-mono text-[9px] font-bold">90°</span>
+                  <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 font-mono text-[9px] font-bold">180°</span>
+                  <span className="absolute top-1/2 -left-4 -translate-y-1/2 font-mono text-[9px] font-bold">270°</span>
+                  <span className="absolute top-[14%] right-[14%] font-mono text-[7px] opacity-60">45°</span>
+                  <span className="absolute bottom-[14%] right-[14%] font-mono text-[7px] opacity-60">135°</span>
+                  <span className="absolute bottom-[14%] left-[14%] font-mono text-[7px] opacity-60">225°</span>
+                  <span className="absolute top-[14%] left-[14%] font-mono text-[7px] opacity-60">315°</span>
                 </motion.div>
 
+                {/* Inner Dashed Ring: Rotating Counter-Clockwise (360deg over 24s) */}
+                <motion.div
+                  animate={{ rotate: -360 }}
+                  transition={{ duration: 24, repeat: Infinity, ease: "linear" }}
+                  className={`absolute w-[105%] h-[105%] rounded-full border border-dashed transition-colors duration-700 pointer-events-none ${
+                    isEvening ? "border-[#C8A97E]/25" : "border-[#11261B]/20"
+                  }`}
+                />
+
                 {/* Deep Offset Architectural Backdrop Slab */}
-                <div className={`absolute -right-4 -bottom-4 w-full h-full rounded-t-[140px] rounded-b-[28px] -z-20 transition-colors duration-700 ${
-                  isEvening ? "bg-[#070F0A]/70" : "bg-[#11261B]/12"
+                <div className={`absolute -right-3 -bottom-3 w-full h-full rounded-t-[140px] rounded-b-[28px] -z-20 transition-colors duration-700 ${
+                  isEvening ? "bg-[#070F0A]/70" : "bg-[#11261B]/10"
                 }`} />
               </div>
 
               {/* ---------------------------------------------------- */}
-              {/* LAYER 1: ASYMMETRIC SCULPTED GALLERY FRAME (translateZ: 0px) */}
-              {/* Continuous vertical levitation (y: [0, -8, 0]) - Paused off-screen */}
+              {/* LAYER 1: DISH LEVITATION, IDLE SWAY & SCULPTED FRAME */}
               {/* ---------------------------------------------------- */}
               <motion.div
-                animate={isHeroInView && !prefersReducedMotion ? { y: [0, -8, 0] } : { y: 0 }}
-                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                animate={{
+                  y: [0, -14, 0],
+                  rotateZ: [-1.2, 1.2, -1.2],
+                  scale: [1, 1.015, 1],
+                  rotateX: isHovered ? 0 : [3, -3, 3],
+                  rotateY: isHovered ? 0 : [-4, 4, -4],
+                }}
+                transition={{
+                  y: { duration: 4.8, repeat: Infinity, ease: "easeInOut" },
+                  rotateZ: { duration: 4.8, repeat: Infinity, ease: "easeInOut" },
+                  scale: { duration: 4.8, repeat: Infinity, ease: "easeInOut" },
+                  rotateX: isHovered ? { duration: 0.3 } : { duration: 7, repeat: Infinity, ease: "easeInOut" },
+                  rotateY: isHovered ? { duration: 0.3 } : { duration: 7, repeat: Infinity, ease: "easeInOut" },
+                }}
                 style={{
                   transformStyle: "preserve-3d",
                   transform: "translateZ(0px)",
                   boxShadow: isEvening
-                    ? "0 24px 48px -12px rgba(0, 0, 0, 0.7)"
-                    : "0 20px 40px -15px rgba(17, 38, 27, 0.2)",
+                    ? "0 28px 56px -12px rgba(0, 0, 0, 0.75)"
+                    : "0 24px 48px -15px rgba(17, 38, 27, 0.25)",
                   willChange: "transform",
                   backfaceVisibility: "hidden",
                 }}
@@ -764,10 +705,11 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={currentDish.id}
-                      initial={{ opacity: 0, scale: 0.94 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 1.04 }}
-                      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                      initial={{ rotateY: 90, scale: 0.88, opacity: 0 }}
+                      animate={{ rotateY: 0, scale: 1, opacity: 1 }}
+                      exit={{ rotateY: -90, scale: 0.88, opacity: 0 }}
+                      transition={{ type: "spring", stiffness: 240, damping: 24, mass: 0.8 }}
+                      style={{ transformStyle: "preserve-3d" }}
                       className="relative w-full h-full"
                     >
                       <Image
@@ -786,7 +728,7 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                     className="absolute inset-0 pointer-events-none transition-opacity duration-500"
                     style={{
                       background: sheenBackground,
-                      opacity: isHovered ? 1 : 0.4,
+                      opacity: isHovered ? 1 : 0.45,
                     }}
                   />
 
@@ -799,82 +741,69 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                 </div>
               </motion.div>
 
-              {/* ---------------------------------------------------- */}
-              {/* LAYER 1.5: LIVE ORGANIC STEAM / AROMA WISPS (translateZ: 20px) */}
-              {/* ---------------------------------------------------- */}
-              {isHeroInView && !prefersReducedMotion && (
-                <>
-                  {/* Rising steam for hot hearth dishes (Dish 0 and 1) */}
-                  {(selectedDishIdx === 0 || selectedDishIdx === 1) && (
-                    <div
-                      style={{
-                        transformStyle: "preserve-3d",
-                        transform: "translateZ(20px)",
-                      }}
-                      className="absolute -top-12 sm:-top-16 left-1/2 -translate-x-1/2 w-48 h-36 pointer-events-none z-20 overflow-visible"
-                    >
-                      {[0, 1, 2].map((wisp) => (
-                        <motion.svg
-                          key={`steam-wisp-${selectedDishIdx}-${wisp}`}
-                          viewBox="0 0 40 100"
-                          className="absolute top-0 w-8 h-28"
-                          style={{ left: `${25 + wisp * 25}%` }}
-                          initial={{ y: 0, opacity: 0, scale: 0.9 }}
-                          animate={{
-                            y: [0, -38],
-                            x: wisp === 1 ? [-4, 6, -2] : [3, -5, 2],
-                            opacity: [0, 0.35, 0],
-                            scale: [0.9, 1.15],
-                          }}
-                          transition={{
-                            duration: 4.5,
-                            repeat: Infinity,
-                            ease: "easeInOut",
-                            delay: wisp * 1.3,
-                          }}
-                        >
-                          <path
-                            d="M 20 100 Q 12 70 24 50 T 16 10"
-                            fill="none"
-                            stroke={isEvening ? "rgba(244, 243, 238, 0.65)" : "rgba(17, 38, 27, 0.45)"}
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            filter="blur(1.5px)"
-                          />
-                        </motion.svg>
-                      ))}
-                    </div>
-                  )}
+              {/* Synchronized Pedestal Shadow beneath bowl */}
+              <motion.div
+                animate={{
+                  scale: [1, 0.86, 1],
+                  opacity: [0.35, 0.18, 0.35],
+                }}
+                transition={{
+                  duration: 4.8,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className="absolute -bottom-5 left-1/2 -translate-x-1/2 w-4/5 h-8 rounded-full pointer-events-none -z-10 blur-xl"
+                style={{
+                  background: isEvening
+                    ? "radial-gradient(ellipse at center, rgba(0, 0, 0, 0.8), transparent 70%)"
+                    : "radial-gradient(ellipse at center, rgba(17, 38, 27, 0.4), transparent 70%)",
+                }}
+              />
 
-                  {/* Downward cool mist halo for Chilled Gelato (Dish 2) */}
-                  {selectedDishIdx === 2 && (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{
-                        y: [0, 14, 0],
-                        opacity: [0.12, 0.32, 0.12],
-                        scale: [0.96, 1.08, 0.96],
-                      }}
-                      transition={{
-                        duration: 5,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                      }}
-                      className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-64 h-16 rounded-full pointer-events-none z-10 blur-xl will-change-transform"
-                      style={{
-                        transformStyle: "preserve-3d",
-                        transform: "translateZ(10px)",
-                        background: isEvening
-                          ? "radial-gradient(ellipse at center, rgba(162, 173, 165, 0.4), transparent 70%)"
-                          : "radial-gradient(ellipse at center, rgba(45, 90, 67, 0.28), transparent 70%)",
-                      }}
+              {/* ---------------------------------------------------- */}
+              {/* LAYER 1.5: VISIBLE RISING BOTANICAL STEAM / WISPS    */}
+              {/* ---------------------------------------------------- */}
+              <div
+                style={{
+                  transformStyle: "preserve-3d",
+                  transform: "translateZ(20px)",
+                }}
+                className="absolute -top-12 sm:-top-16 left-1/2 -translate-x-1/2 w-48 h-36 pointer-events-none z-20 overflow-visible"
+              >
+                {[0, 1, 2].map((wisp) => (
+                  <motion.svg
+                    key={`steam-wisp-${selectedDishIdx}-${wisp}`}
+                    viewBox="0 0 40 100"
+                    className="absolute top-0 w-8 h-28"
+                    style={{ left: `${25 + wisp * 25}%` }}
+                    initial={{ y: 10, opacity: 0 }}
+                    animate={{
+                      y: [10, -55],
+                      x: [-6, 8, -4],
+                      opacity: [0, 0.45, 0],
+                      scaleX: [0.85, 1.2, 0.9],
+                    }}
+                    transition={{
+                      duration: 3.6,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: wisp * 1.1,
+                    }}
+                  >
+                    <path
+                      d="M 20 100 Q 12 70 24 50 T 16 10"
+                      fill="none"
+                      stroke={isEvening ? "rgba(244, 243, 238, 0.7)" : "rgba(17, 38, 27, 0.5)"}
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      filter="blur(3px)"
                     />
-                  )}
-                </>
-              )}
+                  </motion.svg>
+                ))}
+              </div>
 
               {/* ---------------------------------------------------- */}
-              {/* LAYER 2: INTERACTIVE PULSING 3D HOTSPOTS (translateZ: 35px) */}
+              {/* LAYER 2: INTERACTIVE PULSING 3D HOTSPOTS             */}
               {/* ---------------------------------------------------- */}
               <div
                 style={{
@@ -898,20 +827,30 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
                       className="absolute -translate-x-1/2 -translate-y-1/2 pointer-events-auto"
                     >
                       <div className="relative flex items-center justify-center w-10 h-10">
-                        {/* Dual-ring pulse (paused off-screen) */}
-                        {!prefersReducedMotion && (
-                          <motion.span
-                            animate={
-                              isHeroInView && !isActive
-                                ? { scale: [1, 1.8], opacity: [0.6, 0] }
-                                : { opacity: 0 }
-                            }
-                            transition={{ duration: 2.2, repeat: Infinity, ease: "easeOut" }}
-                            className={`absolute w-6 h-6 rounded-full border pointer-events-none ${
-                              isEvening ? "border-[#C8A97E]" : "border-[#1B3B2B]"
-                            }`}
-                          />
-                        )}
+                        {/* Outer Sonar Ripple Ring */}
+                        <motion.span
+                          animate={
+                            !isActive
+                              ? { scale: [1, 2.2], opacity: [0.65, 0] }
+                              : { opacity: 0 }
+                          }
+                          transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
+                          className={`absolute w-6 h-6 rounded-full border pointer-events-none ${
+                            isEvening ? "border-[#C8A97E]" : "border-[#1B3B2B]"
+                          }`}
+                        />
+                        {/* Inner Sonar Ripple Ring */}
+                        <motion.span
+                          animate={
+                            !isActive
+                              ? { scale: [1, 1.6], opacity: [0.8, 0] }
+                              : { opacity: 0 }
+                          }
+                          transition={{ duration: 2, repeat: Infinity, ease: "easeOut", delay: 0.5 }}
+                          className={`absolute w-6 h-6 rounded-full border pointer-events-none ${
+                            isEvening ? "border-[#C8A97E]/70" : "border-[#1B3B2B]/70"
+                          }`}
+                        />
 
                         <motion.button
                           type="button"
@@ -1060,23 +999,32 @@ export default function Hero({ onOpenReservation, isReady = true }: HeroProps) {
       }`}>
         <div className="w-full grid grid-cols-1 md:grid-cols-12 h-full items-center divide-y md:divide-y-0 md:divide-x divide-current/10">
           
-          {/* Left Cell: Scroll To Explore Indicator (Cols 1-3) */}
+          {/* Left Cell: Scroll To Explore Indicator with sliding 1px line (Cols 1-3) */}
           <div className="md:col-span-3 flex items-center justify-between px-6 h-full">
             <span className="font-mono text-[10px] tracking-[0.25em] uppercase font-bold opacity-75">
               SCROLL TO EXPLORE
             </span>
-            <motion.div
-              animate={isHeroInView && !prefersReducedMotion ? { y: [0, 4, 0] } : { y: 0 }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-              className="text-xs font-mono"
-            >
-              ↓
-            </motion.div>
+            <div className="flex items-center gap-2">
+              <div className="relative w-[1.5px] h-5 bg-current/20 overflow-hidden rounded-full">
+                <motion.div
+                  animate={{ y: ["-100%", "100%"] }}
+                  transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+                  className={`w-full h-full ${isEvening ? "bg-[#C8A97E]" : "bg-[#1B3B2B]"}`}
+                />
+              </div>
+              <motion.div
+                animate={{ y: [0, 4, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                className="text-xs font-mono"
+              >
+                ↓
+              </motion.div>
+            </div>
           </div>
 
-          {/* Center Cell: Velocity-Sensitive Smooth Kinetic Marquee Ticker (Cols 4-8) - Paused off-screen */}
+          {/* Center Cell: Non-Stop Infinite Scrolling Marquee Ticker (Cols 4-8) */}
           <div className="md:col-span-6 overflow-hidden h-full flex items-center relative px-4 sm:px-6">
-            <VelocityMarquee isHeroInView={isHeroInView} prefersReducedMotion={prefersReducedMotion} />
+            <ContinuousMarquee />
           </div>
 
           {/* Right Cell: Live Booking Trigger (Cols 9-12) */}

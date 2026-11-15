@@ -173,10 +173,11 @@ function MotionPlateCard({
       layout
       data-cursor="plate"
       data-cursor-label="VIEW DISH"
-      initial={{ opacity: 0, scale: 0.94, y: 32 }}
-      whileInView={{ opacity: 1, scale: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
+      initial={{ opacity: 0, y: 36 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: false, amount: 0.2 }}
       exit={{ opacity: 0, scale: 0.94, y: 16 }}
+      whileHover={{ y: -6 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       ref={cardRef}
       onMouseMove={handleMouseMove}
@@ -209,7 +210,7 @@ function MotionPlateCard({
         </span>
       </div>
 
-      {/* 2. Center: Crisp, uncluttered food photograph with subtle zoom */}
+      {/* 2. Center: Crisp, uncluttered food photograph with subtle zoom & tilt on hover */}
       <div className={`relative w-full aspect-[4/3] rounded-md overflow-hidden mb-4 transition-colors duration-500 ${
         isEvening ? "bg-[#0B1610]" : "bg-[#EAE8E0]"
       }`}>
@@ -217,20 +218,23 @@ function MotionPlateCard({
           src={dish.image}
           alt={dish.name}
           fill
-          className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+          className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.06] group-hover:-rotate-[1.5deg]"
           sizes="(max-width: 768px) 85vw, (max-width: 1200px) 33vw, 380px"
         />
       </div>
 
       {/* 3. Bottom: Roman Serif Title + clean ingredients + plain italic pairing */}
       <div className="space-y-1.5">
-        <h3 className={`font-serif text-xl font-normal tracking-tight transition-colors duration-300 ${
-          isEvening
-            ? "text-[#F4F3EE] group-hover:text-[#C8A97E]"
-            : "text-[#141816] group-hover:text-[#1B3B2B]"
-        }`}>
-          {dish.name}
-        </h3>
+        <div className="flex items-center justify-between">
+          <h3 className={`font-serif text-xl font-normal tracking-tight transition-colors duration-300 ${
+            isEvening
+              ? "text-[#F4F3EE] group-hover:text-[#C8A97E]"
+              : "text-[#141816] group-hover:text-[#1B3B2B]"
+          }`}>
+            {dish.name}
+          </h3>
+          <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 shrink-0 ml-2" />
+        </div>
         <p className={`text-xs leading-relaxed line-clamp-1 transition-colors duration-500 ${
           isEvening ? "text-[#95A79B]" : "text-[#5C645E]"
         }`}>
@@ -399,19 +403,17 @@ export default function SelectedPlates({
               </span>
             </div>
 
-            <div className="overflow-hidden">
-              <motion.h2
-                initial={{ y: "105%" }}
-                whileInView={{ y: "0%" }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-                className={`font-serif text-3xl sm:text-4xl lg:text-5xl font-normal tracking-tight transition-colors duration-700 ${
-                  isEvening ? "text-[#F4F3EE]" : "text-[#141816]"
-                }`}
-              >
-                Selected Plates
-              </motion.h2>
-            </div>
+            <motion.h2
+              initial={{ opacity: 0, y: 36 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: false, amount: 0.2 }}
+              transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+              className={`font-serif text-3xl sm:text-4xl lg:text-5xl font-normal tracking-tight transition-colors duration-700 ${
+                isEvening ? "text-[#F4F3EE]" : "text-[#141816]"
+              }`}
+            >
+              Selected Plates
+            </motion.h2>
           </div>
 
           {/* Right Header Controls: Category Filter Pills + View Mode Toggle */}

@@ -63,11 +63,17 @@ export default function FeatureStrip() {
 
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12">
         {/* Top Structural Header Bar */}
-        <div className={`flex items-center justify-between py-4 border-b text-xs font-mono transition-colors duration-700 ${
-          isEvening
-            ? "border-[#F4F3EE]/10 text-[#95A79B]"
-            : "border-[#11261B]/10 text-[#5C645E]"
-        }`}>
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.2 }}
+          transition={{ duration: 0.6, ease: easeCurve }}
+          className={`flex items-center justify-between py-4 border-b text-xs font-mono transition-colors duration-700 ${
+            isEvening
+              ? "border-[#F4F3EE]/10 text-[#95A79B]"
+              : "border-[#11261B]/10 text-[#5C645E]"
+          }`}
+        >
           <div className="flex items-center gap-2">
             <span className={`w-1.5 h-1.5 rounded-full ${isEvening ? "bg-[#C8A97E]" : "bg-[#2D5A43]"}`} />
             <span className="tracking-[0.18em] uppercase font-bold">
@@ -77,7 +83,7 @@ export default function FeatureStrip() {
           <span className="tracking-[0.16em] uppercase hidden sm:inline-block font-semibold">
             Zero-Kilometer Sourcing
           </span>
-        </div>
+        </motion.div>
 
         {/* Interactive Expanding Architectural Strip */}
         <div className="flex flex-col md:flex-row relative divide-y md:divide-y-0 md:divide-x divide-current/10">
@@ -87,11 +93,12 @@ export default function FeatureStrip() {
             return (
               <motion.div
                 key={item.title}
-                initial={{ opacity: 0, y: 24 }}
-                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+                initial={{ opacity: 0, y: 36 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false, amount: 0.2 }}
                 transition={{
                   duration: 0.75,
-                  delay: 0.15 + idx * 0.12,
+                  delay: 0.1 + idx * 0.12,
                   ease: easeCurve,
                 }}
                 onMouseEnter={() => setHoveredIndex(idx)}
