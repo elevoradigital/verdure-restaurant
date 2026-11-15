@@ -25,8 +25,8 @@ export default function AmbienceToggle({
     return (
       <button
         type="button"
-        onClick={() => {
-          toggleAmbience();
+        onClick={(e) => {
+          toggleAmbience(e);
           onToggleComplete?.();
         }}
         data-cursor="magnetic"
@@ -58,8 +58,8 @@ export default function AmbienceToggle({
     return (
       <button
         type="button"
-        onClick={() => {
-          toggleAmbience();
+        onClick={(e) => {
+          toggleAmbience(e);
           onToggleComplete?.();
         }}
         data-cursor="magnetic"
@@ -92,8 +92,8 @@ export default function AmbienceToggle({
       >
         <button
           type="button"
-          onClick={() => {
-            setAmbience("day");
+          onClick={(e) => {
+            setAmbience("day", e);
             onToggleComplete?.();
           }}
           className={`relative flex-1 py-3 px-2 rounded-xl flex items-center justify-center gap-2 transition-colors cursor-pointer ${
@@ -117,8 +117,8 @@ export default function AmbienceToggle({
 
         <button
           type="button"
-          onClick={() => {
-            setAmbience("evening");
+          onClick={(e) => {
+            setAmbience("evening", e);
             onToggleComplete?.();
           }}
           className={`relative flex-1 py-3 px-2 rounded-xl flex items-center justify-center gap-2 transition-colors cursor-pointer ${
@@ -155,7 +155,7 @@ export default function AmbienceToggle({
       {/* Day Mode Pill Button */}
       <button
         type="button"
-        onClick={() => setAmbience("day")}
+        onClick={(e) => setAmbience("day", e)}
         data-cursor="magnetic"
         className={`relative px-3.5 py-1.5 rounded-full text-xs font-mono tracking-wider transition-colors duration-200 flex items-center gap-1.5 cursor-pointer ${
           !isEvening
@@ -184,7 +184,7 @@ export default function AmbienceToggle({
       {/* Evening Mode Pill Button */}
       <button
         type="button"
-        onClick={() => setAmbience("evening")}
+        onClick={(e) => setAmbience("evening", e)}
         data-cursor="magnetic"
         className={`relative px-3.5 py-1.5 rounded-full text-xs font-mono tracking-wider transition-colors duration-200 flex items-center gap-1.5 cursor-pointer ${
           isEvening

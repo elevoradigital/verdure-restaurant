@@ -334,7 +334,7 @@ export default function Footer() {
             <span className="text-[11px] opacity-70">AMBIENCE:</span>
             <button
               type="button"
-              onClick={toggleAmbience}
+              onClick={(e) => toggleAmbience(e)}
               data-cursor="pointer"
               aria-label="Toggle Lighting Ambience"
               className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-[11px] font-mono tracking-wider transition-colors duration-200 cursor-pointer ${
