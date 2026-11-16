@@ -724,7 +724,7 @@ function SelectedPlates({
           </div>
 
           <MagneticButton
-            onClick={onOpenReservation}
+            onClick={() => onOpenReservation()}
             data-cursor="magnetic"
             className="px-8 py-3.5 rounded-full text-xs font-semibold uppercase tracking-wider shrink-0 shadow-lg bg-[var(--accent-secondary)] hover:bg-[var(--accent-primary)] text-[var(--bg-canvas)] transition-colors duration-200"
           >

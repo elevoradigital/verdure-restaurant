@@ -419,7 +419,7 @@ function Hero({ onOpenReservation, isReady = true }: HeroProps) {
               {/* Action Buttons: Primary Magnetic + Secondary with Rotating Arrow */}
               <div className="flex items-center justify-center sm:justify-start gap-2.5 sm:gap-3 w-full sm:w-auto shrink-0">
                 <MagneticButton
-                  onClick={onOpenReservation}
+                  onClick={() => onOpenReservation()}
                   data-cursor="magnetic"
                   className="group flex-1 sm:flex-initial min-h-[48px] px-5 sm:px-6 py-3 rounded-full text-xs font-semibold uppercase tracking-wider transition-colors duration-200 shadow-md bg-[var(--accent-secondary)] hover:bg-[var(--accent-primary)] text-[var(--bg-canvas)] flex items-center justify-center gap-1.5 touch-manipulation"
                 >

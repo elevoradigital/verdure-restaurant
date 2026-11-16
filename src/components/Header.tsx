@@ -261,7 +261,7 @@ export default function Header({ onOpenReservation }: HeaderProps) {
             {/* Cell 4: High-Contrast Magnetic CTA Button (Cols 11-12) */}
             <div className="col-span-2 xl:col-span-2 flex items-center justify-center px-2 lg:px-4">
               <MagneticButton
-                onClick={onOpenReservation}
+                onClick={() => onOpenReservation()}
                 data-cursor="magnetic"
                 className="group w-full max-w-[155px] py-2 px-4 rounded-full text-xs font-semibold uppercase tracking-wider transition-colors duration-200 shadow-sm cursor-pointer flex items-center justify-center gap-1.5 bg-[var(--accent-secondary)] hover:bg-[var(--accent-primary)] text-[var(--bg-canvas)]"
               >

@@ -28,8 +28,13 @@ export default function Home() {
     setIsPreloaderDone(true);
   }, []);
 
-  const handleOpenReservation = useCallback((dishName?: string) => {
-    setPreferredDishNote(dishName);
+  const handleOpenReservation = useCallback((dishName?: unknown) => {
+    // Defensively ensure dishName is a string, preventing SyntheticEvent objects from leaking into state
+    if (typeof dishName === "string" && dishName.trim()) {
+      setPreferredDishNote(dishName.trim());
+    } else {
+      setPreferredDishNote(undefined);
+    }
     setIsReservationOpen(true);
   }, []);
 

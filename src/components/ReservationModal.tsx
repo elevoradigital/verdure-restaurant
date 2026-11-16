@@ -194,7 +194,7 @@ export default function ReservationModal({
                     </span>
                   </div>
 
-                  {initialDetails?.dishPreference && (
+                  {typeof initialDetails?.dishPreference === "string" && initialDetails.dishPreference.trim() && (
                     <div className="text-xs text-[#2D5A43] bg-[#2D5A43]/10 px-3 py-1.5 rounded-lg font-medium">
                       Plating Note: Preference for {initialDetails.dishPreference} noted.
                     </div>

@@ -86,7 +86,7 @@ function MobileStickyBar({
             {/* Pill CTA with subtle periodic shimmer sweep */}
             <motion.button
               type="button"
-              onClick={onOpenReservation}
+              onClick={() => onOpenReservation()}
               whileTap={{ scale: 0.95 }}
               className={`relative inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-semibold tracking-wide shadow-sm overflow-hidden transition-colors duration-300 cursor-pointer ${
                 isEvening
